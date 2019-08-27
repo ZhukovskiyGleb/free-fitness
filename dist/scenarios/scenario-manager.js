@@ -23,7 +23,6 @@ var ScenarioManager = /** @class */ (function () {
             for (var i = scenarios.length - 1; i >= 0; i--) {
                 var readyForDestroy = scenarios[i].activate(params).readyForDestroy;
                 if (readyForDestroy) {
-                    console.log('SCENARIO REMOVED', typeof scenarios[i]);
                     scenarios[i].destroy();
                     scenarios.splice(i);
                 }
@@ -31,6 +30,15 @@ var ScenarioManager = /** @class */ (function () {
             return true;
         }
         return false;
+    };
+    ScenarioManager.prototype.clearAll = function (userId) {
+        if (!this.scenarios[userId]) {
+            return;
+        }
+        this.scenarios[userId].forEach(function (scenario) {
+            scenario.destroy();
+        });
+        delete this.scenarios[userId];
     };
     return ScenarioManager;
 }());

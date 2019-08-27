@@ -9,7 +9,8 @@ interface CommonParams {
 export interface Params extends CommonParams {
     chatId: number,
     text?: string,
-    data?: string,
+    callback?: string,
+    datetime?: number
 }
 
 export class Parser {
@@ -20,6 +21,7 @@ export class Parser {
             ...common,
             chatId:     msg.chat.id,
             text:       msg.text,
+            datetime:   msg.date * 1000
         } : undefined;
     }
 
@@ -29,7 +31,8 @@ export class Parser {
         return common ? {
             ...common,
             chatId:     query.message ? query.message.chat.id : 0,
-            data:       query.data
+            callback:   query.data,
+            datetime:   query.message? query.message.date * 1000 : 0
         } : undefined;
     }
 
@@ -39,7 +42,7 @@ export class Parser {
         return userId > 0 ? {
             userId:   userId,
             lang:       data.from && data.from.language_code ? data.from.language_code : '',
-            name:       (data.from? data.from.first_name : '') + (data.from? data.from.last_name : ''),
+            name:       (data.from? data.from.first_name : '') + (data.from && data.from.last_name? data.from.last_name : ''),
             nickname:   data.from? data.from.username : ''
         } : undefined;
     }

@@ -1,5 +1,7 @@
 export class User {
-    constructor() {
+    constructor(private readonly _creationDate: number) {
 
     }
+
+
 }

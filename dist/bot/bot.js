@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 var TelegramBot = require("node-telegram-bot-api");
 require("dotenv").config();
@@ -32,7 +21,7 @@ var Bot = /** @class */ (function () {
         var _this = this;
         this._bot.deleteMessage(chatId, msgId.toString())
             .then(function (value) {
-            if (true) {
+            if (value) {
                 _this._history[chatId].splice(msgId);
             }
         })
@@ -40,13 +29,21 @@ var Bot = /** @class */ (function () {
             console.log('Error deleteMessage!', error);
         });
     };
-    Bot.prototype.sendMessage = function (chatId, msgText, deleteLastMsg, options) {
+    Bot.prototype.sendMessage = function (chatId, msgText, keyboard, deleteLastMsg) {
         var _this = this;
         if (deleteLastMsg === void 0) { deleteLastMsg = true; }
         if (deleteLastMsg) {
             this.clearHistory(chatId, true);
         }
-        this._bot.sendMessage(chatId, msgText, __assign({}, options, { parse_mode: "Markdown" }))
+        var options = {
+            parse_mode: "Markdown",
+        };
+        if (keyboard) {
+            options.reply_markup = {
+                inline_keyboard: keyboard
+            };
+        }
+        this._bot.sendMessage(chatId, msgText, options)
             .then(function (msg) {
             _this.addToHistory(msg);
         })

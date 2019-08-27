@@ -14,37 +14,33 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var scenario_1 = require("./scenario");
-var localization_1 = require("../localization/localization");
+var keyboard_maker_1 = require("../utils/keyboard-maker");
 var ExampleScenario = /** @class */ (function (_super) {
     __extends(ExampleScenario, _super);
     function ExampleScenario() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.TEST_DATA = 'TEST_DATA';
+        _this.TEST_CALLBACK = 'TEST_CALLBACK';
         return _this;
     }
     ExampleScenario.prototype.init = function () {
         var _this = this;
         this.addAction(this.INIT_STATE, function (params) {
-            var chatId = params.chatId, lang = params.lang, data = params.data;
-            switch (data) {
-                case _this.TEST_DATA:
-                    _this._bot.sendMessage(chatId, localization_1.Localization.loc(lang, localization_1.LOC_ID.Test), true, _this.getKeyboard(lang));
+            var chatId = params.chatId, lang = params.lang, callback = params.callback;
+            switch (callback) {
+                case _this.TEST_CALLBACK:
+                    _this._bot.sendMessage(chatId, 'Localization.loc(lang, LOC_ID.Test)', _this.getKeyboard(lang));
+                    break;
+                default:
+                    _this._bot.sendMessage(chatId, 'Localization.loc(lang, LOC_ID.Test2)', _this.getKeyboard(lang));
                     break;
             }
             return false;
         });
     };
     ExampleScenario.prototype.getKeyboard = function (lang) {
-        return {
-            reply_markup: {
-                inline_keyboard: [
-                    [{
-                            text: localization_1.Localization.loc(lang, localization_1.LOC_ID.Test),
-                            callback_data: this.TEST_DATA
-                        }]
-                ]
-            }
-        };
+        return new keyboard_maker_1.KeyboardMaker()
+            .addButton('Localization.loc(lang, LOC_ID.Test)', this.TEST_CALLBACK)
+            .result;
     };
     ExampleScenario.prototype.destroy = function () {
     };

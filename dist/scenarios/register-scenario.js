@@ -45,7 +45,7 @@ var RegisterScenario = /** @class */ (function (_super) {
             return false;
         });
         this.addAction(this.RACE_SELECT_STATE, function (params) {
-            var data = params.data, chatId = params.chatId, lang = params.lang, playerId = params.playerId, name = params.name, nickname = params.nickname;
+            var data = params.callback, chatId = params.chatId, lang = params.lang, playerId = params.playerId, name = params.name, nickname = params.nickname;
             switch (data) {
                 case _this.CREATE_DATA:
                     _this._bot.sendMessage(chatId, localization_1.Localization.loc(lang, localization_1.LOC_ID.RegisterRaceSelect), true, _this.getRaceSelectKeyboard(lang));
@@ -68,14 +68,14 @@ var RegisterScenario = /** @class */ (function (_super) {
                     _this._userManager.setTempRace(playerId, randomRace);
                     var randomRoleData = _this.getRandomRoleData(randomRace);
                     _this.setState(_this.ROLE_SELECT_STATE);
-                    params.data = randomRoleData;
+                    params.callback = randomRoleData;
                     _this.activate(params);
                     break;
             }
             return false;
         });
         this.addAction(this.ROLE_SELECT_STATE, function (params) {
-            var data = params.data, playerId = params.playerId, chatId = params.chatId, lang = params.lang;
+            var data = params.callback, playerId = params.playerId, chatId = params.chatId, lang = params.lang;
             switch (data) {
                 case _this.WARRIOR_DATA:
                 case _this.HUNTER_DATA:
@@ -94,7 +94,7 @@ var RegisterScenario = /** @class */ (function (_super) {
             return false;
         });
         this.addAction(this.FINISH_STATE, function (params) {
-            var playerId = params.playerId, data = params.data;
+            var playerId = params.playerId, data = params.callback;
             if (data !== _this.START_DATA) {
                 return false;
             }

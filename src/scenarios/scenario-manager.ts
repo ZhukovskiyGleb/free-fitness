@@ -11,7 +11,7 @@ export class ScenarioManager {
 
     }
 
-    add(userId: number, scenarioClass: ScenarioClass, forceParams?: Params): void {
+    public add(userId: number, scenarioClass: ScenarioClass, forceParams?: Params): void {
         if (!this.scenarios[userId]) {
             this.scenarios[userId] = [];
         }
@@ -25,7 +25,7 @@ export class ScenarioManager {
         }
     }
 
-    activate(params: Params): boolean {
+    public activate(params: Params): boolean {
         const scenarios: Scenario[] = this.scenarios[params.userId];
 
         if (scenarios) {
@@ -33,7 +33,6 @@ export class ScenarioManager {
                 const {readyForDestroy} = scenarios[i].activate(params);
 
                 if (readyForDestroy) {
-                    console.log('SCENARIO REMOVED', typeof scenarios[i]);
                     scenarios[i].destroy();
                     scenarios.splice(i);
                 }
@@ -43,6 +42,18 @@ export class ScenarioManager {
         }
 
         return false;
+    }
+
+    public clearAll(userId: number): void {
+        if (!this.scenarios[userId]) {
+            return;
+        }
+
+        this.scenarios[userId].forEach(scenario => {
+            scenario.destroy();
+        });
+
+        delete this.scenarios[userId];
     }
 
 }

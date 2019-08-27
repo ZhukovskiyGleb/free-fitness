@@ -1,5 +1,5 @@
 import TelegramBot = require("node-telegram-bot-api");
-import {CallbackQuery, Message, SendMessageOptions} from "node-telegram-bot-api";
+import {CallbackQuery, InlineKeyboardButton, Message, SendMessageOptions} from "node-telegram-bot-api";
 
 require("dotenv").config();
 
@@ -29,7 +29,7 @@ export class Bot {
         this._bot.deleteMessage(chatId, msgId.toString())
         .then(
             value => {
-                if (true) {
+                if (value) {
                     this._history[chatId].splice(msgId);
                 }
             }
@@ -41,20 +41,29 @@ export class Bot {
         );
     }
 
-    public sendMessage(chatId: number, msgText: string, deleteLastMsg: boolean = true, options?: SendMessageOptions): void {
+    public sendMessage(chatId: number, msgText: string, keyboard?: InlineKeyboardButton[][], deleteLastMsg: boolean = true): void {
         if (deleteLastMsg) {
             this.clearHistory(chatId, true);
         }
 
-        this._bot.sendMessage(chatId, msgText,
-            {...options, parse_mode: "Markdown"})
+        const options: SendMessageOptions = {
+            parse_mode: "Markdown",
+        };
+
+        if (keyboard) {
+            options.reply_markup = {
+                inline_keyboard: keyboard
+            };
+        }
+
+        this._bot.sendMessage(chatId, msgText, options)
         .then(
             (msg: Message) => {
                 this.addToHistory(msg);
             }
         )
         .catch(
-            error => {
+            (error) => {
                 console.log('Error sendMessage!', error);
             }
         );

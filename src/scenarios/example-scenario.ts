@@ -1,20 +1,29 @@
-import {KeyboardMarkup, Scenario} from "./scenario";
+import {Scenario} from "./scenario";
 import {LOC_ID, Localization} from "../localization/localization";
+import {InlineKeyboardButton} from "node-telegram-bot-api";
+import {KeyboardMaker} from "../utils/keyboard-maker";
 
 export class ExampleScenario extends Scenario {
-    private readonly TEST_DATA = 'TEST_DATA';
+    private readonly TEST_CALLBACK = 'TEST_CALLBACK';
 
     init(): void {
 
         this.addAction(this.INIT_STATE,
     params => {
-                const { chatId, lang, data } = params;
-                switch (data) {
-                    case this.TEST_DATA:
+                const { chatId, lang, callback } = params;
+                switch (callback) {
+                    case this.TEST_CALLBACK:
                         this._bot.sendMessage(
                             chatId,
-                            Localization.loc(lang, LOC_ID.Test),
-                            true,
+                            'Localization.loc(lang, LOC_ID.Test)',
+                            this.getKeyboard(lang)
+                        );
+
+                        break;
+                    default:
+                        this._bot.sendMessage(
+                            chatId,
+                            'Localization.loc(lang, LOC_ID.Test2)',
                             this.getKeyboard(lang)
                         );
 
@@ -25,17 +34,10 @@ export class ExampleScenario extends Scenario {
         });
     }
 
-    private getKeyboard(lang:string): KeyboardMarkup {
-        return {
-            reply_markup: {
-                inline_keyboard: [
-                    [{
-                        text: Localization.loc(lang, LOC_ID.Test),
-                        callback_data: this.TEST_DATA
-                    }]
-                ]
-            }
-        };
+    private getKeyboard(lang:string): InlineKeyboardButton[][] {
+        return new KeyboardMaker()
+            .addButton('Localization.loc(lang, LOC_ID.Test)', this.TEST_CALLBACK)
+            .result;
     }
 
     destroy(): void {
