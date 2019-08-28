@@ -12,11 +12,17 @@ export interface ScenarioAction {
 }
 
 export abstract class Scenario {
-    protected readonly INIT_STATE = 'INIT_STATE';
-    protected readonly FINISH_STATE = 'COMPLETE_STATE';
+    protected readonly INIT_STATE = 'BASE_INIT_STATE';
+    protected readonly WAIT_STATE = 'BASE_WAIT_STATE';
 
     protected _state: string = this.INIT_STATE;
     protected _actions: {[key: string]: ScenarioAction} = {};
+
+    private readonly _waitProperties: {
+        prevState?: string,
+        requestedCallback?: string,
+        responseCallback?: string
+    } = {};
 
     constructor(
         protected _bot: Bot,
@@ -34,7 +40,7 @@ export abstract class Scenario {
         this._actions[state] = action;
     }
 
-    activate(params: Params): {readyForDestroy: boolean} {
+    activate(params: Params): {readyForDestroy: boolean, resultCallback?: string} {
         let readyForDestroy = true;
 
         const action = this._actions[this._state];
@@ -46,7 +52,35 @@ export abstract class Scenario {
             readyForDestroy = false;
         }
 
-        return {readyForDestroy};
+        return {    readyForDestroy,
+                    resultCallback: this._waitProperties.responseCallback
+                };
+    }
+
+    private waitForScenario(params: Params, scenario: ScenarioClass, requestedCallback: string): void {
+        this._waitProperties.prevState = this._state;
+        this._waitProperties.requestedCallback = requestedCallback;
+
+        this.setState(this.WAIT_STATE);
+
+        if (!this._actions[this.WAIT_STATE]) {
+            this.addAction(this.WAIT_STATE,
+        params => {
+                    if (params.callback && params.callback === this._waitProperties.requestedCallback) {
+                        this.setState(this._waitProperties.prevState!);
+                        this.activate(params);
+                    }
+
+                    return true;
+                }
+            )
+        }
+
+        this._scenarioManager.add(params.userId, scenario, params, requestedCallback);
+    }
+
+    public setResultCallback(callback: string): void {
+        this._waitProperties.responseCallback = callback;
     }
 
     destroy(): void {

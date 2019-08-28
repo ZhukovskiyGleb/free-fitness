@@ -20,8 +20,7 @@ export class Bot {
         this._bot.on("polling_error", this.onErrorHandler.bind(this));
 
         // this._bot.onText(/\/clear/, (msg, match) => {
-        //     const chatId = msg.chat.id;
-        //     this.clearHistory(chatId);
+        //     console.log('Clear', match);
         // });
     }
 

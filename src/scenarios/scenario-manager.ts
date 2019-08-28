@@ -11,7 +11,7 @@ export class ScenarioManager {
 
     }
 
-    public add(userId: number, scenarioClass: ScenarioClass, forceParams?: Params): void {
+    public add(userId: number, scenarioClass: ScenarioClass, forceParams?: Params, requestedCallback?: string): void {
         if (!this.scenarios[userId]) {
             this.scenarios[userId] = [];
         }
@@ -19,6 +19,10 @@ export class ScenarioManager {
         const scenario = new scenarioClass(this.bot, this.userManager, this);
         scenario.init();
         this.scenarios[userId].push(scenario);
+
+        if (requestedCallback) {
+            scenario.setResultCallback(requestedCallback);
+        }
 
         if (forceParams) {
             scenario.activate(forceParams);
@@ -28,14 +32,28 @@ export class ScenarioManager {
     public activate(params: Params): boolean {
         const scenarios: Scenario[] = this.scenarios[params.userId];
 
+        const callbacks = [];
+
         if (scenarios) {
             for (let i: number = scenarios.length - 1; i >= 0; i--) {
-                const {readyForDestroy} = scenarios[i].activate(params);
+                const { readyForDestroy, resultCallback } = scenarios[i].activate(params);
 
                 if (readyForDestroy) {
                     scenarios[i].destroy();
                     scenarios.splice(i);
                 }
+
+                if (resultCallback) {
+                    callbacks.push(resultCallback);
+                }
+
+            }
+
+            if (callbacks.length > 0) {
+                callbacks.forEach(callback => {
+                    params.callback = callback;
+                    this.activate(params);
+                });
             }
 
             return true;

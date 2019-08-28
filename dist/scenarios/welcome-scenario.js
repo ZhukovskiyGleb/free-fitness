@@ -16,13 +16,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var scenario_1 = require("./scenario");
 var localization_1 = require("../localization/localization");
 var keyboard_maker_1 = require("../utils/keyboard-maker");
+var diet_scenario_1 = require("./diet-scenario");
 var WelcomeScenario = /** @class */ (function (_super) {
     __extends(WelcomeScenario, _super);
     function WelcomeScenario() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.SELECT_STATE = 'TEST_CALLBACK';
-        _this.DIET_CALLBACK = 'DIET_CALLBACK';
-        _this.WORKOUT_CALLBACK = 'WORKOUT_CALLBACK';
+        _this.SELECT_STATE = 'WELCOME_SELECT_CALLBACK';
+        _this.DIET_CALLBACK = 'WELCOME_DIET_CALLBACK';
+        _this.WORKOUT_CALLBACK = 'WELCOME_WORKOUT_CALLBACK';
         return _this;
     }
     WelcomeScenario.prototype.init = function () {
@@ -44,9 +45,11 @@ var WelcomeScenario = /** @class */ (function (_super) {
             return false;
         });
         this.addAction(this.SELECT_STATE, function (params) {
-            var callback = params.callback;
+            var callback = params.callback, userId = params.userId;
             switch (callback) {
                 case _this.DIET_CALLBACK:
+                    _this._scenarioManager.add(userId, diet_scenario_1.DietScenario, params);
+                    return true;
                     break;
                 case _this.WORKOUT_CALLBACK:
                     break;
@@ -58,21 +61,21 @@ var WelcomeScenario = /** @class */ (function (_super) {
         if (isNewUser === void 0) { isNewUser = false; }
         var locId;
         if (isNewUser) {
-            locId = localization_1.LOC_ID.NewbieMessage;
+            locId = localization_1.LocId.NewbieMessage;
         }
         else {
             var curTime = new Date(datetime).getHours();
-            locId = [localization_1.LOC_ID.Welcome, localization_1.LOC_ID.Hello, localization_1.LOC_ID.NiceToMeetYouAgain,
-                curTime >= 19 ? localization_1.LOC_ID.GoodEvening :
-                    curTime >= 10 ? localization_1.LOC_ID.GoodAfternoon :
-                        localization_1.LOC_ID.GoodMorning][Math.floor(Math.random() * 4)];
+            locId = [localization_1.LocId.Welcome, localization_1.LocId.Hello, localization_1.LocId.NiceToMeetYouAgain,
+                curTime >= 19 ? localization_1.LocId.GoodEvening :
+                    curTime >= 10 ? localization_1.LocId.GoodAfternoon :
+                        localization_1.LocId.GoodMorning][Math.floor(Math.random() * 4)];
         }
-        return localization_1.Localization.loc(lang, locId, { name: name }) + '\n' + localization_1.Localization.loc(lang, localization_1.LOC_ID.HowCanIHelp);
+        return localization_1.Localization.loc(lang, locId, { name: name }) + '\n' + localization_1.Localization.loc(lang, localization_1.LocId.HowCanIHelp);
     };
     WelcomeScenario.prototype.getSelectKeyboard = function (lang) {
         return new keyboard_maker_1.KeyboardMaker()
-            .addButton(localization_1.Localization.loc(lang, localization_1.LOC_ID.ButtonDiet), this.DIET_CALLBACK)
-            .addButton(localization_1.Localization.loc(lang, localization_1.LOC_ID.ButtonWorkout), this.WORKOUT_CALLBACK)
+            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.ButtonDiet), this.DIET_CALLBACK)
+            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.ButtonWorkout), this.WORKOUT_CALLBACK)
             .result;
     };
     WelcomeScenario.prototype.destroy = function () {

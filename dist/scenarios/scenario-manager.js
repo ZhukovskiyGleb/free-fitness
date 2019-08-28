@@ -6,26 +6,40 @@ var ScenarioManager = /** @class */ (function () {
         this.userManager = userManager;
         this.scenarios = {};
     }
-    ScenarioManager.prototype.add = function (userId, scenarioClass, forceParams) {
+    ScenarioManager.prototype.add = function (userId, scenarioClass, forceParams, requestedCallback) {
         if (!this.scenarios[userId]) {
             this.scenarios[userId] = [];
         }
         var scenario = new scenarioClass(this.bot, this.userManager, this);
         scenario.init();
         this.scenarios[userId].push(scenario);
+        if (requestedCallback) {
+            scenario.setResultCallback(requestedCallback);
+        }
         if (forceParams) {
             scenario.activate(forceParams);
         }
     };
     ScenarioManager.prototype.activate = function (params) {
+        var _this = this;
         var scenarios = this.scenarios[params.userId];
+        var callbacks = [];
         if (scenarios) {
             for (var i = scenarios.length - 1; i >= 0; i--) {
-                var readyForDestroy = scenarios[i].activate(params).readyForDestroy;
+                var _a = scenarios[i].activate(params), readyForDestroy = _a.readyForDestroy, resultCallback = _a.resultCallback;
                 if (readyForDestroy) {
                     scenarios[i].destroy();
                     scenarios.splice(i);
                 }
+                if (resultCallback) {
+                    callbacks.push(resultCallback);
+                }
+            }
+            if (callbacks.length > 0) {
+                callbacks.forEach(function (callback) {
+                    params.callback = callback;
+                    _this.activate(params);
+                });
             }
             return true;
         }

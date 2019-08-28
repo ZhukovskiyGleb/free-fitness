@@ -1,12 +1,13 @@
 import {Scenario} from "./scenario";
-import {LOC_ID, Localization} from "../localization/localization";
+import {LocId, Localization} from "../localization/localization";
 import {InlineKeyboardButton} from "node-telegram-bot-api";
 import {KeyboardMaker} from "../utils/keyboard-maker";
+import {DietScenario} from "./diet-scenario";
 
 export class WelcomeScenario extends Scenario {
-    private readonly SELECT_STATE = 'TEST_CALLBACK';
-    private readonly DIET_CALLBACK = 'DIET_CALLBACK';
-    private readonly WORKOUT_CALLBACK = 'WORKOUT_CALLBACK';
+    private readonly SELECT_STATE = 'WELCOME_SELECT_CALLBACK';
+    private readonly DIET_CALLBACK = 'WELCOME_DIET_CALLBACK';
+    private readonly WORKOUT_CALLBACK = 'WELCOME_WORKOUT_CALLBACK';
 
     init(): void {
 
@@ -40,11 +41,13 @@ export class WelcomeScenario extends Scenario {
 
         this.addAction(this.SELECT_STATE,
             params => {
-                const { callback } = params;
+                const { callback, userId } = params;
 
                 switch (callback) {
                     case this.DIET_CALLBACK:
+                        this._scenarioManager.add(userId, DietScenario, params);
 
+                        return true;
                         break;
                     case this.WORKOUT_CALLBACK:
 
@@ -56,24 +59,24 @@ export class WelcomeScenario extends Scenario {
     }
 
     private getWelcomeText(lang: string, datetime: number, name: string, isNewUser: boolean = false): string {
-        let locId: LOC_ID;
+        let locId: LocId;
         if (isNewUser) {
-            locId = LOC_ID.NewbieMessage;
+            locId = LocId.NewbieMessage;
         }
         else {
             const curTime = new Date(datetime).getHours();
-            locId = [LOC_ID.Welcome, LOC_ID.Hello, LOC_ID.NiceToMeetYouAgain,
-            curTime >= 19 ? LOC_ID.GoodEvening :
-            curTime >= 10 ? LOC_ID.GoodAfternoon :
-            LOC_ID.GoodMorning][Math.floor(Math.random() * 4)];
+            locId = [LocId.Welcome, LocId.Hello, LocId.NiceToMeetYouAgain,
+            curTime >= 19 ? LocId.GoodEvening :
+            curTime >= 10 ? LocId.GoodAfternoon :
+            LocId.GoodMorning][Math.floor(Math.random() * 4)];
         }
-        return Localization.loc(lang, locId, {name}) + '\n' + Localization.loc(lang, LOC_ID.HowCanIHelp);
+        return Localization.loc(lang, locId, {name}) + '\n' + Localization.loc(lang, LocId.HowCanIHelp);
     }
 
     private getSelectKeyboard(lang:string): InlineKeyboardButton[][] {
         return new KeyboardMaker()
-            .addButton(Localization.loc(lang, LOC_ID.ButtonDiet), this.DIET_CALLBACK)
-            .addButton(Localization.loc(lang, LOC_ID.ButtonWorkout), this.WORKOUT_CALLBACK)
+            .addButton(Localization.loc(lang, LocId.ButtonDiet), this.DIET_CALLBACK)
+            .addButton(Localization.loc(lang, LocId.ButtonWorkout), this.WORKOUT_CALLBACK)
             .result;
     }
 

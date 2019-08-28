@@ -1,6 +1,6 @@
 import {strict} from "assert";
 
-export enum LOC_ID {
+export enum LocId {
     NewbieMessage,
     GoodMorning,
     GoodAfternoon,
@@ -13,34 +13,32 @@ export enum LOC_ID {
     ButtonWorkout,
 }
 
-export class Localization<T extends keyof LOC_ID> {
-    private static localizations: { [key: string]: {[key in LOC_ID]: string} } = {
+export class Localization<T extends keyof LocId> {
+    private static localizations: { [key: string]: {[key in LocId]: string} } = {
         'ru': {
-            [LOC_ID.NewbieMessage]: 'Здравствуйте, {name}!\n' +
+            [LocId.NewbieMessage]: 'Здравствуйте, {name}!\n' +
             'Я - ваш личный *фитнес тренер и диетолог*!\n' +
             'И совершенно бесплатно, я могу составить для вас рацион питания и программу тренировок.',
-            [LOC_ID.GoodMorning]: 'Доброе утро, {name}',
-            [LOC_ID.GoodAfternoon]: 'Добрый день, {name}',
-            [LOC_ID.GoodEvening]: 'Добрый вечер, {name}',
-            [LOC_ID.NiceToMeetYouAgain]: 'С возвращением, {name}',
-            [LOC_ID.Welcome]: 'Добро пожаловать, {name}',
-            [LOC_ID.Hello]: 'Приветствую, {name}',
-            [LOC_ID.HowCanIHelp]: 'Чем я могу быть полезен?',
-            [LOC_ID.ButtonDiet]: 'Питание',
-            [LOC_ID.ButtonWorkout]: 'Тренировки',
+            [LocId.GoodMorning]: 'Доброе утро, {name}',
+            [LocId.GoodAfternoon]: 'Добрый день, {name}',
+            [LocId.GoodEvening]: 'Добрый вечер, {name}',
+            [LocId.NiceToMeetYouAgain]: 'С возвращением, {name}',
+            [LocId.Welcome]: 'Добро пожаловать, {name}',
+            [LocId.Hello]: 'Приветствую, {name}',
+            [LocId.HowCanIHelp]: 'Чем я могу быть полезен?',
+            [LocId.ButtonDiet]: 'Питание',
+            [LocId.ButtonWorkout]: 'Тренировки',
         }
     };
 
-    public static loc(lang: string, id: LOC_ID, keys?: {[key: string]: string}): string {
+    public static loc(lang: string, id: LocId, keys?: {[key: string]: string}): string {
         if (!this.localizations[lang]) {
             lang = 'ru';
         }
         let text = this.localizations[lang][id];
 
         if (keys) {
-            console.log('parse keys', keys);
             for (let key in keys) {
-                console.log('key', key);
                 text = text.replace(`{${key}}`, keys[key]);
             }
         }

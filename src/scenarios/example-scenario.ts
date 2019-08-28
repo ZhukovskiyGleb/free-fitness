@@ -1,5 +1,5 @@
 import {Scenario} from "./scenario";
-import {LOC_ID, Localization} from "../localization/localization";
+import {LocId, Localization} from "../localization/localization";
 import {InlineKeyboardButton} from "node-telegram-bot-api";
 import {KeyboardMaker} from "../utils/keyboard-maker";
 
