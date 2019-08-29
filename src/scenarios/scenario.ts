@@ -5,13 +5,20 @@ import {Params} from "../utils/parser";
 
 export interface ScenarioClass {new (bot: Bot, userManager: UserManager, scenarioManager: ScenarioManager): Scenario}
 
+type RequestedData = {[key: string]: any} | any[];
+
 export interface ScenarioRequestData {
     callback: string,
-    [key: string]: any
+    data?: RequestedData
+}
+
+export enum ActionResults {
+    ReadyForDestroy = 'readyForDestroy',
+    Repeat = 'repeat'
 }
 
 export interface ScenarioAction {
-    (params: Params): { readyForDestroy?: boolean, repeat?: boolean } | boolean | void
+    (params: Params): ActionResults | void
 }
 
 export abstract class Scenario {
@@ -21,7 +28,7 @@ export abstract class Scenario {
     protected _state: string = this.INIT_STATE;
     protected _actions: {[key: string]: ScenarioAction} = {};
 
-    private readonly _waitProperties: {
+    private _waitProperties: {
         prevState?: string,
         expectedCallback?: string,
         requestData?: ScenarioRequestData
@@ -48,11 +55,10 @@ export abstract class Scenario {
                 const result = action(params);
 
                 if (result) {
-                    if (typeof result === "boolean") {
-                        readyForDestroy = result;
+                    if (result === ActionResults.ReadyForDestroy) {
+                        readyForDestroy = true;
                     } else {
-                        readyForDestroy = result.readyForDestroy ? result.readyForDestroy : readyForDestroy;
-                        repeat = result.repeat ? result.repeat : repeat;
+                        repeat = true;
                     }
                 }
             } while (!readyForDestroy && repeat);
@@ -68,6 +74,10 @@ export abstract class Scenario {
 
     public setRequestData(requestData: ScenarioRequestData): void {
         this._waitProperties.requestData = requestData;
+    }
+
+    protected get requestedData(): RequestedData | undefined {
+        return this._waitProperties.requestData;
     }
 
     protected setState(state: string): void {
@@ -89,7 +99,7 @@ export abstract class Scenario {
         params => {
                     if (params.callback && params.callback === this._waitProperties.expectedCallback) {
                         this.setState(this._waitProperties.prevState!);
-                        this.activate(params);
+                        return ActionResults.Repeat;
                     }
                 }
             )
@@ -104,5 +114,6 @@ export abstract class Scenario {
         delete this._scenarioManager;
 
         delete this._actions;
+        delete this._waitProperties;
     }
 }

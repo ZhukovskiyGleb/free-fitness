@@ -1,42 +1,43 @@
 export enum Gender {
-    Male,
-    Female
+    Male = 'male',
+    Female = 'female',
 }
 
 export enum BodyType {
-    Thin,
-    Muscular,
-    Large,
-    Overweight,
-    Common
+    Thin = 'thin',
+    Muscular = 'muscular',
+    Large = 'large',
+    Overweight = 'overweight',
+    Common = 'common',
 }
 
 export enum Activity {
-    Nothing,
-    Easy,
-    Average,
-    Heavy
+    Nothing = 'nothing',
+    Easy = 'easy',
+    Average = 'average',
+    Heavy = 'heavy',
 }
 
 export enum Experience {
-    Junior,
-    Middle,
-    Senior
+    Junior = 'junior',
+    Middle = 'middle',
+    Senior = 'senior',
 }
 
 export enum UserProperty {
     RequestsAmount = 'requestsAmount',
     RegisterDate = 'registerDate',
-    LastChangeDate = 'lastChangeDate',
+    LastEditDate = 'lastEditDate',
     LastVisitDate = 'lastVisitDate',
     ShowDarkSide = 'showDarkSide',
     DarkSideAccess = 'darkSideAccess',
     ContactsNotified = 'contactsNotified',
     SavedDiet = 'savedDiet',
     SavedWorkout = 'savedWorkout',
+
     Weight = 'weight',
     Height = 'height',
-    YearOfBirth = 'yearOfBirth',
+    Age = 'age',
     Gender = 'gender',
     BodyType = 'bodyType',
     Activity = 'activity',
@@ -46,7 +47,7 @@ export enum UserProperty {
 export interface UserProperties {
     [UserProperty.RequestsAmount]?: number;
     [UserProperty.RegisterDate]?: number;
-    [UserProperty.LastChangeDate]?: number;
+    [UserProperty.LastEditDate]?: number;
     [UserProperty.LastVisitDate]?: number;
     [UserProperty.ShowDarkSide]?: boolean;
     [UserProperty.DarkSideAccess]?: boolean;
@@ -55,7 +56,7 @@ export interface UserProperties {
     [UserProperty.SavedWorkout]?: {};
     [UserProperty.Weight]?: number;
     [UserProperty.Height]?: number;
-    [UserProperty.YearOfBirth]?: number;
+    [UserProperty.Age]?: number;
     [UserProperty.Gender]?: Gender;
     [UserProperty.BodyType]?: BodyType;
     [UserProperty.Activity]?: Activity;
@@ -97,14 +98,20 @@ export class User {
         return result;
     }
 
-    public getProperty(property: UserProperty): unknown {
+    public getProperty<T>(property: UserProperty): T | undefined {
         if (this._properties.hasOwnProperty(property)) {
-            return this._properties[property];
+            return <T>this._properties[property];
         }
+        return undefined;
     }
 
     public get properties(): UserProperties {
         return {...this._properties};
+    }
+
+    public setProperty<T>(property: UserProperty, value: T): void {
+        // @ts-ignore
+        this._properties[property] = value;
     }
 
 }

@@ -13,35 +13,35 @@ var __assign = (this && this.__assign) || function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var Gender;
 (function (Gender) {
-    Gender[Gender["Male"] = 0] = "Male";
-    Gender[Gender["Female"] = 1] = "Female";
+    Gender["Male"] = "male";
+    Gender["Female"] = "female";
 })(Gender = exports.Gender || (exports.Gender = {}));
 var BodyType;
 (function (BodyType) {
-    BodyType[BodyType["Thin"] = 0] = "Thin";
-    BodyType[BodyType["Muscular"] = 1] = "Muscular";
-    BodyType[BodyType["Large"] = 2] = "Large";
-    BodyType[BodyType["Overweight"] = 3] = "Overweight";
-    BodyType[BodyType["Common"] = 4] = "Common";
+    BodyType["Thin"] = "thin";
+    BodyType["Muscular"] = "muscular";
+    BodyType["Large"] = "large";
+    BodyType["Overweight"] = "overweight";
+    BodyType["Common"] = "common";
 })(BodyType = exports.BodyType || (exports.BodyType = {}));
 var Activity;
 (function (Activity) {
-    Activity[Activity["Nothing"] = 0] = "Nothing";
-    Activity[Activity["Easy"] = 1] = "Easy";
-    Activity[Activity["Average"] = 2] = "Average";
-    Activity[Activity["Heavy"] = 3] = "Heavy";
+    Activity["Nothing"] = "nothing";
+    Activity["Easy"] = "easy";
+    Activity["Average"] = "average";
+    Activity["Heavy"] = "heavy";
 })(Activity = exports.Activity || (exports.Activity = {}));
 var Experience;
 (function (Experience) {
-    Experience[Experience["Junior"] = 0] = "Junior";
-    Experience[Experience["Middle"] = 1] = "Middle";
-    Experience[Experience["Senior"] = 2] = "Senior";
+    Experience["Junior"] = "junior";
+    Experience["Middle"] = "middle";
+    Experience["Senior"] = "senior";
 })(Experience = exports.Experience || (exports.Experience = {}));
 var UserProperty;
 (function (UserProperty) {
     UserProperty["RequestsAmount"] = "requestsAmount";
     UserProperty["RegisterDate"] = "registerDate";
-    UserProperty["LastChangeDate"] = "lastChangeDate";
+    UserProperty["LastEditDate"] = "lastEditDate";
     UserProperty["LastVisitDate"] = "lastVisitDate";
     UserProperty["ShowDarkSide"] = "showDarkSide";
     UserProperty["DarkSideAccess"] = "darkSideAccess";
@@ -50,7 +50,7 @@ var UserProperty;
     UserProperty["SavedWorkout"] = "savedWorkout";
     UserProperty["Weight"] = "weight";
     UserProperty["Height"] = "height";
-    UserProperty["YearOfBirth"] = "yearOfBirth";
+    UserProperty["Age"] = "age";
     UserProperty["Gender"] = "gender";
     UserProperty["BodyType"] = "bodyType";
     UserProperty["Activity"] = "activity";

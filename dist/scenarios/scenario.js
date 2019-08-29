@@ -1,5 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var ActionResults;
+(function (ActionResults) {
+    ActionResults["ReadyForDestroy"] = "readyForDestroy";
+    ActionResults["Repeat"] = "repeat";
+})(ActionResults = exports.ActionResults || (exports.ActionResults = {}));
 var Scenario = /** @class */ (function () {
     function Scenario(_bot, _userManager, _scenarioManager) {
         this._bot = _bot;
@@ -20,12 +25,11 @@ var Scenario = /** @class */ (function () {
             do {
                 var result = action(params);
                 if (result) {
-                    if (typeof result === "boolean") {
-                        readyForDestroy = result;
+                    if (result === ActionResults.ReadyForDestroy) {
+                        readyForDestroy = true;
                     }
                     else {
-                        readyForDestroy = result.readyForDestroy ? result.readyForDestroy : readyForDestroy;
-                        repeat = result.repeat ? result.repeat : repeat;
+                        repeat = true;
                     }
                 }
             } while (!readyForDestroy && repeat);
@@ -40,6 +44,13 @@ var Scenario = /** @class */ (function () {
     Scenario.prototype.setRequestData = function (requestData) {
         this._waitProperties.requestData = requestData;
     };
+    Object.defineProperty(Scenario.prototype, "requestedData", {
+        get: function () {
+            return this._waitProperties.requestData;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Scenario.prototype.setState = function (state) {
         this._state = state;
     };
@@ -55,7 +66,7 @@ var Scenario = /** @class */ (function () {
             this.addAction(this.WAIT_STATE, function (params) {
                 if (params.callback && params.callback === _this._waitProperties.expectedCallback) {
                     _this.setState(_this._waitProperties.prevState);
-                    _this.activate(params);
+                    return ActionResults.Repeat;
                 }
             });
         }

@@ -40,7 +40,7 @@ var WelcomeScenario = /** @class */ (function (_super) {
                 _this.setState(_this.SELECT_STATE);
             }
             else {
-                return true;
+                return scenario_1.ActionResults.ReadyForDestroy;
             }
         });
         this.addAction(this.SELECT_STATE, function (params) {
@@ -48,7 +48,7 @@ var WelcomeScenario = /** @class */ (function (_super) {
             switch (callback) {
                 case _this.DIET_CALLBACK:
                     _this._scenarioManager.add(userId, diet_scenario_1.DietScenario, params);
-                    return true;
+                    return scenario_1.ActionResults.ReadyForDestroy;
                     break;
                 case _this.WORKOUT_CALLBACK:
                     break;

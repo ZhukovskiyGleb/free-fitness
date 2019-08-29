@@ -3,8 +3,8 @@ import {CallbackQuery, Message} from "node-telegram-bot-api";
 import {UserManager} from "./user/user-manager";
 import {ScenarioManager} from "./scenarios/scenario-manager";
 import {Parser} from "./utils/parser";
-import {ExampleScenario} from "./scenarios/example-scenario";
 import {WelcomeScenario} from "./scenarios/welcome-scenario";
+import {ProfileUtils} from "./utils/profile-utils";
 
 export class App {
     private readonly _bot: Bot;
@@ -32,7 +32,6 @@ export class App {
             const activated = this._scenarioManager.activate(params);
 
             if (!activated) {
-                this._bot.clearHistory(userId);
                 this._scenarioManager.clearAll(userId);
                 this._scenarioManager.add(userId, WelcomeScenario, params);
             }

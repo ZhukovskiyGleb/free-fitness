@@ -25,7 +25,7 @@ export class ScenarioManager {
         }
 
         if (forceParams) {
-            scenario.activate(forceParams);
+            this.activate(forceParams);
         }
     }
 

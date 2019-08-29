@@ -9,7 +9,10 @@ export class KeyboardMaker {
 
     public addButton(text: string, callback: string): KeyboardMaker {
         const lastLine = this._keyboard[this._keyboard.length - 1];
-        lastLine.push({text, callback_data: callback});
+        lastLine.push({
+            text: text.toUpperCase(),
+            callback_data: callback
+        });
 
         return this;
     }

@@ -40,7 +40,8 @@ var Bot = /** @class */ (function () {
         if (keyboard) {
             options.reply_markup = {
                 inline_keyboard: keyboard,
-                resize_keyboard: true
+                resize_keyboard: true,
+                one_time_keyboard: true
             };
         }
         this._bot.sendMessage(chatId, msgText, options)

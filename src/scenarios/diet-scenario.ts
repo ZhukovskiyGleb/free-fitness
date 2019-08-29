@@ -1,13 +1,16 @@
-import {Scenario} from "./scenario";
+import {ActionResults, Scenario} from "./scenario";
 import {InlineKeyboardButton} from "node-telegram-bot-api";
 import {KeyboardMaker} from "../utils/keyboard-maker";
 import {UserProperty} from "../user/user";
 import {Localization, LocId} from "../localization/localization";
+import {WelcomeScenario} from "./welcome-scenario";
+import {ProfileScenario} from "./profile-scenario";
+import {isSomething} from "../utils/utils";
 
 export class DietScenario extends Scenario {
     private readonly NEW_STATE = 'DIET_NEW_STATE';
 
-    private readonly WAIT_PROFILE_CALLBACK = 'WAIT_PROFILE_CALLBACK';
+    private readonly PROFILE_READY_CALLBACK = 'DIET_PROFILE_READY_CALLBACK';
     private readonly LOAD_CALLBACK = 'DIET_LOAD_CALLBACK';
     private readonly NEW_CALLBACK = 'DIET_NEW_CALLBACK';
     private readonly BACK_CALLBACK = 'DIET_BACK_CALLBACK';
@@ -25,12 +28,11 @@ export class DietScenario extends Scenario {
                 case this.NEW_CALLBACK:
                     this.setState(this.NEW_STATE);
 
-                    return {repeat: true};
-
-                    break;
+                    return ActionResults.Repeat;
                 case this.BACK_CALLBACK:
+                    this._scenarioManager.add(userId, WelcomeScenario, params);
 
-                    break;
+                    return ActionResults.ReadyForDestroy;
                 default:
                     this._bot.sendMessage(
                         chatId,
@@ -44,30 +46,26 @@ export class DietScenario extends Scenario {
 
         this.addAction(this.NEW_STATE,
     params => {
-                const { userId } = params;
+                const { callback } = params;
 
-                const user = this._userManager.getUser(userId);
+                switch (callback) {
+                    case this.PROFILE_READY_CALLBACK:
 
-                if (user) {
-                    if (user.hasProperties([UserProperty.Height, UserProperty.Weight, UserProperty.BodyType, UserProperty.Activity])) {
-                        const { height, weight, bodyType, activity } = user.properties;
-
-                    } else {
-                        // this.waitForScenario(params, )
-                    }
+                        break;
+                    default:
+                        this.waitForScenario(params, ProfileScenario, {
+                            callback: this.PROFILE_READY_CALLBACK,
+                            data: [UserProperty.Height, UserProperty.Weight, UserProperty.BodyType, UserProperty.Activity]
+                        });
+                        break;
                 }
-                else {
-                    return true;
-                }
-
-                return false;
         });
     }
 
     private getInitKeyboard(lang:string, userId: number): InlineKeyboardButton[][] {
         const keyboard = new KeyboardMaker();
         const user = this._userManager.getUser(userId);
-        if (user && !!user.getProperty(UserProperty.SavedDiet)) {
+        if (user && isSomething(user.getProperty(UserProperty.SavedDiet))) {
             keyboard.addButton(Localization.loc(lang, LocId.ButtonDiet), this.LOAD_CALLBACK);
         }
         return keyboard.addButton(Localization.loc(lang, LocId.ButtonDiet), this.NEW_CALLBACK)

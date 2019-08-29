@@ -1,4 +1,4 @@
-import {Scenario} from "./scenario";
+import {ActionResults, Scenario} from "./scenario";
 import {LocId, Localization} from "../localization/localization";
 import {InlineKeyboardButton} from "node-telegram-bot-api";
 import {KeyboardMaker} from "../utils/keyboard-maker";
@@ -33,7 +33,7 @@ export class WelcomeScenario extends Scenario {
                     this.setState(this.SELECT_STATE);
                 }
                 else {
-                    return true;
+                    return ActionResults.ReadyForDestroy;
                 }
         });
 
@@ -45,7 +45,7 @@ export class WelcomeScenario extends Scenario {
                     case this.DIET_CALLBACK:
                         this._scenarioManager.add(userId, DietScenario, params);
 
-                        return true;
+                        return ActionResults.ReadyForDestroy;
                         break;
                     case this.WORKOUT_CALLBACK:
 

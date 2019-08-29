@@ -17,7 +17,7 @@ var ScenarioManager = /** @class */ (function () {
             scenario.setRequestData(requestData);
         }
         if (forceParams) {
-            scenario.activate(forceParams);
+            this.activate(forceParams);
         }
     };
     ScenarioManager.prototype.activate = function (params) {
