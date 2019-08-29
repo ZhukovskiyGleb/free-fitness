@@ -19,7 +19,7 @@ export class Bot {
 
         this._bot.on("polling_error", this.onErrorHandler.bind(this));
 
-        // this._bot.onText(/\/clear/, (msg, match) => {
+        // this._bot.onText(/\/clear(.+)/, (msg, match) => {
         //     console.log('Clear', match);
         // });
     }
