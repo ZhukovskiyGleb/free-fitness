@@ -3,12 +3,15 @@ import {UserManager} from "../user/user-manager";
 import {ScenarioManager} from "./scenario-manager";
 import {Params} from "../utils/parser";
 
-export interface KeyboardMarkup {reply_markup: {inline_keyboard: any[]}}
-
 export interface ScenarioClass {new (bot: Bot, userManager: UserManager, scenarioManager: ScenarioManager): Scenario}
 
+export interface ScenarioRequestData {
+    callback: string,
+    [key: string]: any
+}
+
 export interface ScenarioAction {
-    (params: Params): boolean
+    (params: Params): { readyForDestroy?: boolean, repeat?: boolean } | boolean | void
 }
 
 export abstract class Scenario {
@@ -20,8 +23,8 @@ export abstract class Scenario {
 
     private readonly _waitProperties: {
         prevState?: string,
-        requestedCallback?: string,
-        responseCallback?: string
+        expectedCallback?: string,
+        requestData?: ScenarioRequestData
     } = {};
 
     constructor(
@@ -32,6 +35,41 @@ export abstract class Scenario {
 
     public abstract init(): void;
 
+    public activate(params: Params): { readyForDestroy: boolean, resultCallback?: string } {
+        console.log('Caller', this.activate.caller);
+
+        let readyForDestroy: boolean = false;
+        let repeat: boolean = false;
+
+        const action = this._actions[this._state];
+
+        if (action) {
+            do {
+                const result = action(params);
+
+                if (result) {
+                    if (typeof result === "boolean") {
+                        readyForDestroy = result;
+                    } else {
+                        readyForDestroy = result.readyForDestroy ? result.readyForDestroy : readyForDestroy;
+                        repeat = result.repeat ? result.repeat : repeat;
+                    }
+                }
+            } while (!readyForDestroy && repeat);
+        }
+        else {
+            readyForDestroy = false;
+        }
+
+        return {    readyForDestroy,
+            resultCallback: this._waitProperties.requestData ? this._waitProperties.requestData.callback : undefined
+        };
+    }
+
+    public setRequestData(requestData: ScenarioRequestData): void {
+        this._waitProperties.requestData = requestData;
+    }
+
     protected setState(state: string): void {
         this._state = state;
     }
@@ -40,47 +78,24 @@ export abstract class Scenario {
         this._actions[state] = action;
     }
 
-    activate(params: Params): {readyForDestroy: boolean, resultCallback?: string} {
-        let readyForDestroy = true;
-
-        const action = this._actions[this._state];
-
-        if (action) {
-            readyForDestroy = action(params);
-        }
-        else {
-            readyForDestroy = false;
-        }
-
-        return {    readyForDestroy,
-                    resultCallback: this._waitProperties.responseCallback
-                };
-    }
-
-    private waitForScenario(params: Params, scenario: ScenarioClass, requestedCallback: string): void {
+    protected waitForScenario(params: Params, scenario: ScenarioClass, requestData: ScenarioRequestData): void {
         this._waitProperties.prevState = this._state;
-        this._waitProperties.requestedCallback = requestedCallback;
+        this._waitProperties.expectedCallback = requestData.callback;
 
         this.setState(this.WAIT_STATE);
 
         if (!this._actions[this.WAIT_STATE]) {
             this.addAction(this.WAIT_STATE,
         params => {
-                    if (params.callback && params.callback === this._waitProperties.requestedCallback) {
+                    if (params.callback && params.callback === this._waitProperties.expectedCallback) {
                         this.setState(this._waitProperties.prevState!);
                         this.activate(params);
                     }
-
-                    return true;
                 }
             )
         }
 
-        this._scenarioManager.add(params.userId, scenario, params, requestedCallback);
-    }
-
-    public setResultCallback(callback: string): void {
-        this._waitProperties.responseCallback = callback;
+        this._scenarioManager.add(params.userId, scenario, params, requestData);
     }
 
     destroy(): void {

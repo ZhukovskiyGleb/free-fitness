@@ -11,8 +11,12 @@ var LocId;
     LocId[LocId["Welcome"] = 5] = "Welcome";
     LocId[LocId["Hello"] = 6] = "Hello";
     LocId[LocId["HowCanIHelp"] = 7] = "HowCanIHelp";
-    LocId[LocId["ButtonDiet"] = 8] = "ButtonDiet";
-    LocId[LocId["ButtonWorkout"] = 9] = "ButtonWorkout";
+    LocId[LocId["WhatExactly"] = 8] = "WhatExactly";
+    LocId[LocId["ButtonDiet"] = 9] = "ButtonDiet";
+    LocId[LocId["ButtonWorkout"] = 10] = "ButtonWorkout";
+    LocId[LocId["ButtonMyDiet"] = 11] = "ButtonMyDiet";
+    LocId[LocId["ButtonNewDiet"] = 12] = "ButtonNewDiet";
+    LocId[LocId["ButtonBackToMenu"] = 13] = "ButtonBackToMenu";
 })(LocId = exports.LocId || (exports.LocId = {}));
 var Localization = /** @class */ (function () {
     function Localization() {
@@ -41,8 +45,12 @@ var Localization = /** @class */ (function () {
             _a[LocId.Welcome] = 'Добро пожаловать, {name}',
             _a[LocId.Hello] = 'Приветствую, {name}',
             _a[LocId.HowCanIHelp] = 'Чем я могу быть полезен?',
+            _a[LocId.WhatExactly] = 'Что именно интересует?',
             _a[LocId.ButtonDiet] = 'Питание',
             _a[LocId.ButtonWorkout] = 'Тренировки',
+            _a[LocId.ButtonMyDiet] = 'Мой рацион',
+            _a[LocId.ButtonNewDiet] = 'Новый рацион',
+            _a[LocId.ButtonBackToMenu] = 'В главное меню',
             _a)
     };
     return Localization;

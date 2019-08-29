@@ -6,15 +6,15 @@ var ScenarioManager = /** @class */ (function () {
         this.userManager = userManager;
         this.scenarios = {};
     }
-    ScenarioManager.prototype.add = function (userId, scenarioClass, forceParams, requestedCallback) {
+    ScenarioManager.prototype.add = function (userId, scenarioClass, forceParams, requestData) {
         if (!this.scenarios[userId]) {
             this.scenarios[userId] = [];
         }
         var scenario = new scenarioClass(this.bot, this.userManager, this);
         scenario.init();
         this.scenarios[userId].push(scenario);
-        if (requestedCallback) {
-            scenario.setResultCallback(requestedCallback);
+        if (requestData) {
+            scenario.setRequestData(requestData);
         }
         if (forceParams) {
             scenario.activate(forceParams);

@@ -12,7 +12,7 @@ var Bot = /** @class */ (function () {
         this._bot.on('message', messageHandler);
         this._bot.on('message', this.onReceiveMessage.bind(this));
         this._bot.on("polling_error", this.onErrorHandler.bind(this));
-        // this._bot.onText(/\/clear/, (msg, match) => {
+        // this._bot.onText(/\/clear(.+)/, (msg, match) => {
         //     console.log('Clear', match);
         // });
     };
@@ -39,7 +39,8 @@ var Bot = /** @class */ (function () {
         };
         if (keyboard) {
             options.reply_markup = {
-                inline_keyboard: keyboard
+                inline_keyboard: keyboard,
+                resize_keyboard: true
             };
         }
         this._bot.sendMessage(chatId, msgText, options)
@@ -75,7 +76,7 @@ var Bot = /** @class */ (function () {
         this.addToHistory(msg);
     };
     Bot.prototype.onErrorHandler = function (err) {
-        console.log('Polling error!', err);
+        console.log('Polling error!', err.message);
     };
     return Bot;
 }());

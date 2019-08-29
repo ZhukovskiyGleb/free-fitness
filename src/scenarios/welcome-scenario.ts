@@ -35,8 +35,6 @@ export class WelcomeScenario extends Scenario {
                 else {
                     return true;
                 }
-
-                return false;
         });
 
         this.addAction(this.SELECT_STATE,
@@ -53,8 +51,6 @@ export class WelcomeScenario extends Scenario {
 
                         break;
                 }
-
-                return false;
             });
     }
 

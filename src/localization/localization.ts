@@ -9,8 +9,12 @@ export enum LocId {
     Welcome,
     Hello,
     HowCanIHelp,
+    WhatExactly,
     ButtonDiet,
     ButtonWorkout,
+    ButtonMyDiet,
+    ButtonNewDiet,
+    ButtonBackToMenu,
 }
 
 export class Localization<T extends keyof LocId> {
@@ -26,8 +30,12 @@ export class Localization<T extends keyof LocId> {
             [LocId.Welcome]: 'Добро пожаловать, {name}',
             [LocId.Hello]: 'Приветствую, {name}',
             [LocId.HowCanIHelp]: 'Чем я могу быть полезен?',
+            [LocId.WhatExactly]: 'Что именно интересует?',
             [LocId.ButtonDiet]: 'Питание',
             [LocId.ButtonWorkout]: 'Тренировки',
+            [LocId.ButtonMyDiet]: 'Мой рацион',
+            [LocId.ButtonNewDiet]: 'Новый рацион',
+            [LocId.ButtonBackToMenu]: 'В главное меню',
         }
     };
 

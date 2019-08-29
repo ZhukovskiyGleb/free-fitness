@@ -32,6 +32,8 @@ export enum UserProperty {
     ShowDarkSide = 'showDarkSide',
     DarkSideAccess = 'darkSideAccess',
     ContactsNotified = 'contactsNotified',
+    SavedDiet = 'savedDiet',
+    SavedWorkout = 'savedWorkout',
     Weight = 'weight',
     Height = 'height',
     YearOfBirth = 'yearOfBirth',
@@ -49,6 +51,8 @@ export interface UserProperties {
     [UserProperty.ShowDarkSide]?: boolean;
     [UserProperty.DarkSideAccess]?: boolean;
     [UserProperty.ContactsNotified]?: boolean;
+    [UserProperty.SavedDiet]?: {};
+    [UserProperty.SavedWorkout]?: {};
     [UserProperty.Weight]?: number;
     [UserProperty.Height]?: number;
     [UserProperty.YearOfBirth]?: number;
@@ -85,6 +89,7 @@ export class User {
         const result: UserProperties = {};
         requestProps.forEach((property: UserProperty) => {
             if (this._properties.hasOwnProperty(property)) {
+                // @ts-ignore
                 result[property] = this._properties[property];
             }
         });
@@ -99,7 +104,7 @@ export class User {
     }
 
     public get properties(): UserProperties {
-        return {...this._properties}
+        return {...this._properties};
     }
 
 }

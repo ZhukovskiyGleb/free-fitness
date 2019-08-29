@@ -34,7 +34,6 @@ var ExampleScenario = /** @class */ (function (_super) {
                     _this._bot.sendMessage(chatId, 'Localization.loc(lang, LOC_ID.Test2)', _this.getKeyboard(lang));
                     break;
             }
-            return false;
         });
     };
     ExampleScenario.prototype.getKeyboard = function (lang) {

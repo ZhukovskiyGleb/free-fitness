@@ -1,5 +1,4 @@
 import {Scenario} from "./scenario";
-import {LocId, Localization} from "../localization/localization";
 import {InlineKeyboardButton} from "node-telegram-bot-api";
 import {KeyboardMaker} from "../utils/keyboard-maker";
 
@@ -29,8 +28,6 @@ export class ExampleScenario extends Scenario {
 
                         break;
                 }
-
-                return false;
         });
     }
 

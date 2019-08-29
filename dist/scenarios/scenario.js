@@ -11,43 +11,55 @@ var Scenario = /** @class */ (function () {
         this._actions = {};
         this._waitProperties = {};
     }
+    Scenario.prototype.activate = function (params) {
+        console.log('Caller', this.activate.caller);
+        var readyForDestroy = false;
+        var repeat = false;
+        var action = this._actions[this._state];
+        if (action) {
+            do {
+                var result = action(params);
+                if (result) {
+                    if (typeof result === "boolean") {
+                        readyForDestroy = result;
+                    }
+                    else {
+                        readyForDestroy = result.readyForDestroy ? result.readyForDestroy : readyForDestroy;
+                        repeat = result.repeat ? result.repeat : repeat;
+                    }
+                }
+            } while (!readyForDestroy && repeat);
+        }
+        else {
+            readyForDestroy = false;
+        }
+        return { readyForDestroy: readyForDestroy,
+            resultCallback: this._waitProperties.requestData ? this._waitProperties.requestData.callback : undefined
+        };
+    };
+    Scenario.prototype.setRequestData = function (requestData) {
+        this._waitProperties.requestData = requestData;
+    };
     Scenario.prototype.setState = function (state) {
         this._state = state;
     };
     Scenario.prototype.addAction = function (state, action) {
         this._actions[state] = action;
     };
-    Scenario.prototype.activate = function (params) {
-        var readyForDestroy = true;
-        var action = this._actions[this._state];
-        if (action) {
-            readyForDestroy = action(params);
-        }
-        else {
-            readyForDestroy = false;
-        }
-        return { readyForDestroy: readyForDestroy,
-            resultCallback: this._waitProperties.responseCallback
-        };
-    };
-    Scenario.prototype.waitForResult = function (params, scenario, requestedCallback) {
+    Scenario.prototype.waitForScenario = function (params, scenario, requestData) {
         var _this = this;
         this._waitProperties.prevState = this._state;
-        this._waitProperties.requestedCallback = requestedCallback;
+        this._waitProperties.expectedCallback = requestData.callback;
         this.setState(this.WAIT_STATE);
         if (!this._actions[this.WAIT_STATE]) {
             this.addAction(this.WAIT_STATE, function (params) {
-                if (params.callback && params.callback === _this._waitProperties.requestedCallback) {
+                if (params.callback && params.callback === _this._waitProperties.expectedCallback) {
                     _this.setState(_this._waitProperties.prevState);
                     _this.activate(params);
                 }
-                return true;
             });
         }
-        this._scenarioManager.add(params.userId, scenario, params, requestedCallback);
-    };
-    Scenario.prototype.setResultCallback = function (callback) {
-        this._waitProperties.responseCallback = callback;
+        this._scenarioManager.add(params.userId, scenario, params, requestData);
     };
     Scenario.prototype.destroy = function () {
         delete this._bot;

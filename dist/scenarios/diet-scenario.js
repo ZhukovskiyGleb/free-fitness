@@ -16,23 +16,45 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var scenario_1 = require("./scenario");
 var keyboard_maker_1 = require("../utils/keyboard-maker");
 var user_1 = require("../user/user");
+var localization_1 = require("../localization/localization");
 var DietScenario = /** @class */ (function (_super) {
     __extends(DietScenario, _super);
     function DietScenario() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.WAIT_CALLBACK = 'DIET_WAIT_CALLBACK';
+        _this.NEW_STATE = 'DIET_NEW_STATE';
+        _this.WAIT_PROFILE_CALLBACK = 'WAIT_PROFILE_CALLBACK';
+        _this.LOAD_CALLBACK = 'DIET_LOAD_CALLBACK';
+        _this.NEW_CALLBACK = 'DIET_NEW_CALLBACK';
+        _this.BACK_CALLBACK = 'DIET_BACK_CALLBACK';
         return _this;
     }
     DietScenario.prototype.init = function () {
         var _this = this;
         this.addAction(this.INIT_STATE, function (params) {
-            var datetime = params.datetime, chatId = params.chatId, lang = params.lang, userId = params.userId, name = params.name;
+            var callback = params.callback, chatId = params.chatId, lang = params.lang, userId = params.userId;
+            switch (callback) {
+                case _this.LOAD_CALLBACK:
+                    break;
+                case _this.NEW_CALLBACK:
+                    _this.setState(_this.NEW_STATE);
+                    return { repeat: true };
+                    break;
+                case _this.BACK_CALLBACK:
+                    break;
+                default:
+                    _this._bot.sendMessage(chatId, localization_1.Localization.loc(lang, localization_1.LocId.WhatExactly), _this.getInitKeyboard(lang, userId));
+                    break;
+            }
+        });
+        this.addAction(this.NEW_STATE, function (params) {
+            var userId = params.userId;
             var user = _this._userManager.getUser(userId);
             if (user) {
                 if (user.hasProperties([user_1.UserProperty.Height, user_1.UserProperty.Weight, user_1.UserProperty.BodyType, user_1.UserProperty.Activity])) {
                     var _a = user.properties, height = _a.height, weight = _a.weight, bodyType = _a.bodyType, activity = _a.activity;
                 }
                 else {
+                    // this.waitForScenario(params, )
                 }
             }
             else {
@@ -41,24 +63,14 @@ var DietScenario = /** @class */ (function (_super) {
             return false;
         });
     };
-    // private getWelcomeText(lang: string, datetime: number, name: string, isNewUser: boolean = false): string {
-    //     let locId: LocId;
-    //     if (isNewUser) {
-    //         locId = LocId.NewbieMessage;
-    //     }
-    //     else {
-    //         const curTime = new Date(datetime).getHours();
-    //         locId = [LocId.Welcome, LocId.Hello, LocId.NiceToMeetYouAgain,
-    //         curTime >= 19 ? LocId.GoodEvening :
-    //         curTime >= 10 ? LocId.GoodAfternoon :
-    //         LocId.GoodMorning][Math.floor(Math.random() * 4)];
-    //     }
-    //     return Localization.loc(lang, locId, {name}) + '\n' + Localization.loc(lang, LocId.HowCanIHelp);
-    // }
-    DietScenario.prototype.getSelectKeyboard = function (lang) {
-        return new keyboard_maker_1.KeyboardMaker()
-            // .addButton(Localization.loc(lang, LocId.ButtonDiet), this.DIET_CALLBACK)
-            // .addButton(Localization.loc(lang, LocId.ButtonWorkout), this.WORKOUT_CALLBACK)
+    DietScenario.prototype.getInitKeyboard = function (lang, userId) {
+        var keyboard = new keyboard_maker_1.KeyboardMaker();
+        var user = this._userManager.getUser(userId);
+        if (user && !!user.getProperty(user_1.UserProperty.SavedDiet)) {
+            keyboard.addButton(localization_1.Localization.loc(lang, localization_1.LocId.ButtonDiet), this.LOAD_CALLBACK);
+        }
+        return keyboard.addButton(localization_1.Localization.loc(lang, localization_1.LocId.ButtonDiet), this.NEW_CALLBACK)
+            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.ButtonWorkout), this.BACK_CALLBACK)
             .result;
     };
     DietScenario.prototype.destroy = function () {

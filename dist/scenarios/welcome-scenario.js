@@ -42,7 +42,6 @@ var WelcomeScenario = /** @class */ (function (_super) {
             else {
                 return true;
             }
-            return false;
         });
         this.addAction(this.SELECT_STATE, function (params) {
             var callback = params.callback, userId = params.userId;
@@ -54,7 +53,6 @@ var WelcomeScenario = /** @class */ (function (_super) {
                 case _this.WORKOUT_CALLBACK:
                     break;
             }
-            return false;
         });
     };
     WelcomeScenario.prototype.getWelcomeText = function (lang, datetime, name, isNewUser) {

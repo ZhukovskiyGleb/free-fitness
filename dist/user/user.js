@@ -46,6 +46,8 @@ var UserProperty;
     UserProperty["ShowDarkSide"] = "showDarkSide";
     UserProperty["DarkSideAccess"] = "darkSideAccess";
     UserProperty["ContactsNotified"] = "contactsNotified";
+    UserProperty["SavedDiet"] = "savedDiet";
+    UserProperty["SavedWorkout"] = "savedWorkout";
     UserProperty["Weight"] = "weight";
     UserProperty["Height"] = "height";
     UserProperty["YearOfBirth"] = "yearOfBirth";
@@ -74,6 +76,17 @@ var User = /** @class */ (function () {
         });
         return true;
     };
+    User.prototype.getProperties = function (requestProps) {
+        var _this = this;
+        var result = {};
+        requestProps.forEach(function (property) {
+            if (_this._properties.hasOwnProperty(property)) {
+                // @ts-ignore
+                result[property] = _this._properties[property];
+            }
+        });
+        return result;
+    };
     User.prototype.getProperty = function (property) {
         if (this._properties.hasOwnProperty(property)) {
             return this._properties[property];
@@ -81,10 +94,6 @@ var User = /** @class */ (function () {
     };
     Object.defineProperty(User.prototype, "properties", {
         get: function () {
-            var result = {};
-            for (var key in this._properties) {
-                // result
-            }
             return __assign({}, this._properties);
         },
         enumerable: true,

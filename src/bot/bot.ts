@@ -51,7 +51,8 @@ export class Bot {
 
         if (keyboard) {
             options.reply_markup = {
-                inline_keyboard: keyboard
+                inline_keyboard: keyboard,
+                resize_keyboard: true
             };
         }
 
@@ -98,7 +99,7 @@ export class Bot {
         this.addToHistory(msg);
     }
 
-    private onErrorHandler(err: any): void {
-        console.log('Polling error!', err);
+    private onErrorHandler(err: Error): void {
+        console.log('Polling error!', err.message);
     }
 }

@@ -1,4 +1,4 @@
-import {Scenario, ScenarioClass} from "./scenario";
+import {ScenarioRequestData, Scenario, ScenarioClass} from "./scenario";
 import {Bot} from "../bot/bot";
 import {UserManager} from "../user/user-manager";
 import {Params} from "../utils/parser";
@@ -11,7 +11,7 @@ export class ScenarioManager {
 
     }
 
-    public add(userId: number, scenarioClass: ScenarioClass, forceParams?: Params, requestedCallback?: string): void {
+    public add(userId: number, scenarioClass: ScenarioClass, forceParams?: Params, requestData?: ScenarioRequestData): void {
         if (!this.scenarios[userId]) {
             this.scenarios[userId] = [];
         }
@@ -20,8 +20,8 @@ export class ScenarioManager {
         scenario.init();
         this.scenarios[userId].push(scenario);
 
-        if (requestedCallback) {
-            scenario.setResultCallback(requestedCallback);
+        if (requestData) {
+            scenario.setRequestData(requestData);
         }
 
         if (forceParams) {
