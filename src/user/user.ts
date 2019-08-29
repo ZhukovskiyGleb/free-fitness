@@ -82,6 +82,17 @@ export class User {
         return true;
     }
 
+    public getProperties(requestProps: UserProperty[]): UserProperties {
+        const result: UserProperties = {};
+        requestProps.forEach((property: UserProperty) => {
+            if (this._properties.hasOwnProperty(property)) {
+                result[property] = this._properties[property];
+            }
+        });
+
+        return result;
+    }
+
     public getProperty(property: UserProperty): unknown {
         if (this._properties.hasOwnProperty(property)) {
             return this._properties[property];
@@ -89,10 +100,6 @@ export class User {
     }
 
     public get properties(): UserProperties {
-        const result = {};
-        for (let key in this._properties) {
-            // result
-        }
         return {...this._properties}
     }
 
