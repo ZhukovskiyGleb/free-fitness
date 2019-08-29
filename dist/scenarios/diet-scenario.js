@@ -18,7 +18,7 @@ var keyboard_maker_1 = require("../utils/keyboard-maker");
 var user_1 = require("../user/user");
 var localization_1 = require("../localization/localization");
 var welcome_scenario_1 = require("./welcome-scenario");
-var profile_scenario_1 = require("./profile-scenario");
+var utils_1 = require("../utils/utils");
 var DietScenario = /** @class */ (function (_super) {
     __extends(DietScenario, _super);
     function DietScenario() {
@@ -41,7 +41,7 @@ var DietScenario = /** @class */ (function (_super) {
                     _this.setState(_this.NEW_STATE);
                     return scenario_1.ActionResults.Repeat;
                 case _this.BACK_CALLBACK:
-                    _this._scenarioManager.add(userId, welcome_scenario_1.WelcomeScenario, params);
+                    _this.switchToAnotherScenario(userId, welcome_scenario_1.WelcomeScenario, params);
                     return scenario_1.ActionResults.ReadyForDestroy;
                 default:
                     _this._bot.sendMessage(chatId, localization_1.Localization.loc(lang, localization_1.LocId.WhatExactly), _this.getInitKeyboard(lang, userId));
@@ -54,10 +54,10 @@ var DietScenario = /** @class */ (function (_super) {
                 case _this.PROFILE_READY_CALLBACK:
                     break;
                 default:
-                    _this.waitForScenario(params, profile_scenario_1.ProfileScenario, {
-                        callback: _this.PROFILE_READY_CALLBACK,
-                        data: [user_1.UserProperty.Height, user_1.UserProperty.Weight, user_1.UserProperty.BodyType, user_1.UserProperty.Activity]
-                    });
+                    // this.waitForScenario(params, ProfileScenario, {
+                    //     callback: this.PROFILE_READY_CALLBACK,
+                    //     data: [UserProperty.Height, UserProperty.Weight, UserProperty.BodyType, UserProperty.Activity]
+                    // });
                     break;
             }
         });
@@ -65,11 +65,12 @@ var DietScenario = /** @class */ (function (_super) {
     DietScenario.prototype.getInitKeyboard = function (lang, userId) {
         var keyboard = new keyboard_maker_1.KeyboardMaker();
         var user = this._userManager.getUser(userId);
-        if (user && !!user.getProperty(user_1.UserProperty.SavedDiet)) {
-            keyboard.addButton(localization_1.Localization.loc(lang, localization_1.LocId.ButtonDiet), this.LOAD_CALLBACK);
+        if (user && utils_1.isSomething(user.getProperty(user_1.UserProperty.SavedDiet))) {
+            keyboard.addButton(localization_1.Localization.loc(lang, localization_1.LocId.ButtonMyDiet), this.LOAD_CALLBACK);
         }
-        return keyboard.addButton(localization_1.Localization.loc(lang, localization_1.LocId.ButtonDiet), this.NEW_CALLBACK)
-            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.ButtonWorkout), this.BACK_CALLBACK)
+        return keyboard.addButton(localization_1.Localization.loc(lang, localization_1.LocId.ButtonNewDiet), this.NEW_CALLBACK)
+            .nextLine()
+            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.ButtonBack), this.BACK_CALLBACK)
             .result;
     };
     DietScenario.prototype.destroy = function () {

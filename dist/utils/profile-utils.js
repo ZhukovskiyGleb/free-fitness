@@ -4,23 +4,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var user_1 = require("../user/user");
 var localization_1 = require("../localization/localization");
 var utils_1 = require("./utils");
-var Config = /** @class */ (function () {
-    function Config() {
-    }
-    Config.daysBeforeEdit = 7;
-    return Config;
-}());
 var ProfileUtils = /** @class */ (function () {
     function ProfileUtils() {
     }
     ProfileUtils.prototype.getPropertiesDescription = function (lang, user, properties) {
         var _this = this;
-        var result = localization_1.Localization.loc(lang, localization_1.LocId.ApproveProps);
+        var result = [];
         properties.forEach(function (property) {
             var value = _this.getPropertyValue(user, property, lang);
             var locId = ProfileUtils.PROPERTY_TO_LOC_ID[property];
             if (value && utils_1.isSomething(locId)) {
-                result += '\n' + localization_1.Localization.loc(lang, locId, { value: value });
+                result.push(localization_1.Localization.loc(lang, locId, { value: value }));
             }
         });
         return result;
@@ -36,15 +30,6 @@ var ProfileUtils = /** @class */ (function () {
                 return value;
             }
         }
-    };
-    ProfileUtils.prototype.getDaysBeforeEdit = function (editTime) {
-        var currentTime = new Date().getTime();
-        console.log(new Date(), new Date(editTime));
-        var diffTime = Math.abs(currentTime - editTime);
-        var diffDays = Math.floor(diffTime / (8.64e+7));
-        console.log('days', diffDays);
-        var result = Config.daysBeforeEdit - diffDays;
-        return result > 0 ? result : 0;
     };
     ProfileUtils.PROPERTY_TO_LOC_ID = (_a = {},
         _a[user_1.UserProperty.Weight] = localization_1.LocId.PropertyWeight,

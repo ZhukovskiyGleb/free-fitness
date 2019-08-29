@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var utils_1 = require("../utils/utils");
 var ActionResults;
 (function (ActionResults) {
     ActionResults["ReadyForDestroy"] = "readyForDestroy";
@@ -12,19 +13,21 @@ var Scenario = /** @class */ (function () {
         this._scenarioManager = _scenarioManager;
         this.INIT_STATE = 'BASE_INIT_STATE';
         this.WAIT_STATE = 'BASE_WAIT_STATE';
+        this.FINAL_STATE = 'BASE_FINAL_STATE';
         this._state = this.INIT_STATE;
         this._actions = {};
         this._waitProperties = {};
     }
     Scenario.prototype.activate = function (params) {
-        console.log('Caller', this.activate.caller);
         var readyForDestroy = false;
         var repeat = false;
         var action = this._actions[this._state];
         if (action) {
+            console.log('Action', this._state, '+', params.callback ? 'CB: ' + params.callback : params.text ? 'TXT: ' + params.text : '_');
             do {
                 var result = action(params);
-                if (result) {
+                console.log('Action result', result);
+                if (utils_1.isSomething(result)) {
                     if (result === ActionResults.ReadyForDestroy) {
                         readyForDestroy = true;
                     }
@@ -32,6 +35,7 @@ var Scenario = /** @class */ (function () {
                         repeat = true;
                     }
                 }
+                // if (!readyForDestroy && repeat) console.log('Repeat action')
             } while (!readyForDestroy && repeat);
         }
         else {
@@ -57,8 +61,9 @@ var Scenario = /** @class */ (function () {
     Scenario.prototype.addAction = function (state, action) {
         this._actions[state] = action;
     };
-    Scenario.prototype.waitForScenario = function (params, scenario, requestData) {
+    Scenario.prototype.waitForScenario = function (params, scenarioClass, requestData) {
         var _this = this;
+        console.log('waitForScenario', scenarioClass.name, requestData);
         this._waitProperties.prevState = this._state;
         this._waitProperties.expectedCallback = requestData.callback;
         this.setState(this.WAIT_STATE);
@@ -70,13 +75,19 @@ var Scenario = /** @class */ (function () {
                 }
             });
         }
-        this._scenarioManager.add(params.userId, scenario, params, requestData);
+        this._scenarioManager.add(params.userId, scenarioClass, params, requestData);
+    };
+    Scenario.prototype.switchToAnotherScenario = function (userId, scenarioClass, forceParams) {
+        console.log('switchToAnotherScenario', scenarioClass.name);
+        this.setState(this.FINAL_STATE);
+        this._scenarioManager.add(userId, scenarioClass, forceParams);
     };
     Scenario.prototype.destroy = function () {
         delete this._bot;
         delete this._userManager;
         delete this._scenarioManager;
         delete this._actions;
+        delete this._waitProperties;
     };
     return Scenario;
 }());

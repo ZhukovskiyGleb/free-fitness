@@ -91,6 +91,7 @@ var User = /** @class */ (function () {
         if (this._properties.hasOwnProperty(property)) {
             return this._properties[property];
         }
+        return undefined;
     };
     Object.defineProperty(User.prototype, "properties", {
         get: function () {
@@ -99,6 +100,10 @@ var User = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    User.prototype.setProperty = function (property, value) {
+        // @ts-ignore
+        this._properties[property] = value;
+    };
     return User;
 }());
 exports.User = User;

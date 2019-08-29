@@ -30,7 +30,7 @@ export class DietScenario extends Scenario {
 
                     return ActionResults.Repeat;
                 case this.BACK_CALLBACK:
-                    this._scenarioManager.add(userId, WelcomeScenario, params);
+                    this.switchToAnotherScenario(userId, WelcomeScenario, params);
 
                     return ActionResults.ReadyForDestroy;
                 default:
@@ -39,7 +39,6 @@ export class DietScenario extends Scenario {
                         Localization.loc(lang, LocId.WhatExactly),
                         this.getInitKeyboard(lang, userId)
                     );
-
                     break;
             }
         });
@@ -53,10 +52,10 @@ export class DietScenario extends Scenario {
 
                         break;
                     default:
-                        this.waitForScenario(params, ProfileScenario, {
-                            callback: this.PROFILE_READY_CALLBACK,
-                            data: [UserProperty.Height, UserProperty.Weight, UserProperty.BodyType, UserProperty.Activity]
-                        });
+                        // this.waitForScenario(params, ProfileScenario, {
+                        //     callback: this.PROFILE_READY_CALLBACK,
+                        //     data: [UserProperty.Height, UserProperty.Weight, UserProperty.BodyType, UserProperty.Activity]
+                        // });
                         break;
                 }
         });
@@ -66,10 +65,11 @@ export class DietScenario extends Scenario {
         const keyboard = new KeyboardMaker();
         const user = this._userManager.getUser(userId);
         if (user && isSomething(user.getProperty(UserProperty.SavedDiet))) {
-            keyboard.addButton(Localization.loc(lang, LocId.ButtonDiet), this.LOAD_CALLBACK);
+            keyboard.addButton(Localization.loc(lang, LocId.ButtonMyDiet), this.LOAD_CALLBACK);
         }
-        return keyboard.addButton(Localization.loc(lang, LocId.ButtonDiet), this.NEW_CALLBACK)
-                        .addButton(Localization.loc(lang, LocId.ButtonWorkout), this.BACK_CALLBACK)
+        return keyboard.addButton(Localization.loc(lang, LocId.ButtonNewDiet), this.NEW_CALLBACK)
+                        .nextLine()
+                        .addButton(Localization.loc(lang, LocId.ButtonBack), this.BACK_CALLBACK)
                         .result;
     }
 

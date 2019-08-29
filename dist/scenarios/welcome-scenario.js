@@ -17,6 +17,9 @@ var scenario_1 = require("./scenario");
 var localization_1 = require("../localization/localization");
 var keyboard_maker_1 = require("../utils/keyboard-maker");
 var diet_scenario_1 = require("./diet-scenario");
+var user_1 = require("../user/user");
+var utils_1 = require("../utils/utils");
+var config_1 = require("../config");
 var WelcomeScenario = /** @class */ (function (_super) {
     __extends(WelcomeScenario, _super);
     function WelcomeScenario() {
@@ -36,7 +39,7 @@ var WelcomeScenario = /** @class */ (function (_super) {
                 user = _this._userManager.createUser(userId, new Date().getTime());
             }
             if (user) {
-                _this._bot.sendMessage(chatId, _this.getWelcomeText(lang, datetime, name, isNewUser), _this.getSelectKeyboard(lang));
+                _this._bot.sendMessage(chatId, _this.getWelcomeText(lang, datetime, name, user.getProperty(user_1.UserProperty.LastVisitDate), isNewUser), _this.getSelectKeyboard(lang));
                 _this.setState(_this.SELECT_STATE);
             }
             else {
@@ -47,7 +50,7 @@ var WelcomeScenario = /** @class */ (function (_super) {
             var callback = params.callback, userId = params.userId;
             switch (callback) {
                 case _this.DIET_CALLBACK:
-                    _this._scenarioManager.add(userId, diet_scenario_1.DietScenario, params);
+                    _this.switchToAnotherScenario(userId, diet_scenario_1.DietScenario, params);
                     return scenario_1.ActionResults.ReadyForDestroy;
                     break;
                 case _this.WORKOUT_CALLBACK:
@@ -55,20 +58,30 @@ var WelcomeScenario = /** @class */ (function (_super) {
             }
         });
     };
-    WelcomeScenario.prototype.getWelcomeText = function (lang, datetime, name, isNewUser) {
+    WelcomeScenario.prototype.getWelcomeText = function (lang, datetime, name, lastVisitDate, isNewUser) {
         if (isNewUser === void 0) { isNewUser = false; }
         var locId;
         if (isNewUser) {
             locId = localization_1.LocId.NewbieMessage;
         }
         else {
-            var curTime = new Date(datetime).getHours();
-            locId = [localization_1.LocId.Welcome, localization_1.LocId.Hello, localization_1.LocId.NiceToMeetYouAgain,
-                curTime >= 19 ? localization_1.LocId.GoodEvening :
-                    curTime >= 10 ? localization_1.LocId.GoodAfternoon :
-                        localization_1.LocId.GoodMorning][Math.floor(Math.random() * 4)];
+            var daysToGreeting = 0;
+            if (lastVisitDate) {
+                daysToGreeting = utils_1.getPastDays(lastVisitDate, config_1.Config.daysBeforeGreeting);
+            }
+            if (daysToGreeting === 0) {
+                var curTime = new Date(datetime).getHours();
+                locId = [localization_1.LocId.Welcome, localization_1.LocId.Hello, localization_1.LocId.NiceToMeetYouAgain,
+                    curTime >= 19 ? localization_1.LocId.GoodEvening :
+                        curTime >= 10 ? localization_1.LocId.GoodAfternoon :
+                            localization_1.LocId.GoodMorning][Math.floor(Math.random() * 4)];
+            }
         }
-        return localization_1.Localization.loc(lang, locId, { name: name }) + '\n' + localization_1.Localization.loc(lang, localization_1.LocId.HowCanIHelp);
+        var result = '';
+        if (utils_1.isSomething(locId)) {
+        }
+        localization_1.Localization.loc(lang, locId, { name: name });
+        '' + '\n' + localization_1.Localization.loc(lang, localization_1.LocId.HowCanIHelp);
     };
     WelcomeScenario.prototype.getSelectKeyboard = function (lang) {
         return new keyboard_maker_1.KeyboardMaker()

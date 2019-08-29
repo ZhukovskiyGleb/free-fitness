@@ -2,10 +2,6 @@ import {Activity, BodyType, Experience, Gender, User, UserProperty} from "../use
 import {Localization, LocId} from "../localization/localization";
 import {isSomething} from "./utils";
 
-class Config {
-    public static daysBeforeEdit = 7;
-}
-
 export class ProfileUtils {
     private static PROPERTY_TO_LOC_ID: {[key in UserProperty]?: LocId} = {
         [UserProperty.Weight]: LocId.PropertyWeight,
@@ -59,20 +55,5 @@ export class ProfileUtils {
               return value;
             }
         }
-    }
-
-    public getDaysBeforeEdit(editTime: number): number {
-        const currentTime = new Date().getTime();
-
-        console.log(new Date(), new Date(editTime));
-
-        const diffTime = Math.abs(currentTime - editTime);
-        const diffDays = Math.floor(diffTime / (8.64e+7));
-
-        console.log('days', diffDays);
-
-        const result = Config.daysBeforeEdit - diffDays;
-
-        return result > 0 ? result : 0;
     }
 }

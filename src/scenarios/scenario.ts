@@ -2,6 +2,8 @@ import {Bot} from "../bot/bot";
 import {UserManager} from "../user/user-manager";
 import {ScenarioManager} from "./scenario-manager";
 import {Params} from "../utils/parser";
+import {isSomething} from "../utils/utils";
+import {DietScenario} from "./diet-scenario";
 
 export interface ScenarioClass {new (bot: Bot, userManager: UserManager, scenarioManager: ScenarioManager): Scenario}
 
@@ -25,6 +27,8 @@ export abstract class Scenario {
     protected readonly INIT_STATE = 'BASE_INIT_STATE';
     protected readonly WAIT_STATE = 'BASE_WAIT_STATE';
 
+    private readonly FINAL_STATE = 'BASE_FINAL_STATE';
+
     protected _state: string = this.INIT_STATE;
     protected _actions: {[key: string]: ScenarioAction} = {};
 
@@ -43,24 +47,25 @@ export abstract class Scenario {
     public abstract init(): void;
 
     public activate(params: Params): { readyForDestroy: boolean, resultCallback?: string } {
-        console.log('Caller', this.activate.caller);
-
         let readyForDestroy: boolean = false;
         let repeat: boolean = false;
 
         const action = this._actions[this._state];
 
         if (action) {
+            console.log('Action', this._state, '+', params.callback ? 'CB: ' + params.callback : params.text ? 'TXT: ' + params.text : '_');
             do {
                 const result = action(params);
+                console.log('Action result', result);
 
-                if (result) {
+                if (isSomething(result)) {
                     if (result === ActionResults.ReadyForDestroy) {
                         readyForDestroy = true;
                     } else {
                         repeat = true;
                     }
                 }
+                // if (!readyForDestroy && repeat) console.log('Repeat action')
             } while (!readyForDestroy && repeat);
         }
         else {
@@ -88,7 +93,8 @@ export abstract class Scenario {
         this._actions[state] = action;
     }
 
-    protected waitForScenario(params: Params, scenario: ScenarioClass, requestData: ScenarioRequestData): void {
+    protected waitForScenario(params: Params, scenarioClass: ScenarioClass, requestData: ScenarioRequestData): void {
+        console.log('waitForScenario', scenarioClass.name, requestData);
         this._waitProperties.prevState = this._state;
         this._waitProperties.expectedCallback = requestData.callback;
 
@@ -105,7 +111,14 @@ export abstract class Scenario {
             )
         }
 
-        this._scenarioManager.add(params.userId, scenario, params, requestData);
+        this._scenarioManager.add(params.userId, scenarioClass, params, requestData);
+    }
+
+    protected switchToAnotherScenario(userId: number, scenarioClass: ScenarioClass, forceParams: Params): void {
+        console.log('switchToAnotherScenario', scenarioClass.name);
+        this.setState(this.FINAL_STATE);
+
+        this._scenarioManager.add(userId, scenarioClass, forceParams);
     }
 
     destroy(): void {

@@ -92,9 +92,9 @@ export class Localization<T extends keyof LocId> {
             [LocId.ActivityEasy]: 'Легкая',
             [LocId.ActivityAverage]: 'Средняя',
             [LocId.ActivityHeavy]: 'Высокая',
-            [LocId.ExperienceJunior]: 'Новичок',
-            [LocId.ExperienceMiddle]: 'Опытный',
-            [LocId.ExperienceSenior]: 'Профи',
+            [LocId.ExperienceJunior]: 'Менее 6 месяцев',
+            [LocId.ExperienceMiddle]: 'До 2 лет',
+            [LocId.ExperienceSenior]: 'Свыше 2 лет',
         }
     };
 

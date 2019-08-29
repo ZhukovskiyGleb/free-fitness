@@ -45,9 +45,10 @@ var LocId;
     LocId[LocId["ButtonWorkout"] = 34] = "ButtonWorkout";
     LocId[LocId["ButtonMyDiet"] = 35] = "ButtonMyDiet";
     LocId[LocId["ButtonNewDiet"] = 36] = "ButtonNewDiet";
-    LocId[LocId["ButtonBack"] = 37] = "ButtonBack";
-    LocId[LocId["ButtonApprove"] = 38] = "ButtonApprove";
-    LocId[LocId["ButtonEdit"] = 39] = "ButtonEdit";
+    LocId[LocId["ButtonContinue"] = 37] = "ButtonContinue";
+    LocId[LocId["ButtonBack"] = 38] = "ButtonBack";
+    LocId[LocId["ButtonApprove"] = 39] = "ButtonApprove";
+    LocId[LocId["ButtonEdit"] = 40] = "ButtonEdit";
 })(LocId = exports.LocId || (exports.LocId = {}));
 var Localization = /** @class */ (function () {
     function Localization() {
@@ -87,6 +88,7 @@ var Localization = /** @class */ (function () {
             _a[LocId.ButtonBack] = 'Назад',
             _a[LocId.ButtonApprove] = 'Верно',
             _a[LocId.ButtonEdit] = 'Изменить',
+            _a[LocId.ButtonContinue] = 'Продолжить',
             _a[LocId.PropertyWeight] = '- *Вес*: {value}',
             _a[LocId.PropertyHeight] = '- *Рост*: {value}',
             _a[LocId.PropertyAge] = '- *Возраст*: {value}',
@@ -105,9 +107,9 @@ var Localization = /** @class */ (function () {
             _a[LocId.ActivityEasy] = 'Легкая',
             _a[LocId.ActivityAverage] = 'Средняя',
             _a[LocId.ActivityHeavy] = 'Высокая',
-            _a[LocId.ExperienceJunior] = 'Новичок',
-            _a[LocId.ExperienceMiddle] = 'Опытный',
-            _a[LocId.ExperienceSenior] = 'Профи',
+            _a[LocId.ExperienceJunior] = 'Менее 6 месяцев',
+            _a[LocId.ExperienceMiddle] = 'До 2 лет',
+            _a[LocId.ExperienceSenior] = 'Свыше 2 лет',
             _a)
     };
     return Localization;

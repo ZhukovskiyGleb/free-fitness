@@ -27,7 +27,8 @@ var Parser = /** @class */ (function () {
         return userId > 0 ? {
             userId: userId,
             lang: data.from && data.from.language_code ? data.from.language_code : '',
-            name: (data.from ? data.from.first_name : '') + (data.from && data.from.last_name ? data.from.last_name : ''),
+            name: (data.from ? data.from.first_name : ''),
+            surname: (data.from && data.from.last_name ? data.from.last_name : ''),
             nickname: data.from ? data.from.username : ''
         } : undefined;
     };

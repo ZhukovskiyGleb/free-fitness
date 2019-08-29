@@ -4,6 +4,8 @@ import {KeyboardMaker} from "../utils/keyboard-maker";
 import {User, UserProperty} from "../user/user";
 import {Localization, LocId} from "../localization/localization";
 import {ProfileUtils} from "../utils/profile-utils";
+import {getPastDays} from "../utils/utils";
+import {Config} from "../config";
 
 export class ProfileScenario extends Scenario {
     private readonly APPROVE_PROPS_CORRECT_STATE = 'PROFILE_APPROVE_STATE';
@@ -80,7 +82,7 @@ export class ProfileScenario extends Scenario {
                 const { lastEditDate } = user.properties;
 
                 if (lastEditDate) {
-                    const daysToEdit = this._utils.getDaysBeforeEdit(lastEditDate);
+                    const daysToEdit = getPastDays(lastEditDate, Config.daysBeforeEdit);
 
                     this._bot.sendMessage(
                       chatId,
