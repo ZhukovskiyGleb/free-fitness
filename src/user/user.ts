@@ -42,21 +42,20 @@ export enum UserProperty {
 }
 
 export interface UserProperties {
-    [UserProperty.RequestsAmount]?: number,
-    [UserProperty.RegisterDate]?: number,
-    [UserProperty.LastChangeDate]?: number,
-    [UserProperty.LastVisitDate]?: number,
-    [UserProperty.ShowDarkSide]?: boolean,
-    [UserProperty.DarkSideAccess]?: boolean,
-    [UserProperty.ContactsNotified]?: boolean,
-    [UserProperty.Weight]?: number,
-    [UserProperty.Height]?: number,
-    [UserProperty.YearOfBirth]?: number,
-    [UserProperty.Gender]?: Gender,
-    [UserProperty.BodyType]?: BodyType,
-    [UserProperty.Activity]?: Activity,
-    [UserProperty.Experience]?: Experience
-
+    [UserProperty.RequestsAmount]?: number;
+    [UserProperty.RegisterDate]?: number;
+    [UserProperty.LastChangeDate]?: number;
+    [UserProperty.LastVisitDate]?: number;
+    [UserProperty.ShowDarkSide]?: boolean;
+    [UserProperty.DarkSideAccess]?: boolean;
+    [UserProperty.ContactsNotified]?: boolean;
+    [UserProperty.Weight]?: number;
+    [UserProperty.Height]?: number;
+    [UserProperty.YearOfBirth]?: number;
+    [UserProperty.Gender]?: Gender;
+    [UserProperty.BodyType]?: BodyType;
+    [UserProperty.Activity]?: Activity;
+    [UserProperty.Experience]?: Experience;
 }
 
 export class User {
