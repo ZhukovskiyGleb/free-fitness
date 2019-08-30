@@ -5,7 +5,7 @@ import {KeyboardMaker} from "../../utils/keyboard-maker";
 import {DietScenario} from "../diet/diet-scenario";
 import {UserProperty} from "../../user/user";
 import {getHoursPast} from "../../utils/utils";
-import {Config} from "../configs/config";
+import {Config} from "../../configs/config";
 
 export class WelcomeScenario extends Scenario {
     private readonly SELECT_STATE = 'WELCOME_SELECT_CALLBACK';

@@ -1,4 +1,4 @@
-import {LocId} from "../../localization/localization";
+import {LocId} from "../localization/localization";
 
 export enum Food {
     Salmon,

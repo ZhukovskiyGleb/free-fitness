@@ -1,7 +1,7 @@
 import {Food, FoodType} from "./food";
-import {isSomething} from "../../utils/utils";
+import {isSomething} from "../utils/utils";
 import {DietTarget, Formation} from "../configs/diet-config";
-import {Activity, BodyType, Gender} from "../../user/user";
+import {Activity, BodyType, Gender} from "../user/user";
 import {Config} from "../configs/config";
 
 interface Content {

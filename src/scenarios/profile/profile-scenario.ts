@@ -5,7 +5,7 @@ import {Activity, Experience, User, UserProperty} from "../../user/user";
 import {Localization, LocId} from "../../localization/localization";
 import {ProfileUtils} from "./profile-utils";
 import {getDaysPast, isSomething} from "../../utils/utils";
-import {Config} from "../configs/config";
+import {Config} from "../../configs/config";
 import {Params} from "../../utils/parser";
 
 export class ProfileScenario extends Scenario {

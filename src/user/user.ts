@@ -1,4 +1,4 @@
-import {Diet} from "../scenarios/content/diet";
+import {Diet} from "../content/diet";
 
 export enum Gender {
     Male = 'male',
