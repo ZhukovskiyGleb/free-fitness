@@ -1,3 +1,5 @@
+import {Diet} from "../scenarios/content/diet";
+
 export enum Gender {
     Male = 'male',
     Female = 'female',
@@ -32,6 +34,7 @@ export enum UserProperty {
     ShowDarkSide = 'showDarkSide',
     DarkSideAccess = 'darkSideAccess',
     ContactsNotified = 'contactsNotified',
+
     SavedDiet = 'savedDiet',
     SavedWorkout = 'savedWorkout',
 
@@ -52,7 +55,7 @@ export interface UserProperties {
     [UserProperty.ShowDarkSide]?: boolean;
     [UserProperty.DarkSideAccess]?: boolean;
     [UserProperty.ContactsNotified]?: boolean;
-    [UserProperty.SavedDiet]?: {};
+    [UserProperty.SavedDiet]?: Diet;
     [UserProperty.SavedWorkout]?: {};
     [UserProperty.Weight]?: number;
     [UserProperty.Height]?: number;
@@ -76,7 +79,7 @@ export class User {
         this._properties[UserProperty.RegisterDate] = registerDate;
     }
 
-    public hasProperties(requestProps: UserProperty[]): boolean {
+    public hasProperties<P extends keyof UserProperties>(requestProps: P[]): boolean {
         requestProps.forEach((property: UserProperty) => {
             if (!this._properties.hasOwnProperty(property)) {
                 return false;
@@ -86,11 +89,10 @@ export class User {
         return true;
     }
 
-    public getProperties(requestProps: UserProperty[]): UserProperties {
+    public getProperties<P extends keyof UserProperties>(requestProps: P[]): UserProperties {
         const result: UserProperties = {};
-        requestProps.forEach((property: UserProperty) => {
+        requestProps.forEach((property: P) => {
             if (this._properties.hasOwnProperty(property)) {
-                // @ts-ignore
                 result[property] = this._properties[property];
             }
         });
@@ -98,9 +100,9 @@ export class User {
         return result;
     }
 
-    public getProperty<T>(property: UserProperty): T | undefined {
+    public getProperty<P extends keyof UserProperties>(property: P): UserProperties[P] {
         if (this._properties.hasOwnProperty(property)) {
-            return <T>this._properties[property];
+            return this._properties[property];
         }
         return undefined;
     }
@@ -109,8 +111,7 @@ export class User {
         return {...this._properties};
     }
 
-    public setProperty<T>(property: UserProperty, value: T): void {
-        // @ts-ignore
+    public setProperty<P extends keyof UserProperties>(property: P, value: UserProperties[P]): void {
         this._properties[property] = value;
     }
 

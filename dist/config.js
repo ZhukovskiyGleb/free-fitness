@@ -4,7 +4,7 @@ var Config = /** @class */ (function () {
     function Config() {
     }
     Config.daysBeforeEdit = 7;
-    Config.daysBeforeGreeting = 1;
+    Config.hoursBeforeGreeting = 1;
     return Config;
 }());
 exports.Config = Config;

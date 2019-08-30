@@ -3,8 +3,8 @@ import {CallbackQuery, Message} from "node-telegram-bot-api";
 import {UserManager} from "./user/user-manager";
 import {ScenarioManager} from "./scenarios/scenario-manager";
 import {Parser} from "./utils/parser";
-import {WelcomeScenario} from "./scenarios/welcome-scenario";
-import {ProfileUtils} from "./utils/profile-utils";
+import {WelcomeScenario} from "./scenarios/welcome/welcome-scenario";
+import {ProfileUtils} from "./scenarios/profile/profile-utils";
 
 export class App {
     private readonly _bot: Bot;

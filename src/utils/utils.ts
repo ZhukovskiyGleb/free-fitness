@@ -1,12 +1,17 @@
-export function isSomething<T>(x: T | undefined | null): x is NonNullable<T> {
-  return x != null;
+enum Delimiter {
+    Day = 8.64e+7,
+    Hour = 3.6e+6,
 }
 
-export function getPastDays(editTime: number, moreThen?: number): number {
-  const currentTime = new Date().getTime();
+function getDiffTime(fromTime: number, delimiter: Delimiter): number {
+    const currentTime = new Date().getTime();
+    const diffTime = Math.abs(currentTime - fromTime);
 
-  const diffTime = Math.abs(currentTime - editTime);
-  const diffDays = Math.floor(diffTime / (8.64e+7));
+    return Math.floor(diffTime / (delimiter));
+}
+
+export function getDaysPast(fromTime: number, moreThen?: number): number {
+  const diffDays = getDiffTime(fromTime, Delimiter.Day);
 
   if (!moreThen) {
       return diffDays;
@@ -15,4 +20,20 @@ export function getPastDays(editTime: number, moreThen?: number): number {
   const result = moreThen - diffDays;
 
   return result > 0 ? result : 0;
+}
+
+export function getHoursPast(fromTime: number, moreThen?: number): number {
+  const diffHours = getDiffTime(fromTime, Delimiter.Day);
+
+  if (!moreThen) {
+    return diffHours;
+  }
+
+  const result = moreThen - diffHours;
+
+  return result > 0 ? result : 0;
+}
+
+export function isSomething<T>(x: T | undefined | null): x is NonNullable<T> {
+  return x != null;
 }

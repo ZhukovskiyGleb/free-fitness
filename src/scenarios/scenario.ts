@@ -3,7 +3,7 @@ import {UserManager} from "../user/user-manager";
 import {ScenarioManager} from "./scenario-manager";
 import {Params} from "../utils/parser";
 import {isSomething} from "../utils/utils";
-import {DietScenario} from "./diet-scenario";
+import {DietScenario} from "./diet/diet-scenario";
 
 export interface ScenarioClass {new (bot: Bot, userManager: UserManager, scenarioManager: ScenarioManager): Scenario}
 
@@ -54,7 +54,7 @@ export abstract class Scenario {
 
         if (action) {
             console.log('Action', this._state, '+', params.callback ? 'CB: ' + params.callback : params.text ? 'TXT: ' + params.text : '_');
-            do {
+            // do {
                 const result = action(params);
                 console.log('Action result', result);
 
@@ -65,11 +65,15 @@ export abstract class Scenario {
                         repeat = true;
                     }
                 }
-                // if (!readyForDestroy && repeat) console.log('Repeat action')
-            } while (!readyForDestroy && repeat);
+            // } while (!readyForDestroy && repeat);
         }
         else {
             readyForDestroy = false;
+        }
+
+        if (!readyForDestroy && repeat) {
+            console.log('Repeat action');
+            return this.activate(params);
         }
 
         return {    readyForDestroy,

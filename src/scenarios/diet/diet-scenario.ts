@@ -1,11 +1,12 @@
-import {ActionResults, Scenario} from "./scenario";
+import {ActionResults, Scenario} from "../scenario";
 import {InlineKeyboardButton} from "node-telegram-bot-api";
-import {KeyboardMaker} from "../utils/keyboard-maker";
-import {UserProperty} from "../user/user";
-import {Localization, LocId} from "../localization/localization";
-import {WelcomeScenario} from "./welcome-scenario";
-import {ProfileScenario} from "./profile-scenario";
-import {isSomething} from "../utils/utils";
+import {KeyboardMaker} from "../../utils/keyboard-maker";
+import {UserProperty} from "../../user/user";
+import {Localization, LocId} from "../../localization/localization";
+import {WelcomeScenario} from "../welcome/welcome-scenario";
+import {ProfileScenario} from "../profile/profile-scenario";
+import {isSomething} from "../../utils/utils";
+import {NewDietScenario} from "./new-diet-scenario";
 
 export class DietScenario extends Scenario {
     private readonly NEW_STATE = 'DIET_NEW_STATE';
@@ -27,11 +28,9 @@ export class DietScenario extends Scenario {
                     break;
                 case this.NEW_CALLBACK:
                     this.setState(this.NEW_STATE);
-
                     return ActionResults.Repeat;
                 case this.BACK_CALLBACK:
                     this.switchToAnotherScenario(userId, WelcomeScenario, params);
-
                     return ActionResults.ReadyForDestroy;
                 default:
                     this._bot.sendMessage(
@@ -45,18 +44,16 @@ export class DietScenario extends Scenario {
 
         this.addAction(this.NEW_STATE,
     params => {
-                const { callback } = params;
+                const { callback, userId } = params;
 
-                switch (callback) {
-                    case this.PROFILE_READY_CALLBACK:
-
-                        break;
-                    default:
-                        // this.waitForScenario(params, ProfileScenario, {
-                        //     callback: this.PROFILE_READY_CALLBACK,
-                        //     data: [UserProperty.Height, UserProperty.Weight, UserProperty.BodyType, UserProperty.Activity]
-                        // });
-                        break;
+                if (callback === this.PROFILE_READY_CALLBACK) {
+                    this.switchToAnotherScenario(userId, NewDietScenario, params);
+                    return ActionResults.ReadyForDestroy;
+                } else {
+                    this.waitForScenario(params, ProfileScenario, {
+                        callback: this.PROFILE_READY_CALLBACK,
+                        data: [UserProperty.Height, UserProperty.Weight, UserProperty.BodyType, UserProperty.Activity]
+                    });
                 }
         });
     }
@@ -74,6 +71,6 @@ export class DietScenario extends Scenario {
     }
 
     destroy(): void {
-
+        super.destroy();
     }
 }

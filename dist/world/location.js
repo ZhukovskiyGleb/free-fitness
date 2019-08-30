@@ -23,7 +23,7 @@ var Location = /** @class */ (function () {
         this._players = [];
     }
     Location.prototype.addPlayer = function (player) {
-        if (this._players.indexOf(player) < 0) {
+        if (!this._players.includes(player)) {
             this._players.push(player);
         }
     };

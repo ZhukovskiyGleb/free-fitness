@@ -26,7 +26,7 @@ export class Parser {
         } : undefined;
     }
 
-    public static  parseQuery(query: CallbackQuery): Params | undefined {
+    public static parseQuery(query: CallbackQuery): Params | undefined {
         const common = this.parseCommon(query);
 
         return common ? {
