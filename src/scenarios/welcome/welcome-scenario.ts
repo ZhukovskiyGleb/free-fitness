@@ -1,11 +1,11 @@
-import {ActionResults, Scenario} from "./scenario";
-import {Localization, LocId} from "../localization/localization";
+import {ActionResults, Scenario} from "../scenario";
+import {Localization, LocId} from "../../localization/localization";
 import {InlineKeyboardButton} from "node-telegram-bot-api";
-import {KeyboardMaker} from "../utils/keyboard-maker";
-import {DietScenario} from "./diet-scenario";
-import {UserProperty} from "../user/user";
-import {getPastDays, isSomething} from "../utils/utils";
-import {Config} from "../config";
+import {KeyboardMaker} from "../../utils/keyboard-maker";
+import {DietScenario} from "../diet/diet-scenario";
+import {UserProperty} from "../../user/user";
+import {getHoursPast} from "../../utils/utils";
+import {Config} from "../configs/config";
 
 export class WelcomeScenario extends Scenario {
     private readonly SELECT_STATE = 'WELCOME_SELECT_CALLBACK';
@@ -29,9 +29,11 @@ export class WelcomeScenario extends Scenario {
                 if (user) {
                     this._bot.sendMessage(
                         chatId,
-                        this.getWelcomeText(lang, datetime!, name!, user.getProperty<number>(UserProperty.LastVisitDate), isNewUser),
+                        this.getWelcomeText(lang, datetime!, name!, user.getProperty(UserProperty.LastVisitDate), isNewUser),
                         this.getSelectKeyboard(lang)
                     );
+
+                    user.setProperty(UserProperty.LastVisitDate, new Date().getTime());
 
                     this.setState(this.SELECT_STATE);
                 }
@@ -58,29 +60,37 @@ export class WelcomeScenario extends Scenario {
     }
 
     private getWelcomeText(lang: string, datetime: number, name: string, lastVisitDate?: number, isNewUser: boolean = false): string {
-        let locId: LocId;
+        let messageHeader = '';
         if (isNewUser) {
-            locId = LocId.NewbieMessage;
+            messageHeader = Localization.loc(lang, LocId.NewbieMessage, {name});
         }
         else {
-            let daysToGreeting = 0;
+            let pastHours = 0;
             if (lastVisitDate) {
-                daysToGreeting = getPastDays(lastVisitDate, Config.daysBeforeGreeting);
+                pastHours = getHoursPast(lastVisitDate, Config.hoursBeforeGreeting);
+                if (pastHours > 0) {
+                    const curDate = new Date();
+                    const lastDate = new Date(lastVisitDate);
+                    if (curDate.getDate() !== lastDate.getDate()) {
+                      pastHours = 0;
+                    }
+                }
             }
 
-            if (daysToGreeting === 0) {
+            if (pastHours === 0) {
                 const curTime = new Date(datetime).getHours();
-                locId = [LocId.Welcome, LocId.Hello, LocId.NiceToMeetYouAgain,
+                const locId = [LocId.Welcome, LocId.Hello, LocId.NiceToMeetYouAgain,
                     curTime >= 19 ? LocId.GoodEvening :
                         curTime >= 10 ? LocId.GoodAfternoon :
                             LocId.GoodMorning][Math.floor(Math.random() * 4)];
+
+                messageHeader = Localization.loc(lang, locId, {name});
             }
         }
-        let result = '';
-        if (isSomething(locId)) {
-
+        if (messageHeader.length > 0) {
+            messageHeader += '\n';
         }
-                Localization.loc(lang, locId, {name}) : '' + '\n' + Localization.loc(lang, LocId.HowCanIHelp);
+        return messageHeader + '\n' + Localization.loc(lang, LocId.HowCanIHelp);
     }
 
     private getSelectKeyboard(lang:string): InlineKeyboardButton[][] {
@@ -91,6 +101,6 @@ export class WelcomeScenario extends Scenario {
     }
 
     destroy(): void {
-
+        super.destroy();
     }
 }
