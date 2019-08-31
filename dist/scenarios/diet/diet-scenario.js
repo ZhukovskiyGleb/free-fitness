@@ -13,12 +13,14 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var scenario_1 = require("./scenario");
-var keyboard_maker_1 = require("../utils/keyboard-maker");
-var user_1 = require("../user/user");
-var localization_1 = require("../localization/localization");
-var welcome_scenario_1 = require("./welcome-scenario");
-var utils_1 = require("../utils/utils");
+var scenario_1 = require("../scenario");
+var keyboard_maker_1 = require("../../utils/keyboard-maker");
+var user_1 = require("../../user/user");
+var localization_1 = require("../../localization/localization");
+var welcome_scenario_1 = require("../welcome/welcome-scenario");
+var profile_scenario_1 = require("../profile/profile-scenario");
+var utils_1 = require("../../utils/utils");
+var new_diet_scenario_1 = require("./new-diet-scenario");
 var DietScenario = /** @class */ (function (_super) {
     __extends(DietScenario, _super);
     function DietScenario() {
@@ -49,16 +51,16 @@ var DietScenario = /** @class */ (function (_super) {
             }
         });
         this.addAction(this.NEW_STATE, function (params) {
-            var callback = params.callback;
-            switch (callback) {
-                case _this.PROFILE_READY_CALLBACK:
-                    break;
-                default:
-                    // this.waitForScenario(params, ProfileScenario, {
-                    //     callback: this.PROFILE_READY_CALLBACK,
-                    //     data: [UserProperty.Height, UserProperty.Weight, UserProperty.BodyType, UserProperty.Activity]
-                    // });
-                    break;
+            var callback = params.callback, userId = params.userId;
+            if (callback === _this.PROFILE_READY_CALLBACK) {
+                _this.switchToAnotherScenario(userId, new_diet_scenario_1.NewDietScenario, params);
+                return scenario_1.ActionResults.ReadyForDestroy;
+            }
+            else {
+                _this.waitForScenario(params, profile_scenario_1.ProfileScenario, {
+                    callback: _this.PROFILE_READY_CALLBACK,
+                    data: [user_1.UserProperty.Height, user_1.UserProperty.Weight, user_1.UserProperty.BodyType, user_1.UserProperty.Activity]
+                });
             }
         });
     };
@@ -74,6 +76,7 @@ var DietScenario = /** @class */ (function (_super) {
             .result;
     };
     DietScenario.prototype.destroy = function () {
+        _super.prototype.destroy.call(this);
     };
     return DietScenario;
 }(scenario_1.Scenario));

@@ -23,26 +23,28 @@ var Scenario = /** @class */ (function () {
         var repeat = false;
         var action = this._actions[this._state];
         if (action) {
-            console.log('Action', this._state, '+', params.callback ? 'CB: ' + params.callback : params.text ? 'TXT: ' + params.text : '_');
-            do {
-                var result = action(params);
-                console.log('Action result', result);
-                if (utils_1.isSomething(result)) {
-                    if (result === ActionResults.ReadyForDestroy) {
-                        readyForDestroy = true;
-                    }
-                    else {
-                        repeat = true;
-                    }
+            utils_1.log('Action', this._state, '+', params.callback ? 'CB: ' + params.callback : params.text ? 'TXT: ' + params.text : '_');
+            var result = action(params);
+            if (result)
+                utils_1.log('Has result', result);
+            if (utils_1.isSomething(result)) {
+                if (result === ActionResults.ReadyForDestroy) {
+                    readyForDestroy = true;
                 }
-                // if (!readyForDestroy && repeat) console.log('Repeat action')
-            } while (!readyForDestroy && repeat);
+                else {
+                    repeat = true;
+                }
+            }
         }
         else {
             readyForDestroy = false;
         }
+        if (!readyForDestroy && repeat) {
+            utils_1.log('Repeat action');
+            return this.activate(params);
+        }
         return { readyForDestroy: readyForDestroy,
-            resultCallback: this._waitProperties.requestData ? this._waitProperties.requestData.callback : undefined
+            resultCallback: readyForDestroy && this._waitProperties.requestData ? this._waitProperties.requestData.callback : undefined
         };
     };
     Scenario.prototype.setRequestData = function (requestData) {
@@ -50,12 +52,13 @@ var Scenario = /** @class */ (function () {
     };
     Object.defineProperty(Scenario.prototype, "requestedData", {
         get: function () {
-            return this._waitProperties.requestData;
+            return this._waitProperties.requestData ? this._waitProperties.requestData.data : undefined;
         },
         enumerable: true,
         configurable: true
     });
     Scenario.prototype.setState = function (state) {
+        utils_1.log('Set state', state);
         this._state = state;
     };
     Scenario.prototype.addAction = function (state, action) {
@@ -63,22 +66,24 @@ var Scenario = /** @class */ (function () {
     };
     Scenario.prototype.waitForScenario = function (params, scenarioClass, requestData) {
         var _this = this;
-        console.log('waitForScenario', scenarioClass.name, requestData);
+        utils_1.log('Wait For Scenario', scenarioClass.name, requestData);
         this._waitProperties.prevState = this._state;
         this._waitProperties.expectedCallback = requestData.callback;
         this.setState(this.WAIT_STATE);
         if (!this._actions[this.WAIT_STATE]) {
             this.addAction(this.WAIT_STATE, function (params) {
                 if (params.callback && params.callback === _this._waitProperties.expectedCallback) {
+                    utils_1.log('Callback received');
                     _this.setState(_this._waitProperties.prevState);
                     return ActionResults.Repeat;
                 }
+                utils_1.log('Waiting');
             });
         }
         this._scenarioManager.add(params.userId, scenarioClass, params, requestData);
     };
     Scenario.prototype.switchToAnotherScenario = function (userId, scenarioClass, forceParams) {
-        console.log('switchToAnotherScenario', scenarioClass.name);
+        utils_1.log('switchToAnotherScenario', scenarioClass.name);
         this.setState(this.FINAL_STATE);
         this._scenarioManager.add(userId, scenarioClass, forceParams);
     };

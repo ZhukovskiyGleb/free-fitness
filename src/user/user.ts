@@ -1,4 +1,5 @@
 import {Diet} from "../content/diet";
+import {log} from "../utils/utils";
 
 export enum Gender {
     Male = 'male',
@@ -80,11 +81,11 @@ export class User {
     }
 
     public hasProperties<P extends keyof UserProperties>(requestProps: P[]): boolean {
-        requestProps.forEach((property: UserProperty) => {
+        for (let property of requestProps) {
             if (!this._properties.hasOwnProperty(property)) {
                 return false;
             }
-        });
+        }
 
         return true;
     }
@@ -112,6 +113,7 @@ export class User {
     }
 
     public setProperty<P extends keyof UserProperties>(property: P, value: UserProperties[P]): void {
+        log('[User save property', property, value, ']');
         this._properties[property] = value;
     }
 

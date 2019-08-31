@@ -11,6 +11,7 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var utils_1 = require("../utils/utils");
 var Gender;
 (function (Gender) {
     Gender["Male"] = "male";
@@ -68,12 +69,12 @@ var User = /** @class */ (function () {
         this._properties[UserProperty.RegisterDate] = registerDate;
     }
     User.prototype.hasProperties = function (requestProps) {
-        var _this = this;
-        requestProps.forEach(function (property) {
-            if (!_this._properties.hasOwnProperty(property)) {
+        for (var _i = 0, requestProps_1 = requestProps; _i < requestProps_1.length; _i++) {
+            var property = requestProps_1[_i];
+            if (!this._properties.hasOwnProperty(property)) {
                 return false;
             }
-        });
+        }
         return true;
     };
     User.prototype.getProperties = function (requestProps) {
@@ -81,7 +82,6 @@ var User = /** @class */ (function () {
         var result = {};
         requestProps.forEach(function (property) {
             if (_this._properties.hasOwnProperty(property)) {
-                // @ts-ignore
                 result[property] = _this._properties[property];
             }
         });
@@ -101,7 +101,7 @@ var User = /** @class */ (function () {
         configurable: true
     });
     User.prototype.setProperty = function (property, value) {
-        // @ts-ignore
+        utils_1.log('[User save property', property, value, ']');
         this._properties[property] = value;
     };
     return User;

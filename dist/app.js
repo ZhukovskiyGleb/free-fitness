@@ -4,7 +4,7 @@ var bot_1 = require("./bot/bot");
 var user_manager_1 = require("./user/user-manager");
 var scenario_manager_1 = require("./scenarios/scenario-manager");
 var parser_1 = require("./utils/parser");
-var welcome_scenario_1 = require("./scenarios/welcome-scenario");
+var welcome_scenario_1 = require("./scenarios/welcome/welcome-scenario");
 var App = /** @class */ (function () {
     function App() {
         this._bot = new bot_1.Bot();

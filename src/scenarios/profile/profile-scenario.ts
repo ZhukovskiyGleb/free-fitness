@@ -1,10 +1,10 @@
 import {ActionResults, Scenario} from "../scenario";
 import {InlineKeyboardButton} from "node-telegram-bot-api";
 import {KeyboardMaker} from "../../utils/keyboard-maker";
-import {Activity, Experience, User, UserProperty} from "../../user/user";
+import {User, UserProperty} from "../../user/user";
 import {Localization, LocId} from "../../localization/localization";
 import {ProfileUtils} from "./profile-utils";
-import {getDaysPast, isSomething} from "../../utils/utils";
+import {getDaysPast, isSomething, log} from "../../utils/utils";
 import {Config} from "../../configs/config";
 import {Params} from "../../utils/parser";
 
@@ -34,7 +34,7 @@ export class ProfileScenario extends Scenario {
 
                 const user = this._userManager.getUser(userId);
                 const requestedProperties = <UserProperty[]>this.requestedData;
-
+                log('Requested', requestedProperties);
                 if (user && requestedProperties) {
                     if (user.hasProperties(requestedProperties)) {
                         this._bot.sendMessage(
@@ -131,7 +131,7 @@ export class ProfileScenario extends Scenario {
           params => {
               if (this._propsToEdit && this._propsToEdit.length > 0) {
                   const property = this._propsToEdit.shift();
-
+                  log('Ask for property', property);
                   switch (property) {
                       case UserProperty.Age:
                           this.setState(this.EDIT_AGE_STATE);
@@ -159,6 +159,10 @@ export class ProfileScenario extends Scenario {
                   }
               }
               else {
+                  const { userId } = params;
+                  const user = this._userManager.getUser(userId);
+
+                  log('No properties for ask');
                   return ActionResults.ReadyForDestroy;
               }
           });
@@ -284,6 +288,8 @@ export class ProfileScenario extends Scenario {
                 if (user) {
                     user.setProperty(property, value);
                 }
+
+                params.text = undefined;
 
                 this.setState(this.NEXT_EDIT_STATE);
                 return ActionResults.Repeat;

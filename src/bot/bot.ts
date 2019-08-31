@@ -1,5 +1,6 @@
 import TelegramBot = require("node-telegram-bot-api");
 import {CallbackQuery, InlineKeyboardButton, Message, SendMessageOptions} from "node-telegram-bot-api";
+import {log} from "../utils/utils";
 
 require("dotenv").config();
 
@@ -20,7 +21,7 @@ export class Bot {
         this._bot.on("polling_error", this.onErrorHandler.bind(this));
 
         // this._bot.onText(/\/clear(.+)/, (msg, match) => {
-        //     console.log('Clear', match);
+        //     log('Clear', match);
         // });
     }
 
@@ -29,13 +30,13 @@ export class Bot {
         .then(
             value => {
                 if (value) {
-                    this._history[chatId].splice(msgId);
+                    this._history[chatId].splice(msgId, 1);
                 }
             }
         )
         .catch(
-            error => {
-                console.log('Error deleteMessage!', error);
+            (error: Error) => {
+                log('Error deleteMessage!', error.message);
             }
         );
     }
@@ -56,6 +57,11 @@ export class Bot {
                 one_time_keyboard: true
             };
         }
+        else {
+            options.reply_markup = {
+                force_reply: true
+            }
+        }
 
         this._bot.sendMessage(chatId, msgText, options)
         .then(
@@ -65,7 +71,7 @@ export class Bot {
         )
         .catch(
             (error) => {
-                console.log('Error sendMessage!', error);
+                log('Error sendMessage!', error);
             }
         );
     }
@@ -101,6 +107,6 @@ export class Bot {
     }
 
     private onErrorHandler(err: Error): void {
-        console.log('Polling error!', err.message);
+        log('Polling error!', err.message);
     }
 }

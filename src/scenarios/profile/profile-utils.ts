@@ -1,6 +1,6 @@
 import {Activity, BodyType, Experience, Gender, User, UserProperties, UserProperty} from "../../user/user";
 import {Localization, LocId} from "../../localization/localization";
-import {isSomething} from "../../utils/utils";
+import {isSomething, log} from "../../utils/utils";
 
 interface CallbackStore<P extends keyof UserProperties> {
   [key: string]: {property: P, value: UserProperties[P]}
@@ -95,7 +95,7 @@ export class ProfileUtils {
     private getPropertyValue(user: User, property: UserProperty, lang: string): string | undefined {
         const value = user.getProperty(property);
         if (isSomething(value)) {
-            const locId = ProfileUtils.PROPERTY_VALUE_TO_LOC_ID[property];
+            const locId = ProfileUtils.PROPERTY_VALUE_TO_LOC_ID[value.toString()];
             if (locId) {
               return Localization.loc(lang, locId);
             }

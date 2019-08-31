@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var TelegramBot = require("node-telegram-bot-api");
+var utils_1 = require("../utils/utils");
 require("dotenv").config();
 var Bot = /** @class */ (function () {
     function Bot() {
@@ -13,7 +14,7 @@ var Bot = /** @class */ (function () {
         this._bot.on('message', this.onReceiveMessage.bind(this));
         this._bot.on("polling_error", this.onErrorHandler.bind(this));
         // this._bot.onText(/\/clear(.+)/, (msg, match) => {
-        //     console.log('Clear', match);
+        //     log('Clear', match);
         // });
     };
     Bot.prototype.deleteMessage = function (chatId, msgId) {
@@ -21,11 +22,11 @@ var Bot = /** @class */ (function () {
         this._bot.deleteMessage(chatId, msgId.toString())
             .then(function (value) {
             if (value) {
-                _this._history[chatId].splice(msgId);
+                _this._history[chatId].splice(msgId, 1);
             }
         })
             .catch(function (error) {
-            console.log('Error deleteMessage!', error);
+            utils_1.log('Error deleteMessage!', error.message);
         });
     };
     Bot.prototype.sendMessage = function (chatId, msgText, keyboard, deleteLastMsg) {
@@ -44,12 +45,17 @@ var Bot = /** @class */ (function () {
                 one_time_keyboard: true
             };
         }
+        else {
+            options.reply_markup = {
+                force_reply: true
+            };
+        }
         this._bot.sendMessage(chatId, msgText, options)
             .then(function (msg) {
             _this.addToHistory(msg);
         })
             .catch(function (error) {
-            console.log('Error sendMessage!', error);
+            utils_1.log('Error sendMessage!', error);
         });
     };
     Bot.prototype.clearHistory = function (chatId, lastOnly) {
@@ -77,7 +83,7 @@ var Bot = /** @class */ (function () {
         this.addToHistory(msg);
     };
     Bot.prototype.onErrorHandler = function (err) {
-        console.log('Polling error!', err.message);
+        utils_1.log('Polling error!', err.message);
     };
     return Bot;
 }());

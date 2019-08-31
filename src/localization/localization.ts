@@ -104,14 +104,14 @@ export class Localization<T extends keyof LocId> {
             //Diet
             [LocId.WhatExactly]: 'Что именно интересует?',
             //Profile
-            [LocId.ApproveProps]: 'Верно ли указаны ваши данные:',
+            [LocId.ApproveProps]: 'Верно ли указаны ваши данные?',
             [LocId.EditWarning]: 'Обратите внимание, что повторно изменить свои данные будет возможно только через {days} дней.',
             [LocId.EditError]: 'Повторно изменить свои данные будет возможно только через {days} дней.',
             [LocId.InputIncorrect]: 'Данные введены неверно. Повторите ввод.',
-            [LocId.InputWeight]: 'Укажите ваш вес (в килограммах).',
-            [LocId.InputHeight]: 'Укажите ваш рост (в сантиметрах).',
-            [LocId.InputAge]: 'Укажите ваш возраст.',
-            [LocId.InputGender]: 'Укажите ваш пол.',
+            [LocId.InputWeight]: 'Укажите ваш вес (в килограммах):',
+            [LocId.InputHeight]: 'Укажите ваш рост (в сантиметрах):',
+            [LocId.InputAge]: 'Укажите ваш возраст:',
+            [LocId.InputGender]: 'Укажите ваш пол:',
             [LocId.InputActivity]: 'Укажите вашу ежедневную физическую активность:\n' +
             '*Отсутствует* - малоподвижный образ жизни без занятий спортом;\n' +
             '*Легкая* - целый день на ногах или 1-2 тренировки в неделю;\n' +
@@ -125,8 +125,8 @@ export class Localization<T extends keyof LocId> {
             '*Обычный* - ничего выше не описывает точно.',
             [LocId.InputExperience]: 'Укажите ваш тренировочный стаж:',
             //Properties
-            [LocId.PropertyWeight]: '- *Вес*: {value}',
-            [LocId.PropertyHeight]: '- *Рост*: {value}',
+            [LocId.PropertyWeight]: '- *Вес*: {value} кг',
+            [LocId.PropertyHeight]: '- *Рост*: {value} см',
             [LocId.PropertyAge]: '- *Возраст*: {value}',
             [LocId.PropertyGender]: '- *Пол*: {value}',
             [LocId.PropertyBodyType]: '- *Телосложение*: {value}',

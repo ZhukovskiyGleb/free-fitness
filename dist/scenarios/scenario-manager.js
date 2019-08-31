@@ -8,7 +8,7 @@ var ScenarioManager = /** @class */ (function () {
         this._scenarios = {};
     }
     ScenarioManager.prototype.add = function (userId, scenarioClass, forceParams, requestData) {
-        console.log('add scenario', scenarioClass.name);
+        utils_1.log('add scenario', scenarioClass.name);
         if (!this._scenarios[userId]) {
             this._scenarios[userId] = [];
         }
@@ -23,34 +23,34 @@ var ScenarioManager = /** @class */ (function () {
         }
     };
     ScenarioManager.prototype.activate = function (params, targetScenario) {
-        var _this = this;
         var scenarioList = this._scenarios[params.userId];
-        var callbackList = [];
-        console.log('------- START ---------');
+        var callback;
         if (!scenarioList || scenarioList.length === 0)
-            console.log('Empty scenarios');
+            utils_1.log('Empty scenarios');
         if (scenarioList || targetScenario) {
             var index = -1;
             if (targetScenario) {
                 index = scenarioList.indexOf(targetScenario);
             }
             if (index >= 0) {
-                console.log('force scenario');
-                this.activateScenario(scenarioList, index, params, callbackList);
+                utils_1.log('------- FORCE START ---------');
+                callback = this.activateScenario(scenarioList, index, params);
             }
             else {
-                console.log('scenarios amount', scenarioList.length);
+                utils_1.log('------- START LIST ' + scenarioList.length + ' ---------');
                 for (var i = scenarioList.length - 1; i >= 0; i--) {
-                    this.activateScenario(scenarioList, i, params, callbackList);
+                    callback = this.activateScenario(scenarioList, i, params);
+                    if (utils_1.isSomething(callback)) {
+                        break;
+                    }
                 }
             }
-            if (callbackList.length > 0) {
-                callbackList.forEach(function (callback) {
-                    params.callback = callback;
-                    _this.activate(params);
-                });
+            if (utils_1.isSomething(callback)) {
+                utils_1.log('Activate callback', callback);
+                params.callback = callback;
+                this.activate(params);
             }
-            console.log('-----------------');
+            utils_1.log('------- FINISH ---------');
             return true;
         }
         return false;
@@ -64,18 +64,16 @@ var ScenarioManager = /** @class */ (function () {
         });
         delete this._scenarios[userId];
     };
-    ScenarioManager.prototype.activateScenario = function (scenarioList, index, params, callbackList) {
+    ScenarioManager.prototype.activateScenario = function (scenarioList, index, params) {
         var scenario = scenarioList[index];
-        console.log('activateScenario', scenario.constructor.name);
+        utils_1.log('activate Scenario', scenario.constructor.name);
         var _a = scenario.activate(params), readyForDestroy = _a.readyForDestroy, resultCallback = _a.resultCallback;
         if (readyForDestroy) {
-            console.log('remove', scenario.constructor.name);
+            utils_1.log('remove', scenario.constructor.name);
             scenario.destroy();
             scenarioList.splice(index, 1);
         }
-        if (utils_1.isSomething(resultCallback)) {
-            callbackList.push(resultCallback);
-        }
+        return resultCallback;
     };
     return ScenarioManager;
 }());
