@@ -14,79 +14,108 @@ var LocId;
     LocId[LocId["HowCanIHelp"] = 7] = "HowCanIHelp";
     //Diet
     LocId[LocId["WhatExactly"] = 8] = "WhatExactly";
+    LocId[LocId["DietTarget"] = 9] = "DietTarget";
+    LocId[LocId["MealsAmount"] = 10] = "MealsAmount";
+    LocId[LocId["ExcludeFood"] = 11] = "ExcludeFood";
+    LocId[LocId["DietFormation"] = 12] = "DietFormation";
+    LocId[LocId["Breakfast"] = 13] = "Breakfast";
+    LocId[LocId["Brunch"] = 14] = "Brunch";
+    LocId[LocId["Lunch"] = 15] = "Lunch";
+    LocId[LocId["HighTea"] = 16] = "HighTea";
+    LocId[LocId["Dinner"] = 17] = "Dinner";
+    LocId[LocId["LateDinner"] = 18] = "LateDinner";
     //Profile
-    LocId[LocId["ApproveProps"] = 9] = "ApproveProps";
-    LocId[LocId["EditWarning"] = 10] = "EditWarning";
-    LocId[LocId["EditError"] = 11] = "EditError";
-    LocId[LocId["InputIncorrect"] = 12] = "InputIncorrect";
-    LocId[LocId["InputWeight"] = 13] = "InputWeight";
-    LocId[LocId["InputHeight"] = 14] = "InputHeight";
-    LocId[LocId["InputAge"] = 15] = "InputAge";
-    LocId[LocId["InputGender"] = 16] = "InputGender";
-    LocId[LocId["InputBodyType"] = 17] = "InputBodyType";
-    LocId[LocId["InputActivity"] = 18] = "InputActivity";
-    LocId[LocId["InputExperience"] = 19] = "InputExperience";
+    LocId[LocId["ApproveProps"] = 19] = "ApproveProps";
+    LocId[LocId["EditWarning"] = 20] = "EditWarning";
+    LocId[LocId["EditError"] = 21] = "EditError";
+    LocId[LocId["InputIncorrect"] = 22] = "InputIncorrect";
+    LocId[LocId["InputWeight"] = 23] = "InputWeight";
+    LocId[LocId["InputHeight"] = 24] = "InputHeight";
+    LocId[LocId["InputAge"] = 25] = "InputAge";
+    LocId[LocId["InputGender"] = 26] = "InputGender";
+    LocId[LocId["InputBodyType"] = 27] = "InputBodyType";
+    LocId[LocId["InputActivity"] = 28] = "InputActivity";
+    LocId[LocId["InputExperience"] = 29] = "InputExperience";
     //Properties
-    LocId[LocId["PropertyWeight"] = 20] = "PropertyWeight";
-    LocId[LocId["PropertyHeight"] = 21] = "PropertyHeight";
-    LocId[LocId["PropertyAge"] = 22] = "PropertyAge";
-    LocId[LocId["PropertyGender"] = 23] = "PropertyGender";
-    LocId[LocId["PropertyBodyType"] = 24] = "PropertyBodyType";
-    LocId[LocId["PropertyActivity"] = 25] = "PropertyActivity";
-    LocId[LocId["PropertyExperience"] = 26] = "PropertyExperience";
+    LocId[LocId["PropertyWeight"] = 30] = "PropertyWeight";
+    LocId[LocId["PropertyHeight"] = 31] = "PropertyHeight";
+    LocId[LocId["PropertyAge"] = 32] = "PropertyAge";
+    LocId[LocId["PropertyGender"] = 33] = "PropertyGender";
+    LocId[LocId["PropertyBodyType"] = 34] = "PropertyBodyType";
+    LocId[LocId["PropertyActivity"] = 35] = "PropertyActivity";
+    LocId[LocId["PropertyExperience"] = 36] = "PropertyExperience";
     //Property values
-    LocId[LocId["GenderMale"] = 27] = "GenderMale";
-    LocId[LocId["GenderFemale"] = 28] = "GenderFemale";
-    LocId[LocId["BodyTypeThin"] = 29] = "BodyTypeThin";
-    LocId[LocId["BodyTypeMuscular"] = 30] = "BodyTypeMuscular";
-    LocId[LocId["BodyTypeLarge"] = 31] = "BodyTypeLarge";
-    LocId[LocId["BodyTypeOverweight"] = 32] = "BodyTypeOverweight";
-    LocId[LocId["BodyTypeCommon"] = 33] = "BodyTypeCommon";
-    LocId[LocId["ActivityNothing"] = 34] = "ActivityNothing";
-    LocId[LocId["ActivityEasy"] = 35] = "ActivityEasy";
-    LocId[LocId["ActivityAverage"] = 36] = "ActivityAverage";
-    LocId[LocId["ActivityHeavy"] = 37] = "ActivityHeavy";
-    LocId[LocId["ExperienceJunior"] = 38] = "ExperienceJunior";
-    LocId[LocId["ExperienceMiddle"] = 39] = "ExperienceMiddle";
-    LocId[LocId["ExperienceSenior"] = 40] = "ExperienceSenior";
+    LocId[LocId["GenderMale"] = 37] = "GenderMale";
+    LocId[LocId["GenderFemale"] = 38] = "GenderFemale";
+    LocId[LocId["BodyTypeThin"] = 39] = "BodyTypeThin";
+    LocId[LocId["BodyTypeMuscular"] = 40] = "BodyTypeMuscular";
+    LocId[LocId["BodyTypeLarge"] = 41] = "BodyTypeLarge";
+    LocId[LocId["BodyTypeOverweight"] = 42] = "BodyTypeOverweight";
+    LocId[LocId["BodyTypeCommon"] = 43] = "BodyTypeCommon";
+    LocId[LocId["ActivityNothing"] = 44] = "ActivityNothing";
+    LocId[LocId["ActivityEasy"] = 45] = "ActivityEasy";
+    LocId[LocId["ActivityAverage"] = 46] = "ActivityAverage";
+    LocId[LocId["ActivityHeavy"] = 47] = "ActivityHeavy";
+    LocId[LocId["ExperienceJunior"] = 48] = "ExperienceJunior";
+    LocId[LocId["ExperienceMiddle"] = 49] = "ExperienceMiddle";
+    LocId[LocId["ExperienceSenior"] = 50] = "ExperienceSenior";
+    LocId[LocId["TargetLoss"] = 51] = "TargetLoss";
+    LocId[LocId["TargetSupport"] = 52] = "TargetSupport";
+    LocId[LocId["TargetGain"] = 53] = "TargetGain";
+    LocId[LocId["FormationVariety"] = 54] = "FormationVariety";
+    LocId[LocId["FormationMonotony"] = 55] = "FormationMonotony";
     //Buttons
-    LocId[LocId["ButtonDiet"] = 41] = "ButtonDiet";
-    LocId[LocId["ButtonWorkout"] = 42] = "ButtonWorkout";
-    LocId[LocId["ButtonMyDiet"] = 43] = "ButtonMyDiet";
-    LocId[LocId["ButtonNewDiet"] = 44] = "ButtonNewDiet";
-    LocId[LocId["ButtonContinue"] = 45] = "ButtonContinue";
-    LocId[LocId["ButtonBack"] = 46] = "ButtonBack";
-    LocId[LocId["ButtonApprove"] = 47] = "ButtonApprove";
-    LocId[LocId["ButtonEdit"] = 48] = "ButtonEdit";
+    LocId[LocId["ButtonDiet"] = 56] = "ButtonDiet";
+    LocId[LocId["ButtonWorkout"] = 57] = "ButtonWorkout";
+    LocId[LocId["ButtonMyDiet"] = 58] = "ButtonMyDiet";
+    LocId[LocId["ButtonNewDiet"] = 59] = "ButtonNewDiet";
+    LocId[LocId["ButtonContinue"] = 60] = "ButtonContinue";
+    LocId[LocId["ButtonBack"] = 61] = "ButtonBack";
+    LocId[LocId["ButtonSave"] = 62] = "ButtonSave";
+    LocId[LocId["ButtonApprove"] = 63] = "ButtonApprove";
+    LocId[LocId["ButtonEdit"] = 64] = "ButtonEdit";
     //Food
-    LocId[LocId["FoodSalmon"] = 49] = "FoodSalmon";
-    LocId[LocId["FoodWhiteFish"] = 50] = "FoodWhiteFish";
-    LocId[LocId["FoodSeafood"] = 51] = "FoodSeafood";
-    LocId[LocId["FoodLeanBeef"] = 52] = "FoodLeanBeef";
-    LocId[LocId["FoodLeanPork"] = 53] = "FoodLeanPork";
-    LocId[LocId["FoodPoultryThigh"] = 54] = "FoodPoultryThigh";
-    LocId[LocId["FoodPoultryFillet"] = 55] = "FoodPoultryFillet";
-    LocId[LocId["FoodEgg"] = 56] = "FoodEgg";
-    LocId[LocId["FoodEggWhite"] = 57] = "FoodEggWhite";
-    LocId[LocId["FoodSoybean"] = 58] = "FoodSoybean";
-    LocId[LocId["FoodCheese"] = 59] = "FoodCheese";
-    LocId[LocId["FoodSkimCheese"] = 60] = "FoodSkimCheese";
-    LocId[LocId["FoodProtein"] = 61] = "FoodProtein";
-    LocId[LocId["FoodMassPorridge"] = 62] = "FoodMassPorridge";
-    LocId[LocId["FoodBrownRice"] = 63] = "FoodBrownRice";
-    LocId[LocId["FoodBuckwheat"] = 64] = "FoodBuckwheat";
-    LocId[LocId["FoodOatmeal"] = 65] = "FoodOatmeal";
-    LocId[LocId["FoodBeans"] = 66] = "FoodBeans";
-    LocId[LocId["FoodBerries"] = 67] = "FoodBerries";
-    LocId[LocId["FoodApple"] = 68] = "FoodApple";
-    LocId[LocId["FoodBanana"] = 69] = "FoodBanana";
-    LocId[LocId["FoodNuts"] = 70] = "FoodNuts";
-    LocId[LocId["FoodFishOil"] = 71] = "FoodFishOil";
-    LocId[LocId["FoodOil"] = 72] = "FoodOil";
-    LocId[LocId["FoodAvocado"] = 73] = "FoodAvocado";
+    LocId[LocId["FoodSalmon"] = 65] = "FoodSalmon";
+    LocId[LocId["FoodWhiteFish"] = 66] = "FoodWhiteFish";
+    LocId[LocId["FoodSeafood"] = 67] = "FoodSeafood";
+    LocId[LocId["FoodLeanBeef"] = 68] = "FoodLeanBeef";
+    LocId[LocId["FoodLeanPork"] = 69] = "FoodLeanPork";
+    LocId[LocId["FoodPoultryThigh"] = 70] = "FoodPoultryThigh";
+    LocId[LocId["FoodPoultryFillet"] = 71] = "FoodPoultryFillet";
+    LocId[LocId["FoodEgg"] = 72] = "FoodEgg";
+    LocId[LocId["FoodEggWhite"] = 73] = "FoodEggWhite";
+    LocId[LocId["FoodSoybean"] = 74] = "FoodSoybean";
+    LocId[LocId["FoodCheese"] = 75] = "FoodCheese";
+    LocId[LocId["FoodSkimCheese"] = 76] = "FoodSkimCheese";
+    LocId[LocId["FoodProtein"] = 77] = "FoodProtein";
+    LocId[LocId["FoodMassPorridge"] = 78] = "FoodMassPorridge";
+    LocId[LocId["FoodBrownRice"] = 79] = "FoodBrownRice";
+    LocId[LocId["FoodBuckwheat"] = 80] = "FoodBuckwheat";
+    LocId[LocId["FoodOatmeal"] = 81] = "FoodOatmeal";
+    LocId[LocId["FoodBeans"] = 82] = "FoodBeans";
+    LocId[LocId["FoodBroccoli"] = 83] = "FoodBroccoli";
+    LocId[LocId["FoodBerries"] = 84] = "FoodBerries";
+    LocId[LocId["FoodDriedFruits"] = 85] = "FoodDriedFruits";
+    LocId[LocId["FoodApple"] = 86] = "FoodApple";
+    LocId[LocId["FoodBanana"] = 87] = "FoodBanana";
+    LocId[LocId["FoodNuts"] = 88] = "FoodNuts";
+    LocId[LocId["FoodFishOil"] = 89] = "FoodFishOil";
+    LocId[LocId["FoodOil"] = 90] = "FoodOil";
+    LocId[LocId["FoodAvocado"] = 91] = "FoodAvocado";
+    LocId[LocId["FoodGreens"] = 92] = "FoodGreens";
+    LocId[LocId["FoodTypeMeat"] = 93] = "FoodTypeMeat";
+    LocId[LocId["FoodTypePoultry"] = 94] = "FoodTypePoultry";
+    LocId[LocId["FoodTypeFish"] = 95] = "FoodTypeFish";
+    LocId[LocId["FoodTypeSeafood"] = 96] = "FoodTypeSeafood";
+    LocId[LocId["FoodTypeEggs"] = 97] = "FoodTypeEggs";
+    LocId[LocId["FoodTypeMilk"] = 98] = "FoodTypeMilk";
+    LocId[LocId["FoodTypeFruits"] = 99] = "FoodTypeFruits";
+    LocId[LocId["FoodTypeExpensive"] = 100] = "FoodTypeExpensive";
+    LocId[LocId["FoodTypeSportNutrition"] = 101] = "FoodTypeSportNutrition";
     //Add
-    LocId[LocId["Grams"] = 74] = "Grams";
-    LocId[LocId["Piece"] = 75] = "Piece";
+    LocId[LocId["Grams"] = 102] = "Grams";
+    LocId[LocId["Piece"] = 103] = "Piece";
+    LocId[LocId["Portion"] = 104] = "Portion";
 })(LocId = exports.LocId || (exports.LocId = {}));
 var Localization = /** @class */ (function () {
     function Localization() {
@@ -118,6 +147,18 @@ var Localization = /** @class */ (function () {
             _a[LocId.HowCanIHelp] = 'Чем я могу быть полезен?',
             //Diet
             _a[LocId.WhatExactly] = 'Что именно интересует?',
+            _a[LocId.DietTarget] = 'Укажите цель рациона:',
+            _a[LocId.MealsAmount] = 'Сколько приемов пищи должно быть в рационе (оптимальным количеством является 4-5 приемов):',
+            _a[LocId.ExcludeFood] = 'Укажите, какие типы продуктов вы хотите исключить из рациона:',
+            _a[LocId.DietFormation] = 'Укажите как составлять рацион:\n' +
+                '*Разнообразно* - на каждый прием пищи будут подбираться разные продукты;\n' +
+                '*Однотипно* - все приемы пищи будут составлены из одинаковых продуктов.',
+            _a[LocId.Breakfast] = '*Завтрак*',
+            _a[LocId.Brunch] = '*Второй завтрак*',
+            _a[LocId.Lunch] = '*Обед*',
+            _a[LocId.HighTea] = '*Полдник*',
+            _a[LocId.Dinner] = '*Ужин*',
+            _a[LocId.LateDinner] = '*Поздний ужин*',
             //Profile
             _a[LocId.ApproveProps] = 'Верно ли указаны ваши данные?',
             _a[LocId.EditWarning] = 'Обратите внимание, что повторно изменить свои данные будет возможно только через {days} дней.',
@@ -162,12 +203,18 @@ var Localization = /** @class */ (function () {
             _a[LocId.ExperienceJunior] = 'Менее 6 месяцев',
             _a[LocId.ExperienceMiddle] = 'До 2 лет',
             _a[LocId.ExperienceSenior] = 'Свыше 2 лет',
+            _a[LocId.TargetLoss] = 'Похудение',
+            _a[LocId.TargetSupport] = 'Поддержание формы',
+            _a[LocId.TargetGain] = 'Набор массы',
+            _a[LocId.FormationVariety] = 'Разнообразно',
+            _a[LocId.FormationMonotony] = 'Однотипно',
             //Buttons
             _a[LocId.ButtonDiet] = 'Питание',
             _a[LocId.ButtonWorkout] = 'Тренировки',
             _a[LocId.ButtonMyDiet] = 'Мой рацион',
             _a[LocId.ButtonNewDiet] = 'Новый рацион',
             _a[LocId.ButtonBack] = 'Назад',
+            _a[LocId.ButtonSave] = 'Сохранить',
             _a[LocId.ButtonApprove] = 'Верно',
             _a[LocId.ButtonEdit] = 'Изменить',
             _a[LocId.ButtonContinue] = 'Продолжить',
@@ -188,18 +235,31 @@ var Localization = /** @class */ (function () {
             _a[LocId.FoodMassPorridge] = 'Белый рис / Макароны высшего сорта',
             _a[LocId.FoodBrownRice] = 'Бурый рис',
             _a[LocId.FoodBuckwheat] = 'Гречневая каша',
-            _a[LocId.FoodOatmeal] = 'Овсяные хлопья',
+            _a[LocId.FoodOatmeal] = 'Овсяная каша',
             _a[LocId.FoodBeans] = 'Нут / Фасоль',
+            _a[LocId.FoodBroccoli] = 'Брокколи / Цветная капуста',
             _a[LocId.FoodBerries] = 'Ягоды',
+            _a[LocId.FoodDriedFruits] = 'Сухофрукты',
             _a[LocId.FoodApple] = 'Яблоко',
             _a[LocId.FoodBanana] = 'Банан',
             _a[LocId.FoodNuts] = 'Орехи / Арахисовая паста / Семечки',
             _a[LocId.FoodFishOil] = 'Капсулы рыбьего жира 2г',
             _a[LocId.FoodOil] = 'Оливковое масло / Льняное масло',
             _a[LocId.FoodAvocado] = 'Авокадо',
+            _a[LocId.FoodGreens] = 'Зеленые овощи и зелень',
+            _a[LocId.FoodTypeMeat] = 'Мясо',
+            _a[LocId.FoodTypePoultry] = 'Птица',
+            _a[LocId.FoodTypeFish] = 'Рыба',
+            _a[LocId.FoodTypeSeafood] = 'Морепродукты',
+            _a[LocId.FoodTypeEggs] = 'Яйца',
+            _a[LocId.FoodTypeMilk] = 'Молочные продукты',
+            _a[LocId.FoodTypeFruits] = 'Фрукты',
+            _a[LocId.FoodTypeExpensive] = 'Дорогие продукты',
+            _a[LocId.FoodTypeSportNutrition] = 'Спортивное питание',
             //Add
-            _a[LocId.Grams] = 'гр',
-            _a[LocId.Piece] = 'шт',
+            _a[LocId.Grams] = 'гр.',
+            _a[LocId.Piece] = 'шт.',
+            _a[LocId.Portion] = 'порц.',
             _a)
     };
     return Localization;

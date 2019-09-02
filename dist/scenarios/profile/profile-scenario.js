@@ -17,14 +17,14 @@ var scenario_1 = require("../scenario");
 var keyboard_maker_1 = require("../../utils/keyboard-maker");
 var user_1 = require("../../user/user");
 var localization_1 = require("../../localization/localization");
-var profile_utils_1 = require("./profile-utils");
+var profile_scenario_utils_1 = require("./profile-scenario-utils");
 var utils_1 = require("../../utils/utils");
 var config_1 = require("../../configs/config");
 var ProfileScenario = /** @class */ (function (_super) {
     __extends(ProfileScenario, _super);
     function ProfileScenario() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.APPROVE_PROPS_CORRECT_STATE = 'PROFILE_APPROVE_STATE';
+        _this.APPROVE_PROPS_CORRECT_STATE = 'PROFILE_APPROVE_PROPS_CORRECT_STATE';
         _this.CHECK_EDIT_STATE = 'PROFILE_CHECK_EDIT_STATE';
         _this.CONFIRM_EDIT_STATE = 'PROFILE_CONFIRM_EDIT_STATE';
         _this.EDIT_STATE = 'PROFILE_EDIT_STATE';
@@ -36,7 +36,6 @@ var ProfileScenario = /** @class */ (function (_super) {
         _this.EDIT_BODY_TYPE_STATE = 'PROFILE_BODY_TYPE_STATE';
         _this.EDIT_ACTIVITY_STATE = 'PROFILE_EDIT_ACTIVITY_STATE';
         _this.EDIT_EXPERIENCE_STATE = 'PROFILE_EDIT_EXPERIENCE_STATE';
-        _this._utils = new profile_utils_1.ProfileUtils();
         return _this;
     }
     ProfileScenario.prototype.init = function () {
@@ -63,9 +62,9 @@ var ProfileScenario = /** @class */ (function (_super) {
         this.addAction(this.APPROVE_PROPS_CORRECT_STATE, function (params) {
             var callback = params.callback;
             switch (callback) {
-                case profile_utils_1.ProfileUtils.APPROVE_CALLBACK:
+                case profile_scenario_utils_1.ProfileScenarioUtils.APPROVE_CALLBACK:
                     return scenario_1.ActionResults.ReadyForDestroy;
-                case profile_utils_1.ProfileUtils.EDIT_CALLBACK:
+                case profile_scenario_utils_1.ProfileScenarioUtils.EDIT_CALLBACK:
                     _this.setState(_this.CHECK_EDIT_STATE);
                     return scenario_1.ActionResults.Repeat;
             }
@@ -92,14 +91,14 @@ var ProfileScenario = /** @class */ (function (_super) {
         this.addAction(this.CONFIRM_EDIT_STATE, function (params) {
             var callback = params.callback, userId = params.userId;
             switch (callback) {
-                case profile_utils_1.ProfileUtils.CONTINUE_CALLBACK:
+                case profile_scenario_utils_1.ProfileScenarioUtils.CONTINUE_CALLBACK:
                     var user = _this._userManager.getUser(userId);
                     if (user) {
                         user.setProperty(user_1.UserProperty.LastEditDate, new Date().getTime());
                     }
                     _this.setState(_this.EDIT_STATE);
                     return scenario_1.ActionResults.Repeat;
-                case profile_utils_1.ProfileUtils.BACK_CALLBACK:
+                case profile_scenario_utils_1.ProfileScenarioUtils.BACK_CALLBACK:
                     return scenario_1.ActionResults.ReadyForDestroy;
             }
         });
@@ -156,8 +155,8 @@ var ProfileScenario = /** @class */ (function (_super) {
         this.addAction(this.EDIT_GENDER_STATE, function (params) {
             var chatId = params.chatId, lang = params.lang, callback = params.callback, userId = params.userId;
             switch (callback) {
-                case profile_utils_1.ProfileUtils.GENDER_MALE_CALLBACK:
-                case profile_utils_1.ProfileUtils.GENDER_FEMALE_CALLBACK:
+                case profile_scenario_utils_1.ProfileScenarioUtils.GENDER_MALE_CALLBACK:
+                case profile_scenario_utils_1.ProfileScenarioUtils.GENDER_FEMALE_CALLBACK:
                     _this.setPropertyByCallback(callback, userId);
                     _this.setState(_this.NEXT_EDIT_STATE);
                     return scenario_1.ActionResults.Repeat;
@@ -174,11 +173,11 @@ var ProfileScenario = /** @class */ (function (_super) {
         this.addAction(this.EDIT_BODY_TYPE_STATE, function (params) {
             var chatId = params.chatId, lang = params.lang, callback = params.callback, userId = params.userId;
             switch (callback) {
-                case profile_utils_1.ProfileUtils.BODY_TYPE_THIN_CALLBACK:
-                case profile_utils_1.ProfileUtils.BODY_TYPE_MUSCULAR_CALLBACK:
-                case profile_utils_1.ProfileUtils.BODY_TYPE_LARGE_CALLBACK:
-                case profile_utils_1.ProfileUtils.BODY_TYPE_OVERWEIGHT_CALLBACK:
-                case profile_utils_1.ProfileUtils.BODY_TYPE_COMMON_CALLBACK:
+                case profile_scenario_utils_1.ProfileScenarioUtils.BODY_TYPE_THIN_CALLBACK:
+                case profile_scenario_utils_1.ProfileScenarioUtils.BODY_TYPE_MUSCULAR_CALLBACK:
+                case profile_scenario_utils_1.ProfileScenarioUtils.BODY_TYPE_LARGE_CALLBACK:
+                case profile_scenario_utils_1.ProfileScenarioUtils.BODY_TYPE_OVERWEIGHT_CALLBACK:
+                case profile_scenario_utils_1.ProfileScenarioUtils.BODY_TYPE_COMMON_CALLBACK:
                     _this.setPropertyByCallback(callback, userId);
                     _this.setState(_this.NEXT_EDIT_STATE);
                     return scenario_1.ActionResults.Repeat;
@@ -189,10 +188,10 @@ var ProfileScenario = /** @class */ (function (_super) {
         this.addAction(this.EDIT_ACTIVITY_STATE, function (params) {
             var chatId = params.chatId, lang = params.lang, callback = params.callback, userId = params.userId;
             switch (callback) {
-                case profile_utils_1.ProfileUtils.ACTIVITY_NOTHING_CALLBACK:
-                case profile_utils_1.ProfileUtils.ACTIVITY_EASY_CALLBACK:
-                case profile_utils_1.ProfileUtils.ACTIVITY_AVERAGE_CALLBACK:
-                case profile_utils_1.ProfileUtils.ACTIVITY_HEAVY_CALLBACK:
+                case profile_scenario_utils_1.ProfileScenarioUtils.ACTIVITY_NOTHING_CALLBACK:
+                case profile_scenario_utils_1.ProfileScenarioUtils.ACTIVITY_EASY_CALLBACK:
+                case profile_scenario_utils_1.ProfileScenarioUtils.ACTIVITY_AVERAGE_CALLBACK:
+                case profile_scenario_utils_1.ProfileScenarioUtils.ACTIVITY_HEAVY_CALLBACK:
                     _this.setPropertyByCallback(callback, userId);
                     _this.setState(_this.NEXT_EDIT_STATE);
                     return scenario_1.ActionResults.Repeat;
@@ -203,9 +202,9 @@ var ProfileScenario = /** @class */ (function (_super) {
         this.addAction(this.EDIT_EXPERIENCE_STATE, function (params) {
             var chatId = params.chatId, lang = params.lang, callback = params.callback, userId = params.userId;
             switch (callback) {
-                case profile_utils_1.ProfileUtils.EXPERIENCE_JUNIOR_CALLBACK:
-                case profile_utils_1.ProfileUtils.EXPERIENCE_MIDDLE_CALLBACK:
-                case profile_utils_1.ProfileUtils.EXPERIENCE_SENIOR_CALLBACK:
+                case profile_scenario_utils_1.ProfileScenarioUtils.EXPERIENCE_JUNIOR_CALLBACK:
+                case profile_scenario_utils_1.ProfileScenarioUtils.EXPERIENCE_MIDDLE_CALLBACK:
+                case profile_scenario_utils_1.ProfileScenarioUtils.EXPERIENCE_SENIOR_CALLBACK:
                     _this.setPropertyByCallback(callback, userId);
                     _this.setState(_this.NEXT_EDIT_STATE);
                     return scenario_1.ActionResults.Repeat;
@@ -217,7 +216,7 @@ var ProfileScenario = /** @class */ (function (_super) {
     ProfileScenario.prototype.setPropertyByCallback = function (callback, userId) {
         var user = this._userManager.getUser(userId);
         if (user) {
-            var _a = this._utils.getPropertyValueByCallback(callback), property = _a.property, value = _a.value;
+            var _a = profile_scenario_utils_1.ProfileScenarioUtils.getPropertyValueByCallback(callback), property = _a.property, value = _a.value;
             if (utils_1.isSomething(property) && utils_1.isSomething(value)) {
                 user.setProperty(property, value);
             }
@@ -249,12 +248,12 @@ var ProfileScenario = /** @class */ (function (_super) {
     };
     ProfileScenario.prototype.getApproveText = function (lang, user, properties) {
         return localization_1.Localization.loc(lang, localization_1.LocId.ApproveProps) + '\n' +
-            this._utils.getPropertiesDescription(lang, user, properties).join('\n');
+            profile_scenario_utils_1.ProfileScenarioUtils.getPropertiesDescription(lang, user, properties).join('\n');
     };
     ProfileScenario.prototype.getApproveKeyboard = function (lang) {
         return new keyboard_maker_1.KeyboardMaker()
-            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.ButtonApprove), profile_utils_1.ProfileUtils.APPROVE_CALLBACK)
-            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.ButtonEdit), profile_utils_1.ProfileUtils.EDIT_CALLBACK)
+            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.ButtonApprove), profile_scenario_utils_1.ProfileScenarioUtils.APPROVE_CALLBACK)
+            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.ButtonEdit), profile_scenario_utils_1.ProfileScenarioUtils.EDIT_CALLBACK)
             .result;
     };
     ProfileScenario.prototype.getCheckEditText = function (lang, daysToEdit) {
@@ -268,47 +267,47 @@ var ProfileScenario = /** @class */ (function (_super) {
     ProfileScenario.prototype.getCheckEditKeyboard = function (lang, daysToEdit) {
         var keyboard = new keyboard_maker_1.KeyboardMaker();
         if (daysToEdit <= 0) {
-            keyboard.addButton(localization_1.Localization.loc(lang, localization_1.LocId.ButtonContinue), profile_utils_1.ProfileUtils.CONTINUE_CALLBACK);
+            keyboard.addButton(localization_1.Localization.loc(lang, localization_1.LocId.ButtonContinue), profile_scenario_utils_1.ProfileScenarioUtils.CONTINUE_CALLBACK);
         }
-        keyboard.addButton(localization_1.Localization.loc(lang, localization_1.LocId.ButtonBack), profile_utils_1.ProfileUtils.BACK_CALLBACK);
+        keyboard.addButton(localization_1.Localization.loc(lang, localization_1.LocId.ButtonBack), profile_scenario_utils_1.ProfileScenarioUtils.BACK_CALLBACK);
         return keyboard.result;
     };
     ProfileScenario.prototype.getGenderKeyboard = function (lang) {
         return new keyboard_maker_1.KeyboardMaker()
-            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.GenderMale), profile_utils_1.ProfileUtils.GENDER_MALE_CALLBACK)
+            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.GenderMale), profile_scenario_utils_1.ProfileScenarioUtils.GENDER_MALE_CALLBACK)
             .nextLine()
-            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.GenderFemale), profile_utils_1.ProfileUtils.GENDER_FEMALE_CALLBACK)
+            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.GenderFemale), profile_scenario_utils_1.ProfileScenarioUtils.GENDER_FEMALE_CALLBACK)
             .result;
     };
     ProfileScenario.prototype.getBodyTypeKeyboard = function (lang) {
         return new keyboard_maker_1.KeyboardMaker()
-            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.BodyTypeThin), profile_utils_1.ProfileUtils.BODY_TYPE_THIN_CALLBACK)
-            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.BodyTypeMuscular), profile_utils_1.ProfileUtils.BODY_TYPE_MUSCULAR_CALLBACK)
+            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.BodyTypeThin), profile_scenario_utils_1.ProfileScenarioUtils.BODY_TYPE_THIN_CALLBACK)
+            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.BodyTypeMuscular), profile_scenario_utils_1.ProfileScenarioUtils.BODY_TYPE_MUSCULAR_CALLBACK)
             .nextLine()
-            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.BodyTypeLarge), profile_utils_1.ProfileUtils.BODY_TYPE_LARGE_CALLBACK)
-            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.BodyTypeOverweight), profile_utils_1.ProfileUtils.BODY_TYPE_OVERWEIGHT_CALLBACK)
+            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.BodyTypeLarge), profile_scenario_utils_1.ProfileScenarioUtils.BODY_TYPE_LARGE_CALLBACK)
+            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.BodyTypeOverweight), profile_scenario_utils_1.ProfileScenarioUtils.BODY_TYPE_OVERWEIGHT_CALLBACK)
             .nextLine()
-            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.BodyTypeCommon), profile_utils_1.ProfileUtils.BODY_TYPE_COMMON_CALLBACK)
+            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.BodyTypeCommon), profile_scenario_utils_1.ProfileScenarioUtils.BODY_TYPE_COMMON_CALLBACK)
             .result;
     };
     ProfileScenario.prototype.getActivityKeyboard = function (lang) {
         return new keyboard_maker_1.KeyboardMaker()
-            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.ActivityNothing), profile_utils_1.ProfileUtils.ACTIVITY_NOTHING_CALLBACK)
+            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.ActivityNothing), profile_scenario_utils_1.ProfileScenarioUtils.ACTIVITY_NOTHING_CALLBACK)
             .nextLine()
-            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.ActivityEasy), profile_utils_1.ProfileUtils.ACTIVITY_EASY_CALLBACK)
+            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.ActivityEasy), profile_scenario_utils_1.ProfileScenarioUtils.ACTIVITY_EASY_CALLBACK)
             .nextLine()
-            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.ActivityAverage), profile_utils_1.ProfileUtils.ACTIVITY_AVERAGE_CALLBACK)
+            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.ActivityAverage), profile_scenario_utils_1.ProfileScenarioUtils.ACTIVITY_AVERAGE_CALLBACK)
             .nextLine()
-            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.ActivityHeavy), profile_utils_1.ProfileUtils.ACTIVITY_HEAVY_CALLBACK)
+            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.ActivityHeavy), profile_scenario_utils_1.ProfileScenarioUtils.ACTIVITY_HEAVY_CALLBACK)
             .result;
     };
     ProfileScenario.prototype.getExperienceKeyboard = function (lang) {
         return new keyboard_maker_1.KeyboardMaker()
-            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.ExperienceJunior), profile_utils_1.ProfileUtils.EXPERIENCE_JUNIOR_CALLBACK)
+            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.ExperienceJunior), profile_scenario_utils_1.ProfileScenarioUtils.EXPERIENCE_JUNIOR_CALLBACK)
             .nextLine()
-            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.ExperienceMiddle), profile_utils_1.ProfileUtils.EXPERIENCE_MIDDLE_CALLBACK)
+            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.ExperienceMiddle), profile_scenario_utils_1.ProfileScenarioUtils.EXPERIENCE_MIDDLE_CALLBACK)
             .nextLine()
-            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.ExperienceSenior), profile_utils_1.ProfileUtils.EXPERIENCE_SENIOR_CALLBACK)
+            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.ExperienceSenior), profile_scenario_utils_1.ProfileScenarioUtils.EXPERIENCE_SENIOR_CALLBACK)
             .result;
     };
     ProfileScenario.prototype.destroy = function () {

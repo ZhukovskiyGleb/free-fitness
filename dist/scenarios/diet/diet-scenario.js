@@ -59,7 +59,8 @@ var DietScenario = /** @class */ (function (_super) {
             else {
                 _this.waitForScenario(params, profile_scenario_1.ProfileScenario, {
                     callback: _this.PROFILE_READY_CALLBACK,
-                    data: [user_1.UserProperty.Height, user_1.UserProperty.Weight, user_1.UserProperty.BodyType, user_1.UserProperty.Activity]
+                    data: [user_1.UserProperty.Height, user_1.UserProperty.Weight, user_1.UserProperty.BodyType,
+                        user_1.UserProperty.Activity, user_1.UserProperty.Age, user_1.UserProperty.Gender]
                 });
             }
         });

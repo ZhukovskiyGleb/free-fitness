@@ -52,7 +52,8 @@ export class DietScenario extends Scenario {
                 } else {
                     this.waitForScenario(params, ProfileScenario, {
                         callback: this.PROFILE_READY_CALLBACK,
-                        data: [UserProperty.Height, UserProperty.Weight, UserProperty.BodyType, UserProperty.Activity]
+                        data: [UserProperty.Height, UserProperty.Weight, UserProperty.BodyType,
+                                UserProperty.Activity, UserProperty.Age, UserProperty.Gender]
                     });
                 }
         });

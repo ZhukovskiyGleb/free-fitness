@@ -22,13 +22,15 @@ var Food;
     Food[Food["Buckwheat"] = 15] = "Buckwheat";
     Food[Food["Oatmeal"] = 16] = "Oatmeal";
     Food[Food["Beans"] = 17] = "Beans";
-    Food[Food["Berries"] = 18] = "Berries";
-    Food[Food["Apple"] = 19] = "Apple";
-    Food[Food["Banana"] = 20] = "Banana";
-    Food[Food["Nuts"] = 21] = "Nuts";
-    Food[Food["FishOil"] = 22] = "FishOil";
-    Food[Food["Oil"] = 23] = "Oil";
-    Food[Food["Avocado"] = 24] = "Avocado";
+    Food[Food["Broccoli"] = 18] = "Broccoli";
+    Food[Food["Berries"] = 19] = "Berries";
+    Food[Food["DriedFruits"] = 20] = "DriedFruits";
+    Food[Food["Apple"] = 21] = "Apple";
+    Food[Food["Banana"] = 22] = "Banana";
+    Food[Food["Nuts"] = 23] = "Nuts";
+    Food[Food["FishOil"] = 24] = "FishOil";
+    Food[Food["Oil"] = 25] = "Oil";
+    Food[Food["Avocado"] = 26] = "Avocado";
 })(Food = exports.Food || (exports.Food = {}));
 var FoodType;
 (function (FoodType) {
@@ -49,9 +51,10 @@ var FoodType;
 var FoodConsumable;
 (function (FoodConsumable) {
     FoodConsumable[FoodConsumable["Piece"] = 0] = "Piece";
-    FoodConsumable[FoodConsumable["Weight"] = 1] = "Weight";
+    FoodConsumable[FoodConsumable["Unit"] = 1] = "Unit";
+    FoodConsumable[FoodConsumable["Weight"] = 2] = "Weight";
+    FoodConsumable[FoodConsumable["Portion"] = 3] = "Portion";
 })(FoodConsumable = exports.FoodConsumable || (exports.FoodConsumable = {}));
-;
 exports.FOOD = (_a = {},
     _a[Food.Salmon] = { consumable: FoodConsumable.Weight, type: [FoodType.Fish, FoodType.Expensive], protein: 20, fat: 13, carbo: 0, calories: 208, locId: localization_1.LocId.FoodSalmon },
     _a[Food.WhiteFish] = { consumable: FoodConsumable.Weight, type: [FoodType.Fish], protein: 22, fat: 0, carbo: 0, calories: 111, locId: localization_1.LocId.FoodWhiteFish },
@@ -60,18 +63,20 @@ exports.FOOD = (_a = {},
     _a[Food.LeanPork] = { consumable: FoodConsumable.Weight, type: [FoodType.Meat, FoodType.Gain], protein: 20, fat: 9, carbo: 0, calories: 164, locId: localization_1.LocId.FoodLeanPork },
     _a[Food.PoultryThigh] = { consumable: FoodConsumable.Weight, type: [FoodType.Poultry, FoodType.Gain], protein: 17, fat: 9, carbo: 0, calories: 175, locId: localization_1.LocId.FoodPoultryThigh },
     _a[Food.PoultryFillet] = { consumable: FoodConsumable.Weight, type: [FoodType.Poultry], protein: 20, fat: 0, carbo: 0, calories: 112, locId: localization_1.LocId.FoodPoultryFillet },
-    _a[Food.Egg] = { consumable: FoodConsumable.Piece, type: [FoodType.Eggs], protein: 6, fat: 5, carbo: 0, calories: 75, locId: localization_1.LocId.FoodEgg },
-    _a[Food.EggWhite] = { consumable: FoodConsumable.Piece, type: [FoodType.Eggs], protein: 5, fat: 0, carbo: 0, calories: 25, locId: localization_1.LocId.FoodEggWhite },
+    _a[Food.Egg] = { consumable: FoodConsumable.Unit, type: [FoodType.Eggs], protein: 6, fat: 5, carbo: 0, calories: 75, locId: localization_1.LocId.FoodEgg },
+    _a[Food.EggWhite] = { consumable: FoodConsumable.Unit, type: [FoodType.Eggs], protein: 5, fat: 0, carbo: 0, calories: 25, locId: localization_1.LocId.FoodEggWhite },
     _a[Food.Soybean] = { consumable: FoodConsumable.Weight, type: [FoodType.Vegan], protein: 36, fat: 20, carbo: 30, calories: 446, locId: localization_1.LocId.FoodSoybean },
     _a[Food.Cheese] = { consumable: FoodConsumable.Weight, type: [FoodType.Milk, FoodType.GainSupport], protein: 20, fat: 5, carbo: 0, calories: 145, locId: localization_1.LocId.FoodCheese },
     _a[Food.SkimCheese] = { consumable: FoodConsumable.Weight, type: [FoodType.Milk, FoodType.Loss], protein: 20, fat: 0, carbo: 0, calories: 110, locId: localization_1.LocId.FoodSkimCheese },
     _a[Food.Protein] = { consumable: FoodConsumable.Piece, type: [FoodType.SportNutrition], protein: 20, fat: 0, carbo: 0, calories: 88, locId: localization_1.LocId.FoodProtein },
     _a[Food.MassPorridge] = { consumable: FoodConsumable.Weight, type: [FoodType.GainSupport], protein: 0, fat: 0, carbo: 78, calories: 344, locId: localization_1.LocId.FoodMassPorridge },
     _a[Food.BrownRice] = { consumable: FoodConsumable.Weight, type: [FoodType.Expensive], protein: 0, fat: 0, carbo: 72, calories: 343, locId: localization_1.LocId.FoodBrownRice },
-    _a[Food.Buckwheat] = { consumable: FoodConsumable.Weight, type: [], protein: 0, fat: 0, carbo: 64, calories: 343, locId: localization_1.LocId.FoodBuckwheat },
+    _a[Food.Buckwheat] = { consumable: FoodConsumable.Weight, type: [FoodType.Loss], protein: 0, fat: 0, carbo: 64, calories: 343, locId: localization_1.LocId.FoodBuckwheat },
     _a[Food.Oatmeal] = { consumable: FoodConsumable.Weight, type: [], protein: 0, fat: 0, carbo: 62, calories: 352, locId: localization_1.LocId.FoodOatmeal },
     _a[Food.Beans] = { consumable: FoodConsumable.Weight, type: [FoodType.Vegan], protein: 20, fat: 0, carbo: 64, calories: 347, locId: localization_1.LocId.FoodBeans },
+    _a[Food.Broccoli] = { consumable: FoodConsumable.Weight, type: [], protein: 0, fat: 0, carbo: 5, calories: 347, locId: localization_1.LocId.FoodBroccoli },
     _a[Food.Berries] = { consumable: FoodConsumable.Weight, type: [FoodType.Fruits], protein: 0, fat: 0, carbo: 16, calories: 57, locId: localization_1.LocId.FoodBerries },
+    _a[Food.DriedFruits] = { consumable: FoodConsumable.Weight, type: [FoodType.Fruits], protein: 0, fat: 0, carbo: 83, calories: 359, locId: localization_1.LocId.FoodBerries },
     _a[Food.Apple] = { consumable: FoodConsumable.Piece, type: [FoodType.Fruits], protein: 0, fat: 0, carbo: 10, calories: 60, locId: localization_1.LocId.FoodApple },
     _a[Food.Banana] = { consumable: FoodConsumable.Piece, type: [FoodType.Fruits, FoodType.GainSupport], protein: 0, fat: 0, carbo: 20, calories: 100, locId: localization_1.LocId.FoodBanana },
     _a[Food.Nuts] = { consumable: FoodConsumable.Weight, type: [], protein: 20, fat: 50, carbo: 20, calories: 610, locId: localization_1.LocId.FoodNuts },

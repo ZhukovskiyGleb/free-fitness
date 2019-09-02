@@ -8,6 +8,8 @@ export class DietScenarioUtils {
     public static readonly GAIN_CALLBACK = 'NEW_DIET_GAIN_CALLBACK';
     public static readonly FORMATION_VARIETY_CALLBACK = 'NEW_DIET_FORMATION_VARIETY_CALLBACK';
     public static readonly FORMATION_MONOTONY_CALLBACK = 'NEW_DIET_FORMATION_MONOTONY_CALLBACK';
+    public static readonly RESULT_SAVE_CALLBACK = 'NEW_DIET_RESULT_SAVE_CALLBACK';
+    public static readonly BACK_CALLBACK = 'NEW_DIET_BACK_CALLBACK';
 
     public static readonly MEAL_AMOUNT_3 = 'NEW_DIET_MEAL_AMOUNT_3_CALLBACK';
     public static readonly MEAL_AMOUNT_4 = 'NEW_DIET_MEAL_AMOUNT_4_CALLBACK';

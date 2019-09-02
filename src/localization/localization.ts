@@ -69,6 +69,7 @@ export enum LocId {
     ButtonNewDiet,
     ButtonContinue,
     ButtonBack,
+    ButtonSave,
     ButtonApprove,
     ButtonEdit,
     //Food
@@ -198,6 +199,7 @@ export class Localization<T extends keyof LocId> {
             [LocId.ButtonMyDiet]: 'Мой рацион',
             [LocId.ButtonNewDiet]: 'Новый рацион',
             [LocId.ButtonBack]: 'Назад',
+            [LocId.ButtonSave]: 'Сохранить',
             [LocId.ButtonApprove]: 'Верно',
             [LocId.ButtonEdit]: 'Изменить',
             [LocId.ButtonContinue]: 'Продолжить',
