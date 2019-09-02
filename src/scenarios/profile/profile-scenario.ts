@@ -3,13 +3,13 @@ import {InlineKeyboardButton} from "node-telegram-bot-api";
 import {KeyboardMaker} from "../../utils/keyboard-maker";
 import {User, UserProperty} from "../../user/user";
 import {Localization, LocId} from "../../localization/localization";
-import {ProfileUtils} from "./profile-utils";
+import {ProfileScenarioUtils} from "./profile-scenario-utils";
 import {getDaysPast, isSomething, log} from "../../utils/utils";
 import {Config} from "../../configs/config";
 import {Params} from "../../utils/parser";
 
 export class ProfileScenario extends Scenario {
-    private readonly APPROVE_PROPS_CORRECT_STATE = 'PROFILE_APPROVE_STATE';
+    private readonly APPROVE_PROPS_CORRECT_STATE = 'PROFILE_APPROVE_PROPS_CORRECT_STATE';
     private readonly CHECK_EDIT_STATE = 'PROFILE_CHECK_EDIT_STATE';
     private readonly CONFIRM_EDIT_STATE = 'PROFILE_CONFIRM_EDIT_STATE';
     private readonly EDIT_STATE = 'PROFILE_EDIT_STATE';
@@ -23,7 +23,6 @@ export class ProfileScenario extends Scenario {
     private readonly EDIT_ACTIVITY_STATE = 'PROFILE_EDIT_ACTIVITY_STATE';
     private readonly EDIT_EXPERIENCE_STATE = 'PROFILE_EDIT_EXPERIENCE_STATE';
 
-    private readonly _utils = new ProfileUtils();
     private _propsToEdit?: UserProperty[];
 
     init(): void {
@@ -59,9 +58,9 @@ export class ProfileScenario extends Scenario {
             const { callback } = params;
 
             switch (callback) {
-                case ProfileUtils.APPROVE_CALLBACK:
+                case ProfileScenarioUtils.APPROVE_CALLBACK:
                     return ActionResults.ReadyForDestroy;
-                case ProfileUtils.EDIT_CALLBACK:
+                case ProfileScenarioUtils.EDIT_CALLBACK:
                     this.setState(this.CHECK_EDIT_STATE);
                     return ActionResults.Repeat;
             }
@@ -102,14 +101,14 @@ export class ProfileScenario extends Scenario {
               const { callback, userId } = params;
 
               switch (callback) {
-                  case ProfileUtils.CONTINUE_CALLBACK:
+                  case ProfileScenarioUtils.CONTINUE_CALLBACK:
                       const  user = this._userManager.getUser(userId);
                       if (user) {
                           user.setProperty(UserProperty.LastEditDate, new Date().getTime());
                       }
                       this.setState(this.EDIT_STATE);
                       return ActionResults.Repeat;
-                  case ProfileUtils.BACK_CALLBACK:
+                  case ProfileScenarioUtils.BACK_CALLBACK:
                       return ActionResults.ReadyForDestroy;
               }
           });
@@ -177,8 +176,8 @@ export class ProfileScenario extends Scenario {
               const { chatId, lang, callback, userId } = params;
 
               switch (callback) {
-                  case ProfileUtils.GENDER_MALE_CALLBACK:
-                  case ProfileUtils.GENDER_FEMALE_CALLBACK:
+                  case ProfileScenarioUtils.GENDER_MALE_CALLBACK:
+                  case ProfileScenarioUtils.GENDER_FEMALE_CALLBACK:
                       this.setPropertyByCallback(callback, userId);
                       this.setState(this.NEXT_EDIT_STATE);
                       return ActionResults.Repeat;
@@ -206,11 +205,11 @@ export class ProfileScenario extends Scenario {
               const { chatId, lang, callback, userId } = params;
 
               switch (callback) {
-                  case ProfileUtils.BODY_TYPE_THIN_CALLBACK:
-                  case ProfileUtils.BODY_TYPE_MUSCULAR_CALLBACK:
-                  case ProfileUtils.BODY_TYPE_LARGE_CALLBACK:
-                  case ProfileUtils.BODY_TYPE_OVERWEIGHT_CALLBACK:
-                  case ProfileUtils.BODY_TYPE_COMMON_CALLBACK:
+                  case ProfileScenarioUtils.BODY_TYPE_THIN_CALLBACK:
+                  case ProfileScenarioUtils.BODY_TYPE_MUSCULAR_CALLBACK:
+                  case ProfileScenarioUtils.BODY_TYPE_LARGE_CALLBACK:
+                  case ProfileScenarioUtils.BODY_TYPE_OVERWEIGHT_CALLBACK:
+                  case ProfileScenarioUtils.BODY_TYPE_COMMON_CALLBACK:
                       this.setPropertyByCallback(callback, userId);
                       this.setState(this.NEXT_EDIT_STATE);
                       return ActionResults.Repeat;
@@ -228,10 +227,10 @@ export class ProfileScenario extends Scenario {
               const { chatId, lang, callback, userId } = params;
 
               switch (callback) {
-                  case ProfileUtils.ACTIVITY_NOTHING_CALLBACK:
-                  case ProfileUtils.ACTIVITY_EASY_CALLBACK:
-                  case ProfileUtils.ACTIVITY_AVERAGE_CALLBACK:
-                  case ProfileUtils.ACTIVITY_HEAVY_CALLBACK:
+                  case ProfileScenarioUtils.ACTIVITY_NOTHING_CALLBACK:
+                  case ProfileScenarioUtils.ACTIVITY_EASY_CALLBACK:
+                  case ProfileScenarioUtils.ACTIVITY_AVERAGE_CALLBACK:
+                  case ProfileScenarioUtils.ACTIVITY_HEAVY_CALLBACK:
                       this.setPropertyByCallback(callback, userId);
                       this.setState(this.NEXT_EDIT_STATE);
                       return ActionResults.Repeat;
@@ -249,9 +248,9 @@ export class ProfileScenario extends Scenario {
               const { chatId, lang, callback, userId } = params;
 
               switch (callback) {
-                  case ProfileUtils.EXPERIENCE_JUNIOR_CALLBACK:
-                  case ProfileUtils.EXPERIENCE_MIDDLE_CALLBACK:
-                  case ProfileUtils.EXPERIENCE_SENIOR_CALLBACK:
+                  case ProfileScenarioUtils.EXPERIENCE_JUNIOR_CALLBACK:
+                  case ProfileScenarioUtils.EXPERIENCE_MIDDLE_CALLBACK:
+                  case ProfileScenarioUtils.EXPERIENCE_SENIOR_CALLBACK:
                       this.setPropertyByCallback(callback, userId);
                       this.setState(this.NEXT_EDIT_STATE);
                       return ActionResults.Repeat;
@@ -268,7 +267,7 @@ export class ProfileScenario extends Scenario {
     private setPropertyByCallback(callback: string, userId: number): void {
         const user = this._userManager.getUser(userId);
         if (user) {
-            const { property, value } = this._utils.getPropertyValueByCallback(callback);
+            const { property, value } = ProfileScenarioUtils.getPropertyValueByCallback(callback);
             if (isSomething(property) && isSomething(value)) {
                 user.setProperty(property, value);
             }
@@ -313,13 +312,13 @@ export class ProfileScenario extends Scenario {
 
     private getApproveText(lang: string, user: User, properties: UserProperty[]): string {
         return Localization.loc(lang, LocId.ApproveProps) + '\n' +
-          this._utils.getPropertiesDescription(lang, user, properties).join('\n');
+          ProfileScenarioUtils.getPropertiesDescription(lang, user, properties).join('\n');
     }
 
     private getApproveKeyboard(lang:string): InlineKeyboardButton[][] {
         return new KeyboardMaker()
-            .addButton(Localization.loc(lang, LocId.ButtonApprove), ProfileUtils.APPROVE_CALLBACK)
-            .addButton(Localization.loc(lang, LocId.ButtonEdit), ProfileUtils.EDIT_CALLBACK)
+            .addButton(Localization.loc(lang, LocId.ButtonApprove), ProfileScenarioUtils.APPROVE_CALLBACK)
+            .addButton(Localization.loc(lang, LocId.ButtonEdit), ProfileScenarioUtils.EDIT_CALLBACK)
             .result;
     }
 
@@ -336,52 +335,52 @@ export class ProfileScenario extends Scenario {
         const keyboard = new KeyboardMaker();
 
         if (daysToEdit <= 0) {
-            keyboard.addButton(Localization.loc(lang, LocId.ButtonContinue), ProfileUtils.CONTINUE_CALLBACK);
+            keyboard.addButton(Localization.loc(lang, LocId.ButtonContinue), ProfileScenarioUtils.CONTINUE_CALLBACK);
         }
 
-        keyboard.addButton(Localization.loc(lang, LocId.ButtonBack), ProfileUtils.BACK_CALLBACK);
+        keyboard.addButton(Localization.loc(lang, LocId.ButtonBack), ProfileScenarioUtils.BACK_CALLBACK);
         return keyboard.result;
     }
 
     private getGenderKeyboard(lang: string): InlineKeyboardButton[][] {
         return new KeyboardMaker()
-              .addButton(Localization.loc(lang, LocId.GenderMale), ProfileUtils.GENDER_MALE_CALLBACK)
+              .addButton(Localization.loc(lang, LocId.GenderMale), ProfileScenarioUtils.GENDER_MALE_CALLBACK)
               .nextLine()
-              .addButton(Localization.loc(lang, LocId.GenderFemale), ProfileUtils.GENDER_FEMALE_CALLBACK)
+              .addButton(Localization.loc(lang, LocId.GenderFemale), ProfileScenarioUtils.GENDER_FEMALE_CALLBACK)
               .result;
     }
 
     private getBodyTypeKeyboard(lang: string): InlineKeyboardButton[][] {
         return new KeyboardMaker()
-          .addButton(Localization.loc(lang, LocId.BodyTypeThin), ProfileUtils.BODY_TYPE_THIN_CALLBACK)
-          .addButton(Localization.loc(lang, LocId.BodyTypeMuscular), ProfileUtils.BODY_TYPE_MUSCULAR_CALLBACK)
+          .addButton(Localization.loc(lang, LocId.BodyTypeThin), ProfileScenarioUtils.BODY_TYPE_THIN_CALLBACK)
+          .addButton(Localization.loc(lang, LocId.BodyTypeMuscular), ProfileScenarioUtils.BODY_TYPE_MUSCULAR_CALLBACK)
           .nextLine()
-          .addButton(Localization.loc(lang, LocId.BodyTypeLarge), ProfileUtils.BODY_TYPE_LARGE_CALLBACK)
-          .addButton(Localization.loc(lang, LocId.BodyTypeOverweight), ProfileUtils.BODY_TYPE_OVERWEIGHT_CALLBACK)
+          .addButton(Localization.loc(lang, LocId.BodyTypeLarge), ProfileScenarioUtils.BODY_TYPE_LARGE_CALLBACK)
+          .addButton(Localization.loc(lang, LocId.BodyTypeOverweight), ProfileScenarioUtils.BODY_TYPE_OVERWEIGHT_CALLBACK)
           .nextLine()
-          .addButton(Localization.loc(lang, LocId.BodyTypeCommon), ProfileUtils.BODY_TYPE_COMMON_CALLBACK)
+          .addButton(Localization.loc(lang, LocId.BodyTypeCommon), ProfileScenarioUtils.BODY_TYPE_COMMON_CALLBACK)
           .result;
     }
 
     private getActivityKeyboard(lang: string): InlineKeyboardButton[][] {
         return new KeyboardMaker()
-          .addButton(Localization.loc(lang, LocId.ActivityNothing), ProfileUtils.ACTIVITY_NOTHING_CALLBACK)
+          .addButton(Localization.loc(lang, LocId.ActivityNothing), ProfileScenarioUtils.ACTIVITY_NOTHING_CALLBACK)
           .nextLine()
-          .addButton(Localization.loc(lang, LocId.ActivityEasy), ProfileUtils.ACTIVITY_EASY_CALLBACK)
+          .addButton(Localization.loc(lang, LocId.ActivityEasy), ProfileScenarioUtils.ACTIVITY_EASY_CALLBACK)
           .nextLine()
-          .addButton(Localization.loc(lang, LocId.ActivityAverage), ProfileUtils.ACTIVITY_AVERAGE_CALLBACK)
+          .addButton(Localization.loc(lang, LocId.ActivityAverage), ProfileScenarioUtils.ACTIVITY_AVERAGE_CALLBACK)
           .nextLine()
-          .addButton(Localization.loc(lang, LocId.ActivityHeavy), ProfileUtils.ACTIVITY_HEAVY_CALLBACK)
+          .addButton(Localization.loc(lang, LocId.ActivityHeavy), ProfileScenarioUtils.ACTIVITY_HEAVY_CALLBACK)
           .result;
     }
 
     private getExperienceKeyboard(lang: string): InlineKeyboardButton[][] {
         return new KeyboardMaker()
-          .addButton(Localization.loc(lang, LocId.ExperienceJunior), ProfileUtils.EXPERIENCE_JUNIOR_CALLBACK)
+          .addButton(Localization.loc(lang, LocId.ExperienceJunior), ProfileScenarioUtils.EXPERIENCE_JUNIOR_CALLBACK)
           .nextLine()
-          .addButton(Localization.loc(lang, LocId.ExperienceMiddle), ProfileUtils.EXPERIENCE_MIDDLE_CALLBACK)
+          .addButton(Localization.loc(lang, LocId.ExperienceMiddle), ProfileScenarioUtils.EXPERIENCE_MIDDLE_CALLBACK)
           .nextLine()
-          .addButton(Localization.loc(lang, LocId.ExperienceSenior), ProfileUtils.EXPERIENCE_SENIOR_CALLBACK)
+          .addButton(Localization.loc(lang, LocId.ExperienceSenior), ProfileScenarioUtils.EXPERIENCE_SENIOR_CALLBACK)
           .result;
     }
 

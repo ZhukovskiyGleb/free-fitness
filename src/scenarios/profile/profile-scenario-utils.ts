@@ -6,7 +6,7 @@ interface CallbackStore<P extends keyof UserProperties> {
   [key: string]: {property: P, value: UserProperties[P]}
 }
 
-export class ProfileUtils {
+export class ProfileScenarioUtils {
     public static readonly GENDER_MALE_CALLBACK = 'PROFILE_GENDER_MALE_CALLBACK';
     public static readonly GENDER_FEMALE_CALLBACK = 'PROFILE_GENDER_FEMALE_CALLBACK';
     public static readonly BODY_TYPE_THIN_CALLBACK = 'PROFILE_BODY_THIN_CALLBACK';
@@ -28,20 +28,20 @@ export class ProfileUtils {
     public static readonly BACK_CALLBACK = 'PROFILE_BACK_CALLBACK';
 
     private static readonly CALLBACK_TO_PROPERTY: CallbackStore<UserProperty> = {
-        [ProfileUtils.GENDER_MALE_CALLBACK]: {property: UserProperty.Gender, value: Gender.Male},
-        [ProfileUtils.GENDER_FEMALE_CALLBACK]: {property: UserProperty.Gender, value: Gender.Female},
-        [ProfileUtils.BODY_TYPE_THIN_CALLBACK]: {property: UserProperty.BodyType, value: BodyType.Thin},
-        [ProfileUtils.BODY_TYPE_MUSCULAR_CALLBACK]: {property: UserProperty.BodyType, value: BodyType.Muscular},
-        [ProfileUtils.BODY_TYPE_LARGE_CALLBACK]: {property: UserProperty.BodyType, value: BodyType.Large},
-        [ProfileUtils.BODY_TYPE_OVERWEIGHT_CALLBACK]: {property: UserProperty.BodyType, value: BodyType.Overweight},
-        [ProfileUtils.BODY_TYPE_COMMON_CALLBACK]: {property: UserProperty.BodyType, value: BodyType.Common},
-        [ProfileUtils.ACTIVITY_NOTHING_CALLBACK]: {property: UserProperty.Activity, value: Activity.Nothing},
-        [ProfileUtils.ACTIVITY_EASY_CALLBACK]: {property: UserProperty.Activity, value: Activity.Easy},
-        [ProfileUtils.ACTIVITY_AVERAGE_CALLBACK]: {property: UserProperty.Activity, value: Activity.Average},
-        [ProfileUtils.ACTIVITY_HEAVY_CALLBACK]: {property: UserProperty.Activity, value: Activity.Heavy},
-        [ProfileUtils.EXPERIENCE_JUNIOR_CALLBACK]: {property: UserProperty.Experience, value: Experience.Junior},
-        [ProfileUtils.EXPERIENCE_MIDDLE_CALLBACK]: {property: UserProperty.Experience, value: Experience.Middle},
-        [ProfileUtils.EXPERIENCE_SENIOR_CALLBACK]: {property: UserProperty.Experience, value: Experience.Senior},
+        [ProfileScenarioUtils.GENDER_MALE_CALLBACK]: {property: UserProperty.Gender, value: Gender.Male},
+        [ProfileScenarioUtils.GENDER_FEMALE_CALLBACK]: {property: UserProperty.Gender, value: Gender.Female},
+        [ProfileScenarioUtils.BODY_TYPE_THIN_CALLBACK]: {property: UserProperty.BodyType, value: BodyType.Thin},
+        [ProfileScenarioUtils.BODY_TYPE_MUSCULAR_CALLBACK]: {property: UserProperty.BodyType, value: BodyType.Muscular},
+        [ProfileScenarioUtils.BODY_TYPE_LARGE_CALLBACK]: {property: UserProperty.BodyType, value: BodyType.Large},
+        [ProfileScenarioUtils.BODY_TYPE_OVERWEIGHT_CALLBACK]: {property: UserProperty.BodyType, value: BodyType.Overweight},
+        [ProfileScenarioUtils.BODY_TYPE_COMMON_CALLBACK]: {property: UserProperty.BodyType, value: BodyType.Common},
+        [ProfileScenarioUtils.ACTIVITY_NOTHING_CALLBACK]: {property: UserProperty.Activity, value: Activity.Nothing},
+        [ProfileScenarioUtils.ACTIVITY_EASY_CALLBACK]: {property: UserProperty.Activity, value: Activity.Easy},
+        [ProfileScenarioUtils.ACTIVITY_AVERAGE_CALLBACK]: {property: UserProperty.Activity, value: Activity.Average},
+        [ProfileScenarioUtils.ACTIVITY_HEAVY_CALLBACK]: {property: UserProperty.Activity, value: Activity.Heavy},
+        [ProfileScenarioUtils.EXPERIENCE_JUNIOR_CALLBACK]: {property: UserProperty.Experience, value: Experience.Junior},
+        [ProfileScenarioUtils.EXPERIENCE_MIDDLE_CALLBACK]: {property: UserProperty.Experience, value: Experience.Middle},
+        [ProfileScenarioUtils.EXPERIENCE_SENIOR_CALLBACK]: {property: UserProperty.Experience, value: Experience.Senior},
     };
 
     private static readonly PROPERTY_TO_LOC_ID: {[key in UserProperty]?: LocId} = {
@@ -71,19 +71,19 @@ export class ProfileUtils {
       [Experience.Senior]: LocId.ExperienceSenior,
     };
 
-    public getPropertyValueByCallback(callback: string): { property?: UserProperty; value?: UserProperties[UserProperty] } {
-        if (ProfileUtils.CALLBACK_TO_PROPERTY.hasOwnProperty(callback)) {
-            return ProfileUtils.CALLBACK_TO_PROPERTY[callback];
+    public static getPropertyValueByCallback(callback: string): { property?: UserProperty; value?: UserProperties[UserProperty] } {
+        if (ProfileScenarioUtils.CALLBACK_TO_PROPERTY.hasOwnProperty(callback)) {
+            return ProfileScenarioUtils.CALLBACK_TO_PROPERTY[callback];
         }
         return {};
     }
 
-    public getPropertiesDescription(lang: string, user: User, properties: UserProperty[]): string[] {
+    public static getPropertiesDescription(lang: string, user: User, properties: UserProperty[]): string[] {
         let result: string[] = [];
 
         properties.forEach(property => {
             const value = this.getPropertyValue(user, property, lang);
-            const locId = ProfileUtils.PROPERTY_TO_LOC_ID[property];
+            const locId = ProfileScenarioUtils.PROPERTY_TO_LOC_ID[property];
             if (value && isSomething(locId)) {
                 result.push(Localization.loc(lang, locId, { value }));
             }
@@ -92,10 +92,10 @@ export class ProfileUtils {
         return result;
     }
 
-    private getPropertyValue(user: User, property: UserProperty, lang: string): string | undefined {
+    private static getPropertyValue(user: User, property: UserProperty, lang: string): string | undefined {
         const value = user.getProperty(property);
         if (isSomething(value)) {
-            const locId = ProfileUtils.PROPERTY_VALUE_TO_LOC_ID[value.toString()];
+            const locId = ProfileScenarioUtils.PROPERTY_VALUE_TO_LOC_ID[value.toString()];
             if (locId) {
               return Localization.loc(lang, locId);
             }

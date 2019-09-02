@@ -17,7 +17,7 @@ var Diet = /** @class */ (function () {
         return undefined;
     };
     Diet.prototype.calculateDiet = function () {
-        var _a = this._content, target = _a.target, days = _a.days, formation = _a.formation, excludes = _a.excludes;
+        var _a = this._content, target = _a.target, days = _a.meals, formation = _a.formation, excludes = _a.excludes;
         if (utils_1.isSomething(target) && utils_1.isSomething(days) && utils_1.isSomething(formation) && utils_1.isSomething(excludes)) {
             var types = this.getAvailableFoodTypes(excludes, target);
             return true;
@@ -27,8 +27,8 @@ var Diet = /** @class */ (function () {
     Diet.prototype.setTarget = function (target) {
         this._content.target = target;
     };
-    Diet.prototype.setDays = function (days) {
-        this._content.days = days;
+    Diet.prototype.setMealsAmount = function (days) {
+        this._content.meals = days;
     };
     Diet.prototype.setExcludes = function (excludes) {
         this._content.excludes = excludes;

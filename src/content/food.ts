@@ -20,7 +20,9 @@ export enum Food {
     Buckwheat,
     Oatmeal,
     Beans,
+    Broccoli,
     Berries,
+    DriedFruits,
     Apple,
     Banana,
 
@@ -49,10 +51,12 @@ export enum FoodType {
 
 export enum FoodConsumable {
     Piece,
-    Weight
+    Unit,
+    Weight,
+    Portion
 }
 
-export interface FoodDescription {consumable: FoodConsumable, type: FoodType[], protein: number, fat: number, carbo: number, calories: number, locId: LocId};
+export interface FoodDescription {consumable: FoodConsumable, type: FoodType[], protein: number, fat: number, carbo: number, calories: number, locId: LocId}
 
 export const FOOD: {[key in Food]: FoodDescription} = {
     [Food.Salmon]: {consumable: FoodConsumable.Weight, type: [FoodType.Fish, FoodType.Expensive], protein: 20, fat: 13, carbo: 0, calories: 208, locId: LocId.FoodSalmon},
@@ -65,8 +69,8 @@ export const FOOD: {[key in Food]: FoodDescription} = {
     [Food.PoultryThigh]: {consumable: FoodConsumable.Weight, type: [FoodType.Poultry, FoodType.Gain], protein: 17, fat: 9, carbo: 0, calories: 175, locId: LocId.FoodPoultryThigh},
     [Food.PoultryFillet]: {consumable: FoodConsumable.Weight, type: [FoodType.Poultry], protein: 20, fat: 0, carbo: 0, calories: 112, locId: LocId.FoodPoultryFillet},
 
-    [Food.Egg]: {consumable: FoodConsumable.Piece, type: [FoodType.Eggs], protein: 6, fat: 5, carbo: 0, calories: 75, locId: LocId.FoodEgg},
-    [Food.EggWhite]: {consumable: FoodConsumable.Piece, type: [FoodType.Eggs], protein: 5, fat: 0, carbo: 0, calories: 25, locId: LocId.FoodEggWhite},
+    [Food.Egg]: {consumable: FoodConsumable.Unit, type: [FoodType.Eggs], protein: 6, fat: 5, carbo: 0, calories: 75, locId: LocId.FoodEgg},
+    [Food.EggWhite]: {consumable: FoodConsumable.Unit, type: [FoodType.Eggs], protein: 5, fat: 0, carbo: 0, calories: 25, locId: LocId.FoodEggWhite},
 
     [Food.Soybean]: {consumable: FoodConsumable.Weight, type: [FoodType.Vegan], protein: 36, fat: 20, carbo: 30, calories: 446, locId: LocId.FoodSoybean},
 
@@ -77,12 +81,14 @@ export const FOOD: {[key in Food]: FoodDescription} = {
 
     [Food.MassPorridge]: {consumable: FoodConsumable.Weight, type: [FoodType.GainSupport], protein: 0, fat: 0, carbo: 78, calories: 344, locId: LocId.FoodMassPorridge},
     [Food.BrownRice]: {consumable: FoodConsumable.Weight, type: [FoodType.Expensive], protein: 0, fat: 0, carbo: 72, calories: 343, locId: LocId.FoodBrownRice},
-    [Food.Buckwheat]: {consumable: FoodConsumable.Weight, type: [], protein: 0, fat: 0, carbo: 64, calories: 343, locId: LocId.FoodBuckwheat},
+    [Food.Buckwheat]: {consumable: FoodConsumable.Weight, type: [FoodType.Loss], protein: 0, fat: 0, carbo: 64, calories: 343, locId: LocId.FoodBuckwheat},
     [Food.Oatmeal]: {consumable: FoodConsumable.Weight, type: [], protein: 0, fat: 0, carbo: 62, calories: 352, locId: LocId.FoodOatmeal},
 
     [Food.Beans]: {consumable: FoodConsumable.Weight, type: [FoodType.Vegan], protein: 20, fat: 0, carbo: 64, calories: 347, locId: LocId.FoodBeans},
+    [Food.Broccoli]: {consumable: FoodConsumable.Weight, type: [], protein: 0, fat: 0, carbo: 5, calories: 347, locId: LocId.FoodBroccoli},
 
     [Food.Berries]: {consumable: FoodConsumable.Weight, type: [FoodType.Fruits], protein: 0, fat: 0, carbo: 16, calories: 57, locId: LocId.FoodBerries},
+    [Food.DriedFruits]: {consumable: FoodConsumable.Weight, type: [FoodType.Fruits], protein: 0, fat: 0, carbo: 83, calories: 359, locId: LocId.FoodBerries},
     [Food.Apple]: {consumable: FoodConsumable.Piece, type: [FoodType.Fruits], protein: 0, fat: 0, carbo: 10, calories: 60, locId: LocId.FoodApple},
     [Food.Banana]: {consumable: FoodConsumable.Piece, type: [FoodType.Fruits, FoodType.GainSupport], protein: 0, fat: 0, carbo: 20, calories: 100, locId: LocId.FoodBanana},
 
