@@ -2,7 +2,7 @@ import {ScenarioRequestData, Scenario, ScenarioClass} from "./scenario";
 import {Bot} from "../bot/bot";
 import {UserManager} from "../user/user-manager";
 import {Params} from "../utils/parser";
-import {isSomething, log} from "../utils/utils";
+import {isSomething, logScenario} from "../utils/utils";
 
 export class ScenarioManager {
     private readonly _scenarios: {[key: number]: Scenario[]} = {};
@@ -13,7 +13,7 @@ export class ScenarioManager {
     }
 
     public add(userId: number, scenarioClass: ScenarioClass, forceParams?: Params, requestData?: ScenarioRequestData): void {
-        log('add scenario', scenarioClass.name);
+        logScenario('add scenario', scenarioClass.name);
         if (!this._scenarios[userId]) {
             this._scenarios[userId] = [];
         }
@@ -35,7 +35,7 @@ export class ScenarioManager {
         const scenarioList: Scenario[] = this._scenarios[params.userId];
 
         let callback: string | undefined;
-        if (!scenarioList || scenarioList.length === 0) log('Empty scenarios');
+        if (!scenarioList || scenarioList.length === 0) logScenario('Empty scenarios');
 
         if (scenarioList || targetScenario) {
             let index = -1;
@@ -43,11 +43,11 @@ export class ScenarioManager {
                 index = scenarioList.indexOf(targetScenario);
             }
             if (index >= 0) {
-                log('------- FORCE START ---------');
+                logScenario('------- FORCE START ---------');
                 callback = this.activateScenario(scenarioList, index, params);
             }
             else {
-                log('------- START LIST ' + scenarioList.length + ' ---------');
+                logScenario('------- START LIST ' + scenarioList.length + ' ---------');
                 for (let i: number = scenarioList.length - 1; i >= 0; i--) {
                     callback = this.activateScenario(scenarioList, i, params);
                     if (isSomething(callback)) {
@@ -57,11 +57,11 @@ export class ScenarioManager {
             }
 
             if (isSomething(callback)) {
-                log('Activate callback', callback);
+                logScenario('Activate callback', callback);
                 params.callback = callback;
                 this.activate(params);
             }
-            log('------- FINISH ---------');
+            logScenario('------- FINISH ---------');
             return true;
         }
 
@@ -83,11 +83,11 @@ export class ScenarioManager {
 
     private activateScenario(scenarioList: Scenario[], index: number, params: Params): string | undefined {
         const scenario = scenarioList[index];
-        log('activate Scenario', scenario.constructor.name);
+        logScenario('activate Scenario', scenario.constructor.name);
         const { readyForDestroy, resultCallback } = scenario.activate(params);
 
         if (readyForDestroy) {
-            log('remove', scenario.constructor.name);
+            logScenario('remove', scenario.constructor.name);
             scenario.destroy();
             scenarioList.splice(index, 1);
         }

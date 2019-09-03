@@ -41,3 +41,19 @@ export function isSomething<T>(x: T | undefined | null): x is NonNullable<T> {
 export function log(...args: any[]) {
     console.log(...args);
 }
+
+export function logError(...args: any[]) {
+  console.log(...args);
+}
+
+export function logDiet(...args: any[]) {
+  console.log(...args);
+}
+
+export function logScenario(...args: any[]) {
+  console.log(...args);
+}
+
+export function logUser(...args: any[]) {
+  console.log(...args);
+}

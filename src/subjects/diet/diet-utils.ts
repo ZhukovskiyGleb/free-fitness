@@ -1,4 +1,4 @@
-import {LocId} from "../localization/localization";
+import {LocId} from "../../localization/localization";
 import {FoodConsumable} from "./food";
 
 export enum DietTarget {
@@ -25,7 +25,7 @@ export enum MealName {
     Lunch = 'lunch',
     HighTea = 'highTea',
     Dinner = 'dinner',
-    LateDinner = 'lateDinner'
+    LateDinner = 'lateDinner',
 }
 
 export interface Nutrients {protein: number, fat: number, carbo: number};
@@ -56,9 +56,9 @@ export class DietUtils {
         [DietMealsAmount.Five]: [
             {name: MealName.Breakfast, nutrients: {protein: 15, fat: 40, carbo: 0}},
             {name: MealName.Brunch, nutrients: {protein: 15, fat: 0, carbo: 30}},
-            {name: MealName.Lunch, nutrients: {protein: 20, fat: 30, carbo: 30}},
+            {name: MealName.Lunch, nutrients: {protein: 20, fat: 30, carbo: 20}},
             {name: MealName.HighTea, nutrients: {protein: 20, fat: 0, carbo: 20}},
-            {name: MealName.Dinner, nutrients: {protein: 30, fat: 30, carbo: 20}},
+            {name: MealName.Dinner, nutrients: {protein: 30, fat: 30, carbo: 30}},
         ],
         [DietMealsAmount.Six]: [
             {name: MealName.Breakfast, nutrients: {protein: 15, fat: 40, carbo: 0}},
@@ -66,7 +66,7 @@ export class DietUtils {
             {name: MealName.Lunch, nutrients: {protein: 20, fat: 30, carbo: 30}},
             {name: MealName.HighTea, nutrients: {protein: 15, fat: 0, carbo: 20}},
             {name: MealName.Dinner, nutrients: {protein: 20, fat: 15, carbo: 20}},
-            {name: MealName.LateDinner, nutrients: {protein: 15, fat: 15, carbo: 20}},
+            {name: MealName.LateDinner, nutrients: {protein: 15, fat: 15, carbo: 0}},
         ]
     };
 
@@ -122,11 +122,12 @@ export class DietUtils {
         [MealName.LateDinner]: LocId.LateDinner,
     };
 
-    private static readonly CONSUMABLE_TO_LOC_ID: {[key in FoodConsumable]: LocId} = {
+    private static readonly CONSUMABLE_TO_LOC_ID: {[key in FoodConsumable]?: LocId} = {
         [FoodConsumable.Weight]: LocId.Grams,
         [FoodConsumable.Piece]: LocId.Piece,
         [FoodConsumable.Unit]: LocId.Piece,
         [FoodConsumable.Portion]: LocId.Portion,
+        [FoodConsumable.TeaSpoon]: LocId.TeaSpoon,
     };
 
     public static isSnackMeal(meal: MealName): boolean {
@@ -153,8 +154,11 @@ export class DietUtils {
         return DietUtils.MEAL_TO_LOC_ID[meal];
     }
 
-    public static getConsumableLocId(consumable: FoodConsumable): LocId {
+    public static getConsumableLocId(consumable: FoodConsumable): LocId | undefined {
         return DietUtils.CONSUMABLE_TO_LOC_ID[consumable];
     }
 
+    public static isConsumableCountable(consumable: FoodConsumable): boolean {
+        return  [FoodConsumable.Portion, FoodConsumable.Unit, FoodConsumable.Piece, FoodConsumable.TeaSpoon].includes(consumable);
+    }
 }

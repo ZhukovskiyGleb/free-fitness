@@ -1,5 +1,5 @@
-import {Diet} from "../content/diet";
-import {log} from "../utils/utils";
+import {Diet} from "../subjects/diet/diet";
+import {logUser} from "../utils/utils";
 
 export enum Gender {
     Male = 'male',
@@ -101,6 +101,17 @@ export class User {
         return result;
     }
 
+    public getMissedProperties<P extends keyof UserProperties>(requestProps: P[]): UserProperty[] {
+        const result: UserProperty[] = [];
+        requestProps.forEach((property: P) => {
+            if (!this._properties.hasOwnProperty(property)) {
+                result.push(property);
+            }
+        });
+
+        return result;
+    }
+
     public getProperty<P extends keyof UserProperties>(property: P): UserProperties[P] {
         if (this._properties.hasOwnProperty(property)) {
             return this._properties[property];
@@ -113,8 +124,12 @@ export class User {
     }
 
     public setProperty<P extends keyof UserProperties>(property: P, value: UserProperties[P]): void {
-        log('[User save property', property, value, ']');
+        logUser('[User save property', property, value, ']');
         this._properties[property] = value;
+    }
+
+    public save(): void {
+
     }
 
 }

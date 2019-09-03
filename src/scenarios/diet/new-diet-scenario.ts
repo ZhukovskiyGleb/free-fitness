@@ -2,11 +2,12 @@ import {ActionResults, Scenario} from "../scenario";
 import {InlineKeyboardButton} from "node-telegram-bot-api";
 import {KeyboardMaker} from "../../utils/keyboard-maker";
 import {Localization, LocId} from "../../localization/localization";
-import {Diet} from "../../content/diet";
+import {Diet} from "../../subjects/diet/diet";
 import {DietScenarioUtils} from "./diet-scenario-utils";
-import {log} from "../../utils/utils";
+import {logScenario} from "../../utils/utils";
 import {WelcomeScenario} from "../welcome/welcome-scenario";
 import {DietScenario} from "./diet-scenario";
+import {UserProperty} from "../../user/user";
 
 export class NewDietScenario extends Scenario {
     private readonly TARGET_STATE = 'NEW_DIET_TARGET_STATE';
@@ -144,14 +145,26 @@ export class NewDietScenario extends Scenario {
         this.addAction(this.RESULT_STATE,
             params => {
               const { callback, chatId, lang, userId } = params;
+              const user = this._userManager.getUser(userId);
 
               switch (callback) {
                   case DietScenarioUtils.RESULT_SAVE_CALLBACK:
+                      this._bot.sendMessage(
+                          chatId,
+                          Localization.loc(lang, LocId.SaveSuccess),
+                          this.getSaveKeyboard(lang)
+                      );
+
+                      if (user && this._diet) {
+                          user.setProperty(UserProperty.SavedDiet, this._diet);
+                          user.save();
+                      }
+
+                      return;
                   case DietScenarioUtils.BACK_CALLBACK:
                       this.switchToAnotherScenario(userId, DietScenario, params);
                       return ActionResults.ReadyForDestroy;
-                default:
-                    const user = this._userManager.getUser(userId);
+                  default:
                     if (user && this._diet) {
                         const dietDescription = this._diet.getDiet(user, lang);
                         if (dietDescription) {
@@ -163,7 +176,7 @@ export class NewDietScenario extends Scenario {
                             return;
                         }
                     }
-                    log('Diet creating: something go wrong!');
+                    logScenario('Diet creating: something go wrong!');
                     this.switchToAnotherScenario(userId, WelcomeScenario, params);
                     return ActionResults.ReadyForDestroy;
               }
@@ -224,6 +237,12 @@ export class NewDietScenario extends Scenario {
             .nextLine()
             .addButton(Localization.loc(lang, LocId.ButtonBack), DietScenarioUtils.BACK_CALLBACK)
             .result;
+    }
+
+    private getSaveKeyboard(lang:string): InlineKeyboardButton[][] {
+      return new KeyboardMaker()
+        .addButton(Localization.loc(lang, LocId.ButtonBack), DietScenarioUtils.BACK_CALLBACK)
+        .result;
     }
 
 

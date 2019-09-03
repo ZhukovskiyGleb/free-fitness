@@ -36,14 +36,23 @@ var Diet = /** @class */ (function () {
         }
         return undefined;
     };
+    Diet.prototype.refresh = function (user) {
+        this.calculateDiet(user);
+    };
     Diet.prototype.getMeal = function (name, lang) {
         var result = localization_1.Localization.loc(lang, diet_utils_1.DietUtils.getMealLocId(name)) + ':';
         if (this._content.diet && this._content.diet[name]) {
             var meal = this._content.diet[name];
             meal.forEach(function (food) {
-                var consumable = localization_1.Localization.loc(lang, diet_utils_1.DietUtils.getConsumableLocId(food.consumable));
-                result += '\n- ' + localization_1.Localization.loc(lang, food.locId) + ' ' + food.amount + (" " + consumable + ";");
+                var consumableId = diet_utils_1.DietUtils.getConsumableLocId(food.consumable);
+                var consumable;
+                if (consumableId) {
+                    consumable = localization_1.Localization.loc(lang, consumableId);
+                }
+                result += '\n- ' + localization_1.Localization.loc(lang, food.locId) +
+                    (consumable ? (' ' + food.amount + (consumable + ";")) : ';');
             });
+            utils_1.logDiet(result);
         }
         return result;
     };
@@ -60,108 +69,116 @@ var Diet = /** @class */ (function () {
             return false;
         }
         var types = this.getAvailableFoodTypes(excludes, target);
-        utils_1.log('Available food types:', types);
+        utils_1.logDiet('Available food types:', (function () {
+            var result = [];
+            types.forEach(function (value) { result.push(food_1.FoodType[value]); });
+            return result;
+        })());
         var list = {
-            complexProtein: this.getAvailableFood([food_1.Food.Salmon, food_1.Food.Seafood, food_1.Food.LeanBeef, food_1.Food.PoultryThigh, food_1.Food.Soybean], types, formation),
+            complexProtein: this.getAvailableFood([food_1.Food.Salmon, food_1.Food.Seafood, food_1.Food.LeanBeef, food_1.Food.PoultryLeg, food_1.Food.Soybean], types, formation),
             isolateProtein: this.getAvailableFood([food_1.Food.WhiteFish, food_1.Food.PoultryFillet, food_1.Food.EggWhite, food_1.Food.SkimCheese, food_1.Food.Soybean], types, formation),
-            proteinSnack: this.getAvailableFood([food_1.Food.Protein, food_1.Food.EggWhite, food_1.Food.SkimCheese, food_1.Food.Soybean], types),
-            dayCarbo: this.getAvailableFood([food_1.Food.MassPorridge, food_1.Food.BrownRice, food_1.Food.Buckwheat, food_1.Food.Beans], types, formation),
-            lowCarbo: this.getAvailableFood([food_1.Food.Broccoli], types),
-            fastCarbo: this.getAvailableFood([food_1.Food.Berries, food_1.Food.Banana, food_1.Food.Apple], types),
+            snackProtein: this.getAvailableFood([food_1.Food.Protein, food_1.Food.EggWhite, food_1.Food.SkimCheese, food_1.Food.Soybean], types),
+            morningCarbo: this.getAvailableFood([food_1.Food.Oatmeal, food_1.Food.BreadRolls, food_1.Food.Couscous], types, formation),
+            dayCarbo: this.getAvailableFood([food_1.Food.MassPorridge, food_1.Food.BrownRice, food_1.Food.Buckwheat, food_1.Food.Beans, food_1.Food.Couscous], types, formation),
+            lowCarbo: this.getAvailableFood([food_1.Food.Salad], types),
+            snackCarbo: this.getAvailableFood([food_1.Food.Banana, food_1.Food.Apple, food_1.Food.Grapefruit, food_1.Food.Honey], types),
+            addCarbo: this.getAvailableFood([food_1.Food.Berries, food_1.Food.DriedFruits, food_1.Food.Kiwi], types),
             mainFats: this.getAvailableFood([food_1.Food.Nuts, food_1.Food.Oil, food_1.Food.Avocado], types),
             addFats: this.getAvailableFood([food_1.Food.FishOil, food_1.Food.Oil], types),
-            morningCarbo: this.getAvailableFood([food_1.Food.Oatmeal], types, formation),
         };
         var egg = this.getFoodDescription(food_1.Food.Egg, types);
         var cheese = this.getFoodDescription(food_1.Food.Cheese, types);
         var protein = this.getFoodDescription(food_1.Food.Protein, types);
-        if (list.complexProtein.length === 0) {
-            egg && list.isolateProtein.push(egg);
-            cheese && list.isolateProtein.push(cheese);
-        }
+        cheese && list.complexProtein.push(cheese);
+        egg && list.complexProtein.push(egg);
         if (list.isolateProtein.length === 0 && protein) {
             list.isolateProtein.push(protein);
         }
         var totalCalories = this.getTotalCalories(weight, this.getFatPercent(this.getWeightIndex(weight, height, bodyType, age), gender), activity, target);
-        utils_1.log('Total calories:', totalCalories);
+        utils_1.logDiet('Total calories:', totalCalories);
         var targetSchedule = diet_utils_1.DietUtils.getDailyRequirements(target);
         var dailyRequirements = {
             protein: Math.round(totalCalories * targetSchedule.protein * 0.01 / config_1.Config.proteinCalories),
             fat: Math.round(totalCalories * targetSchedule.fat * 0.01 / config_1.Config.fatCalories),
             carbo: Math.round(totalCalories * targetSchedule.carbo * 0.01 / config_1.Config.carboCalories)
         };
-        utils_1.log('Daily requirements', dailyRequirements);
+        utils_1.logDiet('Daily requirements', dailyRequirements);
         var dailySchedule = diet_utils_1.DietUtils.getDaySchedule(meals);
         var diet = {};
         dailySchedule.forEach(function (config) {
-            utils_1.log('------------', config.name, '------------');
+            utils_1.logDiet('------------', config.name, '------------');
             var mealRequirements = {
                 protein: Math.round(dailyRequirements.protein * config.nutrients.protein * 0.01),
                 fat: Math.round(dailyRequirements.fat * config.nutrients.fat * 0.01),
                 carbo: Math.round(dailyRequirements.carbo * config.nutrients.carbo * 0.01),
             };
-            utils_1.log('Meal requirements', mealRequirements);
+            utils_1.logDiet('Meal calories', mealRequirements.protein * 4 + mealRequirements.fat * 9 + mealRequirements.carbo * 4);
             var options = {
                 isSnack: diet_utils_1.DietUtils.isSnackMeal(config.name),
                 isFastCarboAvailable: diet_utils_1.DietUtils.isFastCarboAvailable(target, config.name),
                 isMorning: config.name === diet_utils_1.MealName.Breakfast || config.name === diet_utils_1.MealName.Brunch,
-                maxMorningCarbo: weight * config_1.Config.maxMorningCarboMul,
+                maxMorningCarbo: target === diet_utils_1.DietTarget.Gain ? weight * config_1.Config.maxDayCarboMul : weight * config_1.Config.maxMorningCarboMul,
                 maxDayCarbo: weight * config_1.Config.maxDayCarboMul
             };
             diet[config.name] = _this.calculateDay(mealRequirements, list, options);
         });
+        utils_1.logDiet('--------------------------------------');
         this._content.diet = diet;
         return true;
     };
     Diet.prototype.calculateDay = function (nutrients, list, options) {
         var result = [];
+        //PROTEIN
         if (nutrients.protein > 0) {
             if (!options.isSnack) {
                 if (nutrients.fat > 0) { //complex protein
-                    utils_1.log('Complex protein');
-                    this.addFoodToList(result, this.calculateFood(nutrients, this.getRandomFoodDescription(list.complexProtein)));
+                    utils_1.logDiet('Complex protein:', nutrients);
+                    this.addFoodToList(result, this.findMeal(nutrients, list.complexProtein));
                 }
                 else { //isolate protein
-                    utils_1.log('Isolate protein');
-                    this.addFoodToList(result, this.calculateFood(nutrients, this.getRandomFoodDescription(list.isolateProtein)));
+                    utils_1.logDiet('Isolate protein:', nutrients);
+                    this.addFoodToList(result, this.findMeal(nutrients, list.isolateProtein));
                 }
             }
             if (nutrients.protein > 0) { //snack protein
-                utils_1.log('Snack protein');
-                this.addFoodToList(result, this.calculateFood(nutrients, this.getRandomFoodDescription(list.proteinSnack)));
+                utils_1.logDiet('Snack protein:', nutrients);
+                this.addFoodToList(result, this.findMeal(nutrients, list.snackProtein));
             }
         }
-        if (nutrients.fat > config_1.Config.minFatPortion) { // main fat
-            utils_1.log('Main fats');
-            this.addFoodToList(result, this.calculateFood(nutrients, this.getRandomFoodDescription(list.mainFats)));
-        }
-        else if (nutrients.fat > 0) { // add fat
-            utils_1.log('Add fats');
-            this.addFoodToList(result, this.calculateFood(nutrients, this.getRandomFoodDescription(list.addFats)));
-        }
-        if (options.isSnack && options.isFastCarboAvailable && nutrients.carbo >= config_1.Config.minSnackCarboPortion) { // 20g fast carbo
-            utils_1.log('Snack carbo potion');
-            this.addFoodToList(result, this.calculateFood(nutrients, this.getRandomFoodDescription(list.fastCarbo), config_1.Config.minSnackCarboPortion));
-        }
+        //CARBO
         if (nutrients.carbo > 0) {
+            if (options.isSnack && options.isFastCarboAvailable && nutrients.carbo >= config_1.Config.minSnackCarboPortion) { // 20g snack carbo
+                utils_1.logDiet('Snack carbo:', nutrients);
+                this.addFoodToList(result, this.findMeal(nutrients, list.snackCarbo, config_1.Config.minSnackCarboPortion));
+            }
             if (options.isMorning) { // morning carbo (max morning carbo)
-                utils_1.log('Morninig carbo');
-                this.addFoodToList(result, this.calculateFood(nutrients, this.getRandomFoodDescription(list.morningCarbo), options.maxMorningCarbo));
+                utils_1.logDiet('Morninig carbo:', nutrients);
+                this.addFoodToList(result, this.findMeal(nutrients, list.morningCarbo, options.maxMorningCarbo));
             }
             else { // main carbo (max day carbo)
-                utils_1.log('Daily carbo');
-                this.addFoodToList(result, this.calculateFood(nutrients, this.getRandomFoodDescription(list.dayCarbo), options.maxDayCarbo));
+                utils_1.logDiet('Daily carbo:', nutrients);
+                this.addFoodToList(result, this.findMeal(nutrients, list.dayCarbo, options.maxDayCarbo));
             }
-            if (nutrients.carbo > 0) {
-                if (options.isFastCarboAvailable) { //fast carbo
-                    utils_1.log('Fast carbo');
-                    this.addFoodToList(result, this.calculateFood(nutrients, this.getRandomFoodDescription(list.fastCarbo)));
-                }
-                else { //low carbo
-                    utils_1.log('Low carbo');
-                    this.addFoodToList(result, this.calculateFood(nutrients, this.getRandomFoodDescription(list.lowCarbo)));
-                }
+            if (nutrients.carbo > 0 && options.isFastCarboAvailable) { //fast carbo
+                utils_1.logDiet('Fast carbo:', nutrients);
+                this.addFoodToList(result, this.findMeal(nutrients, list.addCarbo));
             }
+            if (nutrients.carbo > 0 && options.isFastCarboAvailable) { //low carbo
+                utils_1.logDiet('Low carbo:', nutrients);
+                this.addFoodToList(result, this.findMeal(nutrients, list.lowCarbo));
+            }
+        }
+        //FAT
+        if (nutrients.fat > config_1.Config.minFatPortion) { // main fat
+            utils_1.logDiet('Main fats:', nutrients);
+            this.addFoodToList(result, this.findMeal(nutrients, list.mainFats));
+        }
+        else if (nutrients.fat > 0) { // add fat
+            utils_1.logDiet('Add fats:', nutrients);
+            this.addFoodToList(result, this.findMeal(nutrients, list.addFats));
+        }
+        if (nutrients.protein > 0 || nutrients.fat > 0 || nutrients.carbo > 0) {
+            utils_1.logDiet('!!! Nutrients lost:', nutrients, nutrients.protein * 4 + nutrients.fat * 9 + nutrients.carbo * 4);
         }
         return result;
     };
@@ -170,14 +187,42 @@ var Diet = /** @class */ (function () {
             list.push(meal);
         }
     };
-    Diet.prototype.calculateFood = function (nutrients, description, maxAmount) {
+    Diet.prototype.findMeal = function (totalNutrients, originList, maxAmount) {
+        if (originList.length === 0) {
+            return undefined;
+        }
+        var myList = originList.slice();
+        var repeats = 0;
+        var meal;
+        var description;
+        do {
+            description = this.getRandomFoodDescription(myList, true);
+            meal = undefined;
+            if (description) {
+                meal = this.calculateMeal(totalNutrients, description, maxAmount);
+            }
+            repeats++;
+        } while (!meal && repeats < config_1.Config.mealFindTries && myList.length > 0);
+        if (meal) {
+            if (description && description.oneUse === true && originList.length > 1) {
+                var index = originList.indexOf(description);
+                if (index >= 0) {
+                    utils_1.logDiet('!Only one use', localization_1.LocId[description.locId], 'removed!');
+                    originList.splice(index, 1);
+                }
+            }
+            return meal;
+        }
+        return undefined;
+    };
+    Diet.prototype.calculateMeal = function (totalNutrients, description, maxAmount) {
         var protein = description.protein, fat = description.fat, carbo = description.carbo, consumable = description.consumable, locId = description.locId;
-        var amountByProtein = protein > 0 ? nutrients.protein / (protein * 0.01) : Number.MAX_VALUE;
-        var amountByFat = fat > 0 ? nutrients.fat / (fat * 0.01) : Number.MAX_VALUE;
-        var amountByCarbo = carbo > 0 ? nutrients.carbo / (carbo * 0.01) : Number.MAX_VALUE;
-        var amount = Math.min(amountByProtein, amountByFat, amountByCarbo, maxAmount ? maxAmount : Number.MAX_VALUE);
-        if (consumable !== food_1.FoodConsumable.Weight) {
-            utils_1.log('Consumable amount', amount);
+        var mul = diet_utils_1.DietUtils.isConsumableCountable(consumable) ? 1 : .01;
+        var amountByProtein = protein > 0 ? totalNutrients.protein / (protein * mul) : Number.MAX_VALUE;
+        var amountByFat = fat > 0 ? totalNutrients.fat / (fat * mul) : Number.MAX_VALUE;
+        var amountByCarbo = carbo > 0 ? totalNutrients.carbo / (carbo * mul) : Number.MAX_VALUE;
+        var amount = Math.min(amountByProtein, amountByFat, amountByCarbo, description.max ? description.max : Number.MAX_VALUE, maxAmount ? maxAmount : Number.MAX_VALUE);
+        if (diet_utils_1.DietUtils.isConsumableCountable(consumable)) {
             if (consumable !== food_1.FoodConsumable.Unit) {
                 amount = Math.floor(amount * 2) * .5;
             }
@@ -185,21 +230,28 @@ var Diet = /** @class */ (function () {
                 amount = Math.floor(amount);
             }
             if (amount < config_1.Config.minPieceValue) {
-                utils_1.log('Food:', localization_1.LocId[locId], 'not enough');
+                utils_1.logDiet('- Food:', localization_1.LocId[locId], "not enough " + amount + " (min " + config_1.Config.minPieceValue + " piece)");
                 return undefined;
             }
-            nutrients.protein -= amount * description.protein;
-            nutrients.fat -= amount * description.fat;
-            nutrients.carbo -= amount * description.carbo;
         }
         else {
             amount = Math.round(amount * .1) * 10;
-            nutrients.protein -= amount * description.protein * .01;
-            nutrients.fat -= amount * description.fat * .01;
-            nutrients.carbo -= amount * description.carbo * .01;
         }
-        amount = Math.round(amount);
-        utils_1.log('Food:', localization_1.LocId[locId], 'amount:', amount);
+        if (description.min) {
+            if (amount < description.min) {
+                utils_1.logDiet('- Food:', localization_1.LocId[locId], "not enough " + amount + " (min value " + description.min + ")");
+                return undefined;
+            }
+        }
+        var mealNutrients = {
+            protein: Math.round(amount * description.protein * mul),
+            fat: Math.round(amount * description.fat * mul),
+            carbo: Math.round(amount * description.carbo * mul)
+        };
+        utils_1.logDiet('* Food:', localization_1.LocId[locId], 'x' + amount, mealNutrients, mealNutrients.protein * 4 + mealNutrients.fat * 9 + mealNutrients.carbo * 4);
+        totalNutrients.protein -= mealNutrients.protein;
+        totalNutrients.fat -= mealNutrients.fat;
+        totalNutrients.carbo -= mealNutrients.carbo;
         return { locId: locId, amount: amount, consumable: consumable };
     };
     Diet.prototype.setTarget = function (target) {
@@ -243,7 +295,7 @@ var Diet = /** @class */ (function () {
         else if (bodyType === user_1.BodyType.Muscular) {
             index -= config_1.Config.muscularIndexWeightLoss;
         }
-        utils_1.log('Weight index:', index);
+        utils_1.logDiet('Weight index:', index);
         return index;
     };
     Diet.prototype.getFatPercent = function (indexWeight, gender) {
@@ -252,7 +304,7 @@ var Diet = /** @class */ (function () {
         if (gender === user_1.Gender.Female) {
             result += config_1.Config.femaleFatPercentBonus;
         }
-        utils_1.log('Fat %:', result);
+        utils_1.logDiet('Fat %:', result);
         return result;
     };
     Diet.prototype.getTotalCalories = function (weight, fatPercent, activity, target) {
@@ -283,9 +335,11 @@ var Diet = /** @class */ (function () {
         var description = food_1.FOOD[food];
         for (var i in description.type) {
             if (!availableTypes.includes(description.type[i])) {
+                utils_1.logDiet('--- Filter', food_1.Food[food], "rejected (only " + food_1.FoodType[description.type[i]] + ")");
                 return undefined;
             }
         }
+        utils_1.logDiet('+++ Filter', food_1.Food[food], 'accepted.');
         return description;
     };
     Diet.prototype.getAvailableFood = function (types, availableTypes, formation) {
@@ -294,22 +348,27 @@ var Diet = /** @class */ (function () {
         types.forEach(function (type) {
             var description = _this.getFoodDescription(type, availableTypes);
             if (description) {
-                utils_1.log('+++ Food', food_1.Food[type], 'accepted.');
                 result.push(description);
             }
-            else {
-                utils_1.log('--- Food', food_1.Food[type], 'rejected.');
-            }
         });
-        if (utils_1.isSomething(formation) && formation === diet_utils_1.Formation.Monotony) {
+        if (result.length > 0 && utils_1.isSomething(formation) && formation === diet_utils_1.Formation.Monotony) {
             return [
                 this.getRandomFoodDescription(result)
             ];
         }
         return result;
     };
-    Diet.prototype.getRandomFoodDescription = function (list) {
-        return list[Math.floor(Math.random() * list.length)];
+    Diet.prototype.getRandomFoodDescription = function (list, removeAfter) {
+        if (removeAfter === void 0) { removeAfter = false; }
+        if (list.length === 0) {
+            return undefined;
+        }
+        var index = Math.floor(Math.random() * list.length);
+        var result = list[index];
+        if (removeAfter) {
+            list.splice(index, 1);
+        }
+        return result;
     };
     return Diet;
 }());

@@ -4,10 +4,10 @@ import {UserManager} from "./user/user-manager";
 import {ScenarioManager} from "./scenarios/scenario-manager";
 import {Parser} from "./utils/parser";
 import {WelcomeScenario} from "./scenarios/welcome/welcome-scenario";
-import {Diet} from "./content/diet";
-import {DietMealsAmount, DietTarget, Formation} from "./content/diet-utils";
+import {Diet} from "./subjects/diet/diet";
+import {DietMealsAmount, DietTarget, Formation} from "./subjects/diet/diet-utils";
 import {Activity, BodyType, Gender, UserProperty} from "./user/user";
-import {FoodType} from "./content/food";
+import {FoodType} from "./subjects/diet/food";
 
 export class App {
     private readonly _bot: Bot;
@@ -31,19 +31,18 @@ export class App {
 
         if (user) {
             user.setProperty(UserProperty.Activity, Activity.Average);
-            user.setProperty(UserProperty.BodyType, BodyType.Muscular);
-            user.setProperty(UserProperty.Weight, 95);
-            user.setProperty(UserProperty.Height, 183);
-            user.setProperty(UserProperty.Gender, Gender.Male);
+            user.setProperty(UserProperty.BodyType, BodyType.Common);
+            user.setProperty(UserProperty.Weight, 52);
+            user.setProperty(UserProperty.Height, 164);
+            user.setProperty(UserProperty.Gender, Gender.Female);
             user.setProperty(UserProperty.Age, 31);
 
             const diet = new Diet();
-            diet.setTarget(DietTarget.Loss);
+            diet.setTarget(DietTarget.Support);
             diet.setMealsAmount(DietMealsAmount.Three);
-            diet.setExcludes([]);
+            diet.setExcludes([FoodType.Seafood, FoodType.Fish, FoodType.Meat, FoodType.Poultry, FoodType.Eggs, FoodType.Milk]);
             diet.setFormation(Formation.Variety);
 
-            // log('Diet result:', );
             diet.getDiet(user, 'ru');
         }
     }

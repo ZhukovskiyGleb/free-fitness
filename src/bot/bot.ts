@@ -1,6 +1,6 @@
 import TelegramBot = require("node-telegram-bot-api");
 import {CallbackQuery, InlineKeyboardButton, Message, SendMessageOptions} from "node-telegram-bot-api";
-import {log} from "../utils/utils";
+import {logError} from "../utils/utils";
 
 require("dotenv").config();
 
@@ -36,7 +36,7 @@ export class Bot {
         )
         .catch(
             (error: Error) => {
-                log('Error deleteMessage!', error.message);
+                logError('Error deleteMessage!', error.message);
             }
         );
     }
@@ -71,7 +71,7 @@ export class Bot {
         )
         .catch(
             (error) => {
-                log('Error sendMessage!', error);
+                logError('Error sendMessage!', error);
             }
         );
     }
@@ -107,6 +107,6 @@ export class Bot {
     }
 
     private onErrorHandler(err: Error): void {
-        log('Polling error!', err.message);
+        logError('Polling error!', err.message);
     }
 }

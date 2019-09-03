@@ -26,7 +26,7 @@ var Bot = /** @class */ (function () {
             }
         })
             .catch(function (error) {
-            utils_1.log('Error deleteMessage!', error.message);
+            utils_1.logError('Error deleteMessage!', error.message);
         });
     };
     Bot.prototype.sendMessage = function (chatId, msgText, keyboard, deleteLastMsg) {
@@ -55,7 +55,7 @@ var Bot = /** @class */ (function () {
             _this.addToHistory(msg);
         })
             .catch(function (error) {
-            utils_1.log('Error sendMessage!', error);
+            utils_1.logError('Error sendMessage!', error);
         });
     };
     Bot.prototype.clearHistory = function (chatId, lastOnly) {
@@ -83,7 +83,7 @@ var Bot = /** @class */ (function () {
         this.addToHistory(msg);
     };
     Bot.prototype.onErrorHandler = function (err) {
-        utils_1.log('Polling error!', err.message);
+        utils_1.logError('Polling error!', err.message);
     };
     return Bot;
 }());

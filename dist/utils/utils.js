@@ -40,3 +40,35 @@ function log() {
     console.log.apply(console, args);
 }
 exports.log = log;
+function logError() {
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+    }
+    console.log.apply(console, args);
+}
+exports.logError = logError;
+function logDiet() {
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+    }
+    console.log.apply(console, args);
+}
+exports.logDiet = logDiet;
+function logScenario() {
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+    }
+    console.log.apply(console, args);
+}
+exports.logScenario = logScenario;
+function logUser() {
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+    }
+    console.log.apply(console, args);
+}
+exports.logUser = logUser;

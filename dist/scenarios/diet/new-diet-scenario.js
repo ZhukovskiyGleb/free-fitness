@@ -16,11 +16,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var scenario_1 = require("../scenario");
 var keyboard_maker_1 = require("../../utils/keyboard-maker");
 var localization_1 = require("../../localization/localization");
-var diet_1 = require("../../content/diet");
+var diet_1 = require("../../subjects/diet/diet");
 var diet_scenario_utils_1 = require("./diet-scenario-utils");
 var utils_1 = require("../../utils/utils");
 var welcome_scenario_1 = require("../welcome/welcome-scenario");
 var diet_scenario_1 = require("./diet-scenario");
+var user_1 = require("../../user/user");
 var NewDietScenario = /** @class */ (function (_super) {
     __extends(NewDietScenario, _super);
     function NewDietScenario() {
@@ -113,13 +114,19 @@ var NewDietScenario = /** @class */ (function (_super) {
         });
         this.addAction(this.RESULT_STATE, function (params) {
             var callback = params.callback, chatId = params.chatId, lang = params.lang, userId = params.userId;
+            var user = _this._userManager.getUser(userId);
             switch (callback) {
                 case diet_scenario_utils_1.DietScenarioUtils.RESULT_SAVE_CALLBACK:
+                    _this._bot.sendMessage(chatId, localization_1.Localization.loc(lang, localization_1.LocId.SaveSuccess), _this.getSaveKeyboard(lang));
+                    if (user && _this._diet) {
+                        user.setProperty(user_1.UserProperty.SavedDiet, _this._diet);
+                        user.save();
+                    }
+                    return;
                 case diet_scenario_utils_1.DietScenarioUtils.BACK_CALLBACK:
                     _this.switchToAnotherScenario(userId, diet_scenario_1.DietScenario, params);
                     return scenario_1.ActionResults.ReadyForDestroy;
                 default:
-                    var user = _this._userManager.getUser(userId);
                     if (user && _this._diet) {
                         var dietDescription = _this._diet.getDiet(user, lang);
                         if (dietDescription) {
@@ -127,7 +134,7 @@ var NewDietScenario = /** @class */ (function (_super) {
                             return;
                         }
                     }
-                    utils_1.log('Diet creating: something go wrong!');
+                    utils_1.logScenario('Diet creating: something go wrong!');
                     _this.switchToAnotherScenario(userId, welcome_scenario_1.WelcomeScenario, params);
                     return scenario_1.ActionResults.ReadyForDestroy;
             }
@@ -180,6 +187,11 @@ var NewDietScenario = /** @class */ (function (_super) {
         return new keyboard_maker_1.KeyboardMaker()
             .addButton(localization_1.Localization.loc(lang, localization_1.LocId.ButtonSave), diet_scenario_utils_1.DietScenarioUtils.RESULT_SAVE_CALLBACK)
             .nextLine()
+            .addButton(localization_1.Localization.loc(lang, localization_1.LocId.ButtonBack), diet_scenario_utils_1.DietScenarioUtils.BACK_CALLBACK)
+            .result;
+    };
+    NewDietScenario.prototype.getSaveKeyboard = function (lang) {
+        return new keyboard_maker_1.KeyboardMaker()
             .addButton(localization_1.Localization.loc(lang, localization_1.LocId.ButtonBack), diet_scenario_utils_1.DietScenarioUtils.BACK_CALLBACK)
             .result;
     };

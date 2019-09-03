@@ -43,7 +43,7 @@ var KeyboardMaker = /** @class */ (function () {
     KeyboardMaker.prototype.updateCheckboxText = function (callback) {
         if (this._checkboxes && this._checkboxes[callback]) {
             var config = this._checkboxes[callback];
-            config.button.text = (config.value ? '✔' : '❌') + config.text;
+            config.button.text = (config.value ? '☑ ' : '☒ ') + config.text;
         }
     };
     KeyboardMaker.prototype.nextLine = function () {

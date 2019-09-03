@@ -18,6 +18,7 @@ var Config = /** @class */ (function () {
     Config.maxMorningCarboMul = 1;
     Config.maxDayCarboMul = 1.5;
     Config.minPieceValue = .5;
+    Config.mealFindTries = 2;
     return Config;
 }());
 exports.Config = Config;

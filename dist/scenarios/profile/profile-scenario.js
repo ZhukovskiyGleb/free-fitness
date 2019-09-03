@@ -36,6 +36,7 @@ var ProfileScenario = /** @class */ (function (_super) {
         _this.EDIT_BODY_TYPE_STATE = 'PROFILE_BODY_TYPE_STATE';
         _this.EDIT_ACTIVITY_STATE = 'PROFILE_EDIT_ACTIVITY_STATE';
         _this.EDIT_EXPERIENCE_STATE = 'PROFILE_EDIT_EXPERIENCE_STATE';
+        _this._propertiesFiltered = false;
         return _this;
     }
     ProfileScenario.prototype.init = function () {
@@ -44,7 +45,7 @@ var ProfileScenario = /** @class */ (function (_super) {
             var userId = params.userId, chatId = params.chatId, lang = params.lang;
             var user = _this._userManager.getUser(userId);
             var requestedProperties = _this.requestedData;
-            utils_1.log('Requested', requestedProperties);
+            utils_1.logScenario('Requested', requestedProperties);
             if (user && requestedProperties) {
                 if (user.hasProperties(requestedProperties)) {
                     _this._bot.sendMessage(chatId, _this.getApproveText(lang, user, requestedProperties), _this.getApproveKeyboard(lang));
@@ -103,19 +104,25 @@ var ProfileScenario = /** @class */ (function (_super) {
             }
         });
         this.addAction(this.EDIT_STATE, function (params) {
-            _this._propsToEdit = _this.requestedData.slice();
-            if (_this._propsToEdit && _this._propsToEdit.length > 0) {
-                _this.setState(_this.NEXT_EDIT_STATE);
-                return scenario_1.ActionResults.Repeat;
+            var userId = params.userId;
+            var user = _this._userManager.getUser(userId);
+            if (user) {
+                _this._propsToEdit = _this.requestedData.slice();
+                if (!_this._propertiesFiltered) {
+                    _this._propertiesFiltered = true;
+                    _this._propsToEdit = user.getMissedProperties(_this._propsToEdit);
+                }
+                if (_this._propsToEdit && _this._propsToEdit.length > 0) {
+                    _this.setState(_this.NEXT_EDIT_STATE);
+                    return scenario_1.ActionResults.Repeat;
+                }
             }
-            else {
-                return scenario_1.ActionResults.ReadyForDestroy;
-            }
+            return scenario_1.ActionResults.ReadyForDestroy;
         });
         this.addAction(this.NEXT_EDIT_STATE, function (params) {
             if (_this._propsToEdit && _this._propsToEdit.length > 0) {
                 var property = _this._propsToEdit.shift();
-                utils_1.log('Ask for property', property);
+                utils_1.logScenario('Ask for property', property);
                 switch (property) {
                     case user_1.UserProperty.Age:
                         _this.setState(_this.EDIT_AGE_STATE);
@@ -145,8 +152,12 @@ var ProfileScenario = /** @class */ (function (_super) {
             else {
                 var userId = params.userId;
                 var user = _this._userManager.getUser(userId);
-                utils_1.log('No properties for ask');
-                return scenario_1.ActionResults.ReadyForDestroy;
+                if (user) {
+                    user.save();
+                }
+                utils_1.logScenario('No properties for ask');
+                _this.setState(_this.INIT_STATE);
+                return scenario_1.ActionResults.Repeat;
             }
         });
         this.addAction(this.EDIT_AGE_STATE, function (params) {

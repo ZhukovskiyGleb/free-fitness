@@ -1,6 +1,6 @@
 import {Activity, BodyType, Experience, Gender, User, UserProperties, UserProperty} from "../../user/user";
 import {Localization, LocId} from "../../localization/localization";
-import {isSomething, log} from "../../utils/utils";
+import {isSomething} from "../../utils/utils";
 
 interface CallbackStore<P extends keyof UserProperties> {
   [key: string]: {property: P, value: UserProperties[P]}

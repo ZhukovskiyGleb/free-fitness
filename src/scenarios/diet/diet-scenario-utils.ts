@@ -1,6 +1,6 @@
-import {DietMealsAmount, DietTarget, Formation} from "../../content/diet-utils";
+import {DietMealsAmount, DietTarget, Formation} from "../../subjects/diet/diet-utils";
 import {Checkbox} from "../../utils/keyboard-maker";
-import {FoodType} from "../../content/food";
+import {FoodType} from "../../subjects/diet/food";
 
 export class DietScenarioUtils {
     public static readonly LOSS_CALLBACK = 'NEW_DIET_LOSS_CALLBACK';

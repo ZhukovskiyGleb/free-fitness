@@ -2,8 +2,7 @@ import {Bot} from "../bot/bot";
 import {UserManager} from "../user/user-manager";
 import {ScenarioManager} from "./scenario-manager";
 import {Params} from "../utils/parser";
-import {isSomething, log} from "../utils/utils";
-import {DietScenario} from "./diet/diet-scenario";
+import {isSomething, logScenario} from "../utils/utils";
 
 export interface ScenarioClass {new (bot: Bot, userManager: UserManager, scenarioManager: ScenarioManager): Scenario}
 
@@ -53,10 +52,10 @@ export abstract class Scenario {
         const action = this._actions[this._state];
 
         if (action) {
-            log('Action', this._state, '+', params.callback ? 'CB: ' + params.callback : params.text ? 'TXT: ' + params.text : '_');
+            logScenario('Action', this._state, '+', params.callback ? 'CB: ' + params.callback : params.text ? 'TXT: ' + params.text : '_');
 
             const result = action(params);
-            if (result) log('Has result', result);
+            if (result) logScenario('Has result', result);
 
             if (isSomething(result)) {
                 if (result === ActionResults.ReadyForDestroy) {
@@ -71,7 +70,7 @@ export abstract class Scenario {
         }
 
         if (!readyForDestroy && repeat) {
-            log('Repeat action');
+            logScenario('Repeat action');
             return this.activate(params);
         }
 
@@ -89,7 +88,7 @@ export abstract class Scenario {
     }
 
     protected setState(state: string): void {
-        log('Set state', state);
+        logScenario('Set state', state);
         this._state = state;
     }
 
@@ -98,7 +97,7 @@ export abstract class Scenario {
     }
 
     protected waitForScenario(params: Params, scenarioClass: ScenarioClass, requestData: ScenarioRequestData): void {
-        log('Wait For Scenario', scenarioClass.name, requestData);
+        logScenario('Wait For Scenario', scenarioClass.name, requestData);
         this._waitProperties.prevState = this._state;
         this._waitProperties.expectedCallback = requestData.callback;
 
@@ -108,11 +107,11 @@ export abstract class Scenario {
             this.addAction(this.WAIT_STATE,
         params => {
                     if (params.callback && params.callback === this._waitProperties.expectedCallback) {
-                        log('Callback received');
+                        logScenario('Callback received');
                         this.setState(this._waitProperties.prevState!);
                         return ActionResults.Repeat;
                     }
-                    log('Waiting');
+                    logScenario('Waiting');
                 }
             )
         }
@@ -121,7 +120,7 @@ export abstract class Scenario {
     }
 
     protected switchToAnotherScenario(userId: number, scenarioClass: ScenarioClass, forceParams: Params): void {
-        log('switchToAnotherScenario', scenarioClass.name);
+        logScenario('switchToAnotherScenario', scenarioClass.name);
         this.setState(this.FINAL_STATE);
 
         this._scenarioManager.add(userId, scenarioClass, forceParams);

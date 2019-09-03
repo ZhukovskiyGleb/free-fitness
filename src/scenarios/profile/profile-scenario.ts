@@ -4,7 +4,7 @@ import {KeyboardMaker} from "../../utils/keyboard-maker";
 import {User, UserProperty} from "../../user/user";
 import {Localization, LocId} from "../../localization/localization";
 import {ProfileScenarioUtils} from "./profile-scenario-utils";
-import {getDaysPast, isSomething, log} from "../../utils/utils";
+import {getDaysPast, isSomething, logScenario} from "../../utils/utils";
 import {Config} from "../../configs/config";
 import {Params} from "../../utils/parser";
 
@@ -24,6 +24,7 @@ export class ProfileScenario extends Scenario {
     private readonly EDIT_EXPERIENCE_STATE = 'PROFILE_EDIT_EXPERIENCE_STATE';
 
     private _propsToEdit?: UserProperty[];
+    private _propertiesFiltered: boolean = false;
 
     init(): void {
 
@@ -33,7 +34,8 @@ export class ProfileScenario extends Scenario {
 
                 const user = this._userManager.getUser(userId);
                 const requestedProperties = <UserProperty[]>this.requestedData;
-                log('Requested', requestedProperties);
+
+                logScenario('Requested', requestedProperties);
                 if (user && requestedProperties) {
                     if (user.hasProperties(requestedProperties)) {
                         this._bot.sendMessage(
@@ -115,22 +117,29 @@ export class ProfileScenario extends Scenario {
 
         this.addAction(this.EDIT_STATE,
           params => {
-            this._propsToEdit = [...<UserProperty[]>this.requestedData];
+              const { userId } = params;
+              const user = this._userManager.getUser(userId);
+              if (user) {
+                  this._propsToEdit = [...<UserProperty[]>this.requestedData];
 
-                if (this._propsToEdit && this._propsToEdit.length > 0) {
-                    this.setState(this.NEXT_EDIT_STATE);
-                    return ActionResults.Repeat;
+                  if (!this._propertiesFiltered) {
+                      this._propertiesFiltered = true;
+                      this._propsToEdit = user.getMissedProperties(this._propsToEdit);
+                  }
+
+                  if (this._propsToEdit && this._propsToEdit.length > 0) {
+                      this.setState(this.NEXT_EDIT_STATE);
+                      return ActionResults.Repeat;
+                  }
               }
-              else {
-                    return ActionResults.ReadyForDestroy;
-              }
+              return ActionResults.ReadyForDestroy;
         });
 
         this.addAction(this.NEXT_EDIT_STATE,
           params => {
               if (this._propsToEdit && this._propsToEdit.length > 0) {
                   const property = this._propsToEdit.shift();
-                  log('Ask for property', property);
+                  logScenario('Ask for property', property);
                   switch (property) {
                       case UserProperty.Age:
                           this.setState(this.EDIT_AGE_STATE);
@@ -161,8 +170,14 @@ export class ProfileScenario extends Scenario {
                   const { userId } = params;
                   const user = this._userManager.getUser(userId);
 
-                  log('No properties for ask');
-                  return ActionResults.ReadyForDestroy;
+                  if (user) {
+                      user.save();
+                  }
+
+                  logScenario('No properties for ask');
+
+                  this.setState(this.INIT_STATE);
+                  return ActionResults.Repeat;
               }
           });
 

@@ -19,4 +19,6 @@ export class Config {
     public static readonly maxDayCarboMul = 1.5;
 
     public static readonly minPieceValue = .5;
+
+    public static readonly mealFindTries = 2;
 }

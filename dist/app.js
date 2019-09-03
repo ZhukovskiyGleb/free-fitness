@@ -5,9 +5,10 @@ var user_manager_1 = require("./user/user-manager");
 var scenario_manager_1 = require("./scenarios/scenario-manager");
 var parser_1 = require("./utils/parser");
 var welcome_scenario_1 = require("./scenarios/welcome/welcome-scenario");
-var diet_1 = require("./content/diet");
-var diet_utils_1 = require("./content/diet-utils");
+var diet_1 = require("./subjects/diet/diet");
+var diet_utils_1 = require("./subjects/diet/diet-utils");
 var user_1 = require("./user/user");
+var food_1 = require("./subjects/diet/food");
 var App = /** @class */ (function () {
     function App() {
         this._bot = new bot_1.Bot();
@@ -19,17 +20,16 @@ var App = /** @class */ (function () {
         var user = this._userManager.getUser(id);
         if (user) {
             user.setProperty(user_1.UserProperty.Activity, user_1.Activity.Average);
-            user.setProperty(user_1.UserProperty.BodyType, user_1.BodyType.Muscular);
-            user.setProperty(user_1.UserProperty.Weight, 95);
-            user.setProperty(user_1.UserProperty.Height, 183);
-            user.setProperty(user_1.UserProperty.Gender, user_1.Gender.Male);
+            user.setProperty(user_1.UserProperty.BodyType, user_1.BodyType.Common);
+            user.setProperty(user_1.UserProperty.Weight, 52);
+            user.setProperty(user_1.UserProperty.Height, 164);
+            user.setProperty(user_1.UserProperty.Gender, user_1.Gender.Female);
             user.setProperty(user_1.UserProperty.Age, 31);
             var diet = new diet_1.Diet();
-            diet.setTarget(diet_utils_1.DietTarget.Loss);
+            diet.setTarget(diet_utils_1.DietTarget.Support);
             diet.setMealsAmount(diet_utils_1.DietMealsAmount.Three);
-            diet.setExcludes([]);
+            diet.setExcludes([food_1.FoodType.Seafood, food_1.FoodType.Fish, food_1.FoodType.Meat, food_1.FoodType.Poultry, food_1.FoodType.Eggs, food_1.FoodType.Milk]);
             diet.setFormation(diet_utils_1.Formation.Variety);
-            // log('Diet result:', );
             diet.getDiet(user, 'ru');
         }
     }

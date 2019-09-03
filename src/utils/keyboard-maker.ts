@@ -51,7 +51,7 @@ export class KeyboardMaker {
     private updateCheckboxText(callback: string): void {
         if (this._checkboxes && this._checkboxes[callback]) {
             const config = this._checkboxes[callback];
-            config.button.text = (config.value ? '✔' : '❌') + config.text;
+            config.button.text = (config.value ? '☑ ' : '☒ ') + config.text;
         }
     }
 

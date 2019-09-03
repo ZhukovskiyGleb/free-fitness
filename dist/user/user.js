@@ -87,6 +87,16 @@ var User = /** @class */ (function () {
         });
         return result;
     };
+    User.prototype.getMissedProperties = function (requestProps) {
+        var _this = this;
+        var result = [];
+        requestProps.forEach(function (property) {
+            if (!_this._properties.hasOwnProperty(property)) {
+                result.push(property);
+            }
+        });
+        return result;
+    };
     User.prototype.getProperty = function (property) {
         if (this._properties.hasOwnProperty(property)) {
             return this._properties[property];
@@ -101,8 +111,10 @@ var User = /** @class */ (function () {
         configurable: true
     });
     User.prototype.setProperty = function (property, value) {
-        utils_1.log('[User save property', property, value, ']');
+        utils_1.logUser('[User save property', property, value, ']');
         this._properties[property] = value;
+    };
+    User.prototype.save = function () {
     };
     return User;
 }());
