@@ -148,6 +148,7 @@ export enum LocId {
     BarbellHipThrust,
     SmithHipThrust,
     CableKickback,
+    SideCableLift,
     PlieSquats,
     ThighAdductor,
     ThighAbductor,
@@ -197,7 +198,6 @@ export enum LocId {
     HammerCurl,
     ConcentrationCurl,
     BarbellPreacherCurl,
-    DumbbellPreacherCurl,
     OneArmDumbbellPreacherCurl,
     Hyperextension,
     StandCalfRaise,
@@ -206,9 +206,9 @@ export enum LocId {
     LyingReverseCrunch,
     Crunch,
     CableCrunch,
-    Walking,
-    Bicycle,
-    Orbitrek,
+    // Walking,
+    // Bicycle,
+    // Orbitrek,
     Cardio,
     Interval,
 }
@@ -356,8 +356,6 @@ export class Localization<T extends keyof LocId> {
             [LocId.OneLegPress]: 'Жим одной ногой {[?](http://sportwiki.to/%D0%96%D0%B8%D0%BC_%D0%BD%D0%BE%D0%B3%D0%B0%D0%BC%D0%B8)}',
             [LocId.LegExtension]: 'Разгибания ног {[?](http://sportwiki.to/%D0%A0%D0%B0%D0%B7%D0%B3%D0%B8%D0%B1%D0%B0%D0%BD%D0%B8%D1%8F_%D0%BD%D0%BE%D0%B3_%D0%B2_%D1%82%D1%80%D0%B5%D0%BD%D0%B0%D0%B6%D0%B5%D1%80%D0%B5)}',
             [LocId.OneLegExtension]: 'Разгибания одной ноги {[?](http://sportwiki.to/%D0%A0%D0%B0%D0%B7%D0%B3%D0%B8%D0%B1%D0%B0%D0%BD%D0%B8%D1%8F_%D0%BD%D0%BE%D0%B3_%D0%B2_%D1%82%D1%80%D0%B5%D0%BD%D0%B0%D0%B6%D0%B5%D1%80%D0%B5)}',
-            [LocId.SmithLunge]: '{Выпады в тренажере Смита [?](http://sportwiki.to/%D0%92%D1%8B%D0%BF%D0%B0%D0%B4%D1%8B)}',
-            [LocId.DumbbellLunge]: 'Выпады с гантелями {[?](http://sportwiki.to/%D0%92%D1%8B%D0%BF%D0%B0%D0%B4%D1%8B_%D1%81_%D0%B3%D0%B0%D0%BD%D1%82%D0%B5%D0%BB%D1%8F%D0%BC%D0%B8)}',
 
             [LocId.BarbellRomanianDeadLift]: 'Румынская тяга со штангой {[?](http://sportwiki.to/%D0%A0%D1%83%D0%BC%D1%8B%D0%BD%D1%81%D0%BA%D0%B0%D1%8F_%D1%82%D1%8F%D0%B3%D0%B0)}',
             [LocId.DumbbellRomanianDeadLift]: 'Румынская тяга с гантелями {[?](http://sportwiki.to/%D0%A0%D1%83%D0%BC%D1%8B%D0%BD%D1%81%D0%BA%D0%B0%D1%8F_%D1%82%D1%8F%D0%B3%D0%B0)}',
@@ -378,8 +376,11 @@ export class Localization<T extends keyof LocId> {
 
             [LocId.BarbellHipThrust]: 'Подъем таза со штангой {[?](http://sportwiki.to/%D0%9F%D0%BE%D0%B4%D1%8A%D0%B5%D0%BC_%D1%82%D0%B0%D0%B7%D0%B0)}',
             [LocId.SmithHipThrust]: 'Подъем таза в тренажере Смита {[?](http://sportwiki.to/%D0%9F%D0%BE%D0%B4%D1%8A%D0%B5%D0%BC_%D1%82%D0%B0%D0%B7%D0%B0)}',
-            [LocId.CableKickback]: 'Отведение ноги на блоке {[?](http://sportwiki.to/%D0%9E%D1%82%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5_%D0%BD%D0%BE%D0%B3%D0%B8_%D0%BD%D0%B0_%D0%B1%D0%BB%D0%BE%D0%BA%D0%B5)}',
+            [LocId.CableKickback]: 'Отведение ноги назад на блоке {[?](http://sportwiki.to/%D0%9E%D1%82%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5_%D0%BD%D0%BE%D0%B3%D0%B8_%D0%BD%D0%B0_%D0%B1%D0%BB%D0%BE%D0%BA%D0%B5)}',
+            [LocId.SideCableLift]: 'Отведение ноги в сторону на блоке {[?](http://sportwiki.to/%D0%9E%D1%82%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5_%D0%BD%D0%BE%D0%B3%D0%B8_%D0%BD%D0%B0_%D0%B1%D0%BB%D0%BE%D0%BA%D0%B5)}',
             [LocId.PlieSquats]: 'Приседания с гантелью между ног {[?](http://sportwiki.to/%D0%9F%D1%80%D0%B8%D1%81%D0%B5%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5_%D0%BF%D0%BB%D0%B8%D0%B5)}',
+            [LocId.SmithLunge]: 'Выпады в тренажере Смита {[?](http://sportwiki.to/%D0%92%D1%8B%D0%BF%D0%B0%D0%B4%D1%8B)}',
+            [LocId.DumbbellLunge]: 'Выпады с гантелями {[?](http://sportwiki.to/%D0%92%D1%8B%D0%BF%D0%B0%D0%B4%D1%8B_%D1%81_%D0%B3%D0%B0%D0%BD%D1%82%D0%B5%D0%BB%D1%8F%D0%BC%D0%B8)}',
             [LocId.ThighAdductor]: 'Сведения ног {[?](http://sportwiki.to/%D0%A1%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5_%D0%BD%D0%BE%D0%B3_%D0%BD%D0%B0_%D1%82%D1%80%D0%B5%D0%BD%D0%B0%D0%B6%D0%B5%D1%80%D0%B5)}',
             [LocId.ThighAbductor]: 'Разведение ног {[?](http://sportwiki.to/%D0%A0%D0%B0%D0%B7%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5_%D0%BD%D0%BE%D0%B3_%D0%BD%D0%B0_%D1%82%D1%80%D0%B5%D0%BD%D0%B0%D0%B6%D0%B5%D1%80%D0%B5)}',
 
@@ -409,7 +410,7 @@ export class Localization<T extends keyof LocId> {
             [LocId.OneArmCableSideLateralRaise]: 'Отведение в сторону одной рукой на блоке {[?](http://sportwiki.to/%D0%A0%D0%B0%D0%B7%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5_%D1%80%D1%83%D0%BA_%D1%81%D1%82%D0%BE%D1%8F)}',
             [LocId.BarbellUprightRow]: 'Тяга штанги к подбородку {[?](http://sportwiki.to/%D0%A2%D1%8F%D0%B3%D0%B0_%D1%88%D1%82%D0%B0%D0%BD%D0%B3%D0%B8_%D0%BA_%D0%BF%D0%BE%D0%B4%D0%B1%D0%BE%D1%80%D0%BE%D0%B4%D0%BA%D1%83)}',
             [LocId.SmithUprightRow]: 'Тяга к подбородку в тренажере Смита {[?](http://sportswiki.ru/%D0%A2%D1%8F%D0%B3%D0%B0_%D0%BA_%D0%BF%D0%BE%D0%B4%D0%B1%D0%BE%D1%80%D0%BE%D0%B4%D0%BA%D1%83)}',
-            [LocId.BentOverDumbbellRearDeltRaise]: 'Разведение гантелей в стороны в наклоне {[?](http://sportwiki.to/%D0%A0%D0%B0%D0%B7%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5_%D0%B3%D0%B0%D0%BD%D1%82%D0%B5%D0%BB%D0%B5%D0%B9_%D0%B2_%D1%81%D1%82%D0%BE%D1%80%D0%BE%D0%BD%D1%8B_%D0%B2_%D0%BD%D0%B0%D0%BA%D0%BB%D0%BE%D0%BD%D0%B5)}',
+            [LocId.BentOverDumbbellRearDeltRaise]: 'Разведение гантелей в наклоне {[?](http://sportwiki.to/%D0%A0%D0%B0%D0%B7%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5_%D0%B3%D0%B0%D0%BD%D1%82%D0%B5%D0%BB%D0%B5%D0%B9_%D0%B2_%D1%81%D1%82%D0%BE%D1%80%D0%BE%D0%BD%D1%8B_%D0%B2_%D0%BD%D0%B0%D0%BA%D0%BB%D0%BE%D0%BD%D0%B5)}',
             [LocId.ReversePekDek]: 'Разведение рук на тренажере {[?](http://sportwiki.to/%D0%A0%D0%B0%D0%B7%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5_%D1%80%D1%83%D0%BA_%D0%BD%D0%B0_%D1%82%D1%80%D0%B5%D0%BD%D0%B0%D0%B6%D0%B5%D1%80%D0%B5)}',
             [LocId.CableRearDeltRaise]: 'Разведения рук в кроссовере {[?](http://sportwiki.to/%D0%A0%D0%B0%D0%B7%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5_%D1%80%D1%83%D0%BA_%D0%BD%D0%B0_%D1%82%D1%80%D0%B5%D0%BD%D0%B0%D0%B6%D0%B5%D1%80%D0%B5)}',
 
@@ -432,8 +433,7 @@ export class Localization<T extends keyof LocId> {
             [LocId.HammerCurl]: 'Сгибания рук с гантелями в стиле молота {[?](http://sportwiki.to/%D0%A1%D0%B3%D0%B8%D0%B1%D0%B0%D0%BD%D0%B8%D0%B5_%D1%80%D1%83%D0%BA_%D1%81_%D0%B3%D0%B0%D0%BD%D1%82%D0%B5%D0%BB%D1%8F%D0%BC%D0%B8_%D1%85%D0%B2%D0%B0%D1%82%D0%BE%D0%BC_%C2%AB%D0%BC%D0%BE%D0%BB%D0%BE%D1%82%D0%BE%D0%BA%C2%BB)}',
             [LocId.ConcentrationCurl]: 'Концентрированные сгибания рук {[?](http://sportwiki.to/%D0%9A%D0%BE%D0%BD%D1%86%D0%B5%D0%BD%D1%82%D1%80%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D0%BE%D0%B5_%D1%81%D0%B3%D0%B8%D0%B1%D0%B0%D0%BD%D0%B8%D0%B5_%D1%80%D1%83%D0%BA%D0%B8_%D0%BD%D0%B0_%D0%B1%D0%B8%D1%86%D0%B5%D0%BF%D1%81)}',
             [LocId.BarbellPreacherCurl]: 'Сгибания рук со штангой в скамье Скотта {[?](http://sportwiki.to/%D0%A1%D0%B3%D0%B8%D0%B1%D0%B0%D0%BD%D0%B8%D1%8F_%D1%80%D1%83%D0%BA_%D0%BD%D0%B0_%D1%81%D0%BA%D0%B0%D0%BC%D1%8C%D0%B5_%D0%A1%D0%BA%D0%BE%D1%82%D1%82%D0%B0)}',
-            [LocId.DumbbellPreacherCurl]: 'Сгибания руки с гантелью в скамье Скотта {[?](http://sportwiki.to/%D0%A1%D0%B3%D0%B8%D0%B1%D0%B0%D0%BD%D0%B8%D1%8F_%D1%80%D1%83%D0%BA_%D0%BD%D0%B0_%D1%81%D0%BA%D0%B0%D0%BC%D1%8C%D0%B5_%D0%A1%D0%BA%D0%BE%D1%82%D1%82%D0%B0)}',
-            [LocId.OneArmDumbbellPreacherCurl]: '{[?]()}',
+            [LocId.OneArmDumbbellPreacherCurl]: 'Сгибания руки с гантелью в скамье Скотта {[?](http://sportwiki.to/%D0%A1%D0%B3%D0%B8%D0%B1%D0%B0%D0%BD%D0%B8%D1%8F_%D1%80%D1%83%D0%BA_%D0%BD%D0%B0_%D1%81%D0%BA%D0%B0%D0%BC%D1%8C%D0%B5_%D0%A1%D0%BA%D0%BE%D1%82%D1%82%D0%B0)}',
 
             [LocId.Hyperextension]: 'Гиперэкстензия {[?](http://sportwiki.to/%D0%93%D0%B8%D0%BF%D0%B5%D1%80%D1%8D%D0%BA%D1%81%D1%82%D0%B5%D0%BD%D0%B7%D0%B8%D0%B8)}',
 
@@ -445,9 +445,9 @@ export class Localization<T extends keyof LocId> {
             [LocId.Crunch]: 'Скручивания {[?](http://sportwiki.to/%D0%A1%D0%BA%D1%80%D1%83%D1%87%D0%B8%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5_%D1%81_%D0%BF%D0%BE%D0%B4%D1%8A%D0%B5%D0%BC%D0%BE%D0%BC_%D0%BA%D0%BE%D1%80%D0%BF%D1%83%D1%81%D0%B0_%D0%BD%D0%B0_%D0%BD%D0%B0%D0%BA%D0%BB%D0%BE%D0%BD%D0%BD%D0%BE%D0%B9_%D1%81%D0%BA%D0%B0%D0%BC%D1%8C%D0%B5)}',
             [LocId.CableCrunch]: 'Скручивания на блоке {[?](http://sportwiki.to/%D0%A1%D0%BA%D1%80%D1%83%D1%87%D0%B8%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F_%D0%B2_%D1%82%D1%80%D0%B5%D0%BD%D0%B0%D0%B6%D0%B5%D1%80%D0%B5)}',
 
-            [LocId.Walking]: 'Ходьба на беговой дорожке под углом {[?](http://sportwiki.to/%D0%91%D0%B5%D0%B3%D0%BE%D0%B2%D1%8B%D0%B5_%D1%82%D1%80%D0%B5%D0%BD%D0%B0%D0%B6%D0%B5%D1%80%D1%8B)}',
-            [LocId.Bicycle]: 'Велотренажер {[?](http://sportwiki.to/%D0%92%D0%B5%D0%BB%D0%BE%D1%82%D1%80%D0%B5%D0%BD%D0%B0%D0%B6%D0%B5%D1%80)}',
-            [LocId.Orbitrek]: 'Элипсоид {[?](http://sportwiki.to/%D0%AD%D0%BB%D0%BB%D0%B8%D0%BF%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9_%D1%82%D1%80%D0%B5%D0%BD%D0%B0%D0%B6%D0%B5%D1%80)}',
+            // [LocId.Walking]: 'Ходьба на беговой дорожке под углом {[?](http://sportwiki.to/%D0%91%D0%B5%D0%B3%D0%BE%D0%B2%D1%8B%D0%B5_%D1%82%D1%80%D0%B5%D0%BD%D0%B0%D0%B6%D0%B5%D1%80%D1%8B)}',
+            // [LocId.Bicycle]: 'Велотренажер {[?](http://sportwiki.to/%D0%92%D0%B5%D0%BB%D0%BE%D1%82%D1%80%D0%B5%D0%BD%D0%B0%D0%B6%D0%B5%D1%80)}',
+            // [LocId.Orbitrek]: 'Элипсоид {[?](http://sportwiki.to/%D0%AD%D0%BB%D0%BB%D0%B8%D0%BF%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9_%D1%82%D1%80%D0%B5%D0%BD%D0%B0%D0%B6%D0%B5%D1%80)}',
 
             [LocId.Cardio]: 'Кардио',
             [LocId.Interval]: '[Интервальное кардио] (http://sportwiki.to/%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%B2%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9_%D1%82%D1%80%D0%B5%D0%BD%D0%B8%D0%BD%D0%B3)',
