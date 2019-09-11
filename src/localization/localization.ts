@@ -201,7 +201,7 @@ export enum LocId {
     OneArmDumbbellPreacherCurl,
     Hyperextension,
     StandCalfRaise,
-    SeatCalfRaise,
+    SeatedCalfRaise,
     ReverseCrunch,
     LyingReverseCrunch,
     Crunch,
@@ -219,7 +219,7 @@ export class Localization<T extends keyof LocId> {
             //Welcome
             [LocId.NewbieMessage]: 'Здравствуйте, {name}!\n' +
             'Я - ваш личный *фитнес тренер и диетолог*!\n' +
-            'И совершенно бесплатно, я могу составить для вас рацион питания и программу тренировок.',
+            'И, совершенно бесплатно, я могу составить для вас рацион питания и программу тренировок.',
             [LocId.GoodMorning]: 'Доброе утро, {name}',
             [LocId.GoodAfternoon]: 'Добрый день, {name}',
             [LocId.GoodEvening]: 'Добрый вечер, {name}',
@@ -438,7 +438,7 @@ export class Localization<T extends keyof LocId> {
             [LocId.Hyperextension]: 'Гиперэкстензия {[?](http://sportwiki.to/%D0%93%D0%B8%D0%BF%D0%B5%D1%80%D1%8D%D0%BA%D1%81%D1%82%D0%B5%D0%BD%D0%B7%D0%B8%D0%B8)}',
 
             [LocId.StandCalfRaise]: 'Подъем на носках стоя {[?](http://sportwiki.to/%D0%9F%D0%BE%D0%B4%D1%8A%D0%B5%D0%BC_%D0%BD%D0%B0_%D0%BD%D0%BE%D1%81%D0%BA%D0%B8)}',
-            [LocId.SeatCalfRaise]: 'Подьем на носках сидя {[?](http://sportwiki.to/%D0%9F%D0%BE%D0%B4%D1%8A%D0%B5%D0%BC_%D0%BD%D0%B0_%D0%BD%D0%BE%D1%81%D0%BA%D0%B0%D1%85_%D1%81%D0%B8%D0%B4%D1%8F)}',
+            [LocId.SeatedCalfRaise]: 'Подьем на носках сидя {[?](http://sportwiki.to/%D0%9F%D0%BE%D0%B4%D1%8A%D0%B5%D0%BC_%D0%BD%D0%B0_%D0%BD%D0%BE%D1%81%D0%BA%D0%B0%D1%85_%D1%81%D0%B8%D0%B4%D1%8F)}',
 
             [LocId.ReverseCrunch]: 'Подъем ног в висе {[?](http://sportwiki.to/%D0%9F%D0%BE%D0%B4%D1%8A%D0%B5%D0%BC_%D0%BD%D0%BE%D0%B3_%D0%B2_%D0%B2%D0%B8%D1%81%D0%B5)}',
             [LocId.LyingReverseCrunch]: 'Подъем ног лежа {[?](http://sportwiki.to/%D0%9F%D0%BE%D0%B4%D1%8A%D0%B5%D0%BC_%D0%BD%D0%BE%D0%B3_%D0%BD%D0%B0_%D1%81%D0%BA%D0%B0%D0%BC%D1%8C%D0%B5)}',
