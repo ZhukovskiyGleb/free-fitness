@@ -1,10 +1,13 @@
-import {LocId} from "../../localization/localization";
-import {FoodConsumable} from "./food";
+import { Experience } from "../../user/user";
+import { Muscle } from "./exercises";
 
-export enum DietTarget {
-    Loss= 'loss',
+export enum WorkoutTarget {
+    Gain = 'gain',
+    Strength = 'strength',
     Support = 'support',
-    Gain = 'gain'
+    Complex = 'complex',
+    Loss = 'loss',
+    Pump = 'pump'
 }
 
 export enum Formation {
@@ -12,153 +15,58 @@ export enum Formation {
     Monotony
 }
 
-export enum DietMealsAmount {
+export enum WorkoutsAmount {
+    Two = 'two',
     Three= 'three',
     Four = 'four',
-    Five = 'five',
-    Six = 'six'
+    Five = 'five'
 }
 
-export enum MealName {
-    Breakfast = 'breakfast',
-    Brunch = 'brunch',
-    Lunch = 'lunch',
-    HighTea = 'highTea',
-    Dinner = 'dinner',
-    LateDinner = 'lateDinner',
+export enum MuscleGroup {
+    Legs = 'legs',
+    Back = 'back',
+    Chest = 'chest',
+    Delts = 'delts',
+    Arms = 'arms',
+    Abs = 'abs',
 }
 
-export interface Nutrients {protein: number, fat: number, carbo: number};
+type ComplexGroup = MuscleGroup | Muscle;
 
-type MealConfig = {name: MealName, nutrients: Nutrients}
-type DaysConfig = {[key in DietMealsAmount]: MealConfig[]}
-type RequirementConfig = {[key in DietTarget]: Nutrients}
+export interface Split {
+    [key: number]: (MuscleGroup | Muscle)[];
+}
 
 export class WorkoutUtils {
-    private static readonly DAILY_REQUIREMENTS: RequirementConfig = {
-        [DietTarget.Loss]: {protein: 30, fat: 30, carbo: 40},
-        [DietTarget.Support]: {protein: 35, fat: 40, carbo: 35},
-        [DietTarget.Gain]: {protein: 25, fat: 25, carbo: 50},
+
+    private static readonly EXPERIENCE_TO_TARGETS: {[key in Experience]: WorkoutTarget[]} = {
+        [Experience.Junior]: [WorkoutTarget.Gain, WorkoutTarget.Loss, WorkoutTarget.Support],
+        [Experience.Middle]: [WorkoutTarget.Gain, WorkoutTarget.Loss, WorkoutTarget.Support, WorkoutTarget.Strength, WorkoutTarget.Complex],
+        [Experience.Senior]: [WorkoutTarget.Gain, WorkoutTarget.Loss, WorkoutTarget.Support, WorkoutTarget.Strength, WorkoutTarget.Complex, WorkoutTarget.Pump],
     };
 
-    private static readonly DAYS_SCHEDULE: DaysConfig = {
-        [DietMealsAmount.Three]: [
-            {name: MealName.Breakfast, nutrients: {protein: 30, fat: 40, carbo: 30}},
-            {name: MealName.Lunch, nutrients: {protein: 30, fat: 30, carbo: 40}},
-            {name: MealName.Dinner, nutrients: {protein: 40, fat: 30, carbo: 30}},
-        ],
-        [DietMealsAmount.Four]: [
-            {name: MealName.Breakfast, nutrients: {protein: 20, fat: 40, carbo: 0}},
-            {name: MealName.Brunch, nutrients: {protein: 20, fat: 0, carbo: 30}},
-            {name: MealName.Lunch, nutrients: {protein: 20, fat: 30, carbo: 40}},
-            {name: MealName.Dinner, nutrients: {protein: 40, fat: 30, carbo: 30}},
-        ],
-        [DietMealsAmount.Five]: [
-            {name: MealName.Breakfast, nutrients: {protein: 15, fat: 40, carbo: 0}},
-            {name: MealName.Brunch, nutrients: {protein: 15, fat: 0, carbo: 30}},
-            {name: MealName.Lunch, nutrients: {protein: 20, fat: 30, carbo: 20}},
-            {name: MealName.HighTea, nutrients: {protein: 20, fat: 0, carbo: 20}},
-            {name: MealName.Dinner, nutrients: {protein: 30, fat: 30, carbo: 30}},
-        ],
-        [DietMealsAmount.Six]: [
-            {name: MealName.Breakfast, nutrients: {protein: 15, fat: 40, carbo: 0}},
-            {name: MealName.Brunch, nutrients: {protein: 15, fat: 0, carbo: 30}},
-            {name: MealName.Lunch, nutrients: {protein: 20, fat: 30, carbo: 30}},
-            {name: MealName.HighTea, nutrients: {protein: 15, fat: 0, carbo: 20}},
-            {name: MealName.Dinner, nutrients: {protein: 20, fat: 15, carbo: 20}},
-            {name: MealName.LateDinner, nutrients: {protein: 15, fat: 15, carbo: 0}},
-        ]
+    private static readonly MUSCLE_GROUP_TO_MUSCLES: {[key in MuscleGroup]: Muscle[]} = {
+        [MuscleGroup.Legs]: [Muscle.Quads, Muscle.Hamstrings, Muscle.Glutes, Muscle.OuterCalves, Muscle.InnerCalves],
+        [MuscleGroup.Back]: [Muscle.Lats, Muscle.Trapezius, Muscle.LowerBack],
+        [MuscleGroup.Chest]: [Muscle.MiddleChest, Muscle.UpperChest],
+        [MuscleGroup.Delts]: [Muscle.FrontDelt, Muscle.MiddleDelt, Muscle.RearDelt],
+        [MuscleGroup.Arms]: [Muscle.Triceps, Muscle.Biceps],
+        [MuscleGroup.Abs]: [Muscle.UpperAbs, Muscle.LowerAbs],
     };
 
-    private static readonly DAYS_AMOUNT: {[key in DietMealsAmount]: number} = {
-        [DietMealsAmount.Three]: 3,
-        [DietMealsAmount.Four]: 4,
-        [DietMealsAmount.Five]: 5,
-        [DietMealsAmount.Six]: 6,
+    private static readonly WORKOUT_SPLITS: {[key in WorkoutsAmount]: Split} = {
+        [WorkoutsAmount.Two]: [Muscle.Quads, Muscle.Hamstrings],
+        [WorkoutsAmount.Three]: [],
+        [WorkoutsAmount.Four]: [],
+        [WorkoutsAmount.Five]: [],
     };
 
-    private static readonly MEAL_SNACK: {[key in MealName]: boolean} = {
-        [MealName.Breakfast]: false,
-        [MealName.Brunch]: true,
-        [MealName.Lunch]: false,
-        [MealName.HighTea]: true,
-        [MealName.Dinner]: false,
-        [MealName.LateDinner]: true,
-    };
-
-     private static readonly MEAL_TO_FAST_CARBO_AVAILABLE: {[key in DietTarget]: {[key in MealName]: boolean}} = {
-        [DietTarget.Loss]: {
-            [MealName.Breakfast]: true,
-            [MealName.Brunch]: true,
-            [MealName.Lunch]: false,
-            [MealName.HighTea]: false,
-            [MealName.Dinner]: false,
-            [MealName.LateDinner]: false,
-        },
-        [DietTarget.Support]: {
-            [MealName.Breakfast]: true,
-            [MealName.Brunch]: true,
-            [MealName.Lunch]: true,
-            [MealName.HighTea]: true,
-            [MealName.Dinner]: false,
-            [MealName.LateDinner]: false,
-        },
-        [DietTarget.Gain]: {
-            [MealName.Breakfast]: true,
-            [MealName.Brunch]: true,
-            [MealName.Lunch]: true,
-            [MealName.HighTea]: true,
-            [MealName.Dinner]: true,
-            [MealName.LateDinner]: false,
-        }
-     };
-
-    private static readonly MEAL_TO_LOC_ID: {[key in MealName]: LocId} = {
-        [MealName.Breakfast]: LocId.Breakfast,
-        [MealName.Brunch]: LocId.Brunch,
-        [MealName.Lunch]: LocId.Lunch,
-        [MealName.HighTea]: LocId.HighTea,
-        [MealName.Dinner]: LocId.Dinner,
-        [MealName.LateDinner]: LocId.LateDinner,
-    };
-
-    private static readonly CONSUMABLE_TO_LOC_ID: {[key in FoodConsumable]?: LocId} = {
-        [FoodConsumable.Weight]: LocId.Grams,
-        [FoodConsumable.Piece]: LocId.Piece,
-        [FoodConsumable.Unit]: LocId.Piece,
-        [FoodConsumable.Portion]: LocId.Portion,
-        [FoodConsumable.TeaSpoon]: LocId.TeaSpoon,
-    };
-
-    public static isSnackMeal(meal: MealName): boolean {
-       return DietUtils.MEAL_SNACK[meal];
+    public static getAvailableTargetsByExperience(experience: Experience): WorkoutTarget[] {
+       return this.EXPERIENCE_TO_TARGETS[experience];
     }
 
-    public static isFastCarboAvailable(target: DietTarget, meal: MealName): boolean {
-      return DietUtils.MEAL_TO_FAST_CARBO_AVAILABLE[target][meal];
+    public static getMusclesByMuscleGroup(group: MuscleGroup): Muscle[] {
+        return this.MUSCLE_GROUP_TO_MUSCLES[group];
     }
 
-    public static getDaySchedule(days: DietMealsAmount): MealConfig[] {
-        return DietUtils.DAYS_SCHEDULE[days];
-    }
-
-    public static getDaysAmount(days: DietMealsAmount): number {
-        return DietUtils.DAYS_AMOUNT[days];
-    }
-
-    public static getDailyRequirements(target: DietTarget): Nutrients {
-        return DietUtils.DAILY_REQUIREMENTS[target];
-    }
-
-    public static getMealLocId(meal: MealName): LocId {
-        return DietUtils.MEAL_TO_LOC_ID[meal];
-    }
-
-    public static getConsumableLocId(consumable: FoodConsumable): LocId | undefined {
-        return DietUtils.CONSUMABLE_TO_LOC_ID[consumable];
-    }
-
-    public static isConsumableCountable(consumable: FoodConsumable): boolean {
-        return  [FoodConsumable.Portion, FoodConsumable.Unit, FoodConsumable.Piece, FoodConsumable.TeaSpoon].includes(consumable);
-    }
 }
