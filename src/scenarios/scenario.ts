@@ -13,7 +13,7 @@ export interface ScenarioRequestData {
     data?: RequestedData
 }
 
-export enum ActionResults {
+export const enum ActionResults {
     ReadyForDestroy = 'readyForDestroy',
     Repeat = 'repeat'
 }

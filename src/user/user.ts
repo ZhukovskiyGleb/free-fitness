@@ -1,12 +1,12 @@
 import {Diet} from "../subjects/diet/diet";
 import {logUser} from "../utils/utils";
 
-export enum Gender {
+export const enum Gender {
     Male = 'male',
     Female = 'female',
 }
 
-export enum BodyType {
+export const enum BodyType {
     Thin = 'thin',
     Muscular = 'muscular',
     Large = 'large',
@@ -14,20 +14,20 @@ export enum BodyType {
     Common = 'common',
 }
 
-export enum Activity {
+export const enum Activity {
     Nothing = 'nothing',
     Easy = 'easy',
     Average = 'average',
     Heavy = 'heavy',
 }
 
-export enum Experience {
+export const enum Experience {
     Junior = 'junior',
     Middle = 'middle',
     Senior = 'senior',
 }
 
-export enum UserProperty {
+export const enum UserProperty {
     RequestsAmount = 'requestsAmount',
     RegisterDate = 'registerDate',
     LastEditDate = 'lastEditDate',

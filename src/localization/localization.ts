@@ -1,6 +1,6 @@
 import {strict} from "assert";
 
-export enum LocId {
+export const enum LocId {
     //Welcome
     NewbieMessage,
     GoodMorning,

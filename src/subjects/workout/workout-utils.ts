@@ -1,7 +1,7 @@
-import { Experience } from "../../user/user";
+import { Experience, Gender } from "../../user/user";
 import { Muscle } from "./exercises";
 
-export enum WorkoutTarget {
+export const enum WorkoutTarget {
     Gain = 'gain',
     Strength = 'strength',
     Support = 'support',
@@ -10,20 +10,21 @@ export enum WorkoutTarget {
     Pump = 'pump'
 }
 
-export enum Formation {
+export const enum Formation {
     Variety,
     Monotony
 }
 
-export enum WorkoutsAmount {
+export const enum WorkoutsAmount {
     Two = 'two',
     Three= 'three',
     Four = 'four',
     Five = 'five'
 }
 
-export enum MuscleGroup {
+export const enum MuscleGroup {
     Legs = 'legs',
+    Glutes = 'glutes',
     Back = 'back',
     Chest = 'chest',
     Delts = 'delts',
@@ -31,10 +32,13 @@ export enum MuscleGroup {
     Abs = 'abs',
 }
 
-type ComplexGroup = MuscleGroup | Muscle;
+interface MuscleCondition {
+    gender: Gender,
+    muscle: MuscleGroup | Muscle
+}
 
 export interface Split {
-    [key: number]: (MuscleGroup | Muscle)[];
+    [key: number]: (MuscleGroup | Muscle | MuscleCondition)[];
 }
 
 export class WorkoutUtils {
@@ -46,7 +50,8 @@ export class WorkoutUtils {
     };
 
     private static readonly MUSCLE_GROUP_TO_MUSCLES: {[key in MuscleGroup]: Muscle[]} = {
-        [MuscleGroup.Legs]: [Muscle.Quads, Muscle.Hamstrings, Muscle.Glutes, Muscle.OuterCalves, Muscle.InnerCalves],
+        [MuscleGroup.Legs]: [Muscle.Quads, Muscle.Hamstrings, Muscle.OuterCalves, Muscle.InnerCalves],
+        [MuscleGroup.Glutes]: [Muscle.Glutes, Muscle.Thigs],
         [MuscleGroup.Back]: [Muscle.Lats, Muscle.Trapezius, Muscle.LowerBack],
         [MuscleGroup.Chest]: [Muscle.MiddleChest, Muscle.UpperChest],
         [MuscleGroup.Delts]: [Muscle.FrontDelt, Muscle.MiddleDelt, Muscle.RearDelt],
@@ -55,10 +60,28 @@ export class WorkoutUtils {
     };
 
     private static readonly WORKOUT_SPLITS: {[key in WorkoutsAmount]: Split} = {
-        [WorkoutsAmount.Two]: [Muscle.Quads, Muscle.Hamstrings],
-        [WorkoutsAmount.Three]: [],
-        [WorkoutsAmount.Four]: [],
-        [WorkoutsAmount.Five]: [],
+        [WorkoutsAmount.Two]: [
+            [Muscle.Quads, Muscle.Hamstrings, Muscle.FrontDelt, Muscle.MiddleDelt],
+            [Muscle.Lats, Muscle.Trapezius, Muscle.UpperAbs, {gender: Gender.Male, muscle: Muscle.MiddleChest}, {gender: Gender.Female, muscle: Muscle.Glutes}],
+        ],
+        [WorkoutsAmount.Three]: [
+            [Muscle.Quads, Muscle.Hamstrings, Muscle.FrontDelt, Muscle.MiddleDelt],
+            [MuscleGroup.Back, Muscle.UpperAbs, Muscle.Biceps],
+            [Muscle.Triceps, Muscle.UpperAbs, {gender: Gender.Male, muscle: MuscleGroup.Chest}, {gender: Gender.Female, muscle: Muscle.Glutes}],
+        ],
+        [WorkoutsAmount.Four]: [
+            [Muscle.Quads, Muscle.Hamstrings, Muscle.OuterCalves],
+            [MuscleGroup.Abs, {gender: Gender.Male, muscle: MuscleGroup.Chest}, {gender: Gender.Female, muscle: MuscleGroup.Glutes}],
+            [MuscleGroup.Back, Muscle.Biceps],
+            [MuscleGroup.Delts, Muscle.Triceps],
+        ],
+        [WorkoutsAmount.Five]: [
+            [Muscle.Quads, Muscle.Hamstrings, Muscle.OuterCalves],
+            [MuscleGroup.Abs, {gender: Gender.Male, muscle: MuscleGroup.Chest}, {gender: Gender.Female, muscle: MuscleGroup.Glutes}],
+            [MuscleGroup.Back],
+            [MuscleGroup.Delts, Muscle.InnerCalves],
+            [MuscleGroup.Arms],
+        ],
     };
 
     public static getAvailableTargetsByExperience(experience: Experience): WorkoutTarget[] {

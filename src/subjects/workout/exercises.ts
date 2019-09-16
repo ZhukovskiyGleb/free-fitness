@@ -1,6 +1,6 @@
 import { LocId } from "../../localization/localization";
 
-export enum Exercise {
+export const enum Exercise {
     Squats,
     LegPress,
     LegExtension,
@@ -49,12 +49,13 @@ export enum Exercise {
     // Cardio
 }
 
-export enum Muscle {
+export const enum Muscle {
     Quads = 'quads',
     Hamstrings = 'hamstrings',
     Lats = 'lats',
     Trapezius = 'trapezius',
     Glutes = 'glutes',
+    Thigs = 'thigs',
     MiddleChest = 'middleChest',
     UpperChest = 'upperChest',
     FrontDelt = 'frontDelt',
@@ -70,7 +71,7 @@ export enum Muscle {
     // Cardio
 }
 
-export enum Complexity {
+export const enum Complexity {
     Compound,
     Isolation
 }
@@ -132,7 +133,8 @@ const MUSCLE_EXERCISES: {[key in Muscle]: Exercise[]} = {
     [Muscle.Hamstrings]: [Exercise.LegCurl, Exercise.RomanianDeadLift],
     [Muscle.Lats]: [Exercise.PullDown],
     [Muscle.Trapezius]: [Exercise.BentOverRow, Exercise.SeatedRow, Exercise.PullOver, Exercise.OneArmSeatedRow],
-    [Muscle.Glutes]: [Exercise.Lunge, Exercise.CableKickback, Exercise.HipThrust, Exercise.Thighs],
+    [Muscle.Glutes]: [Exercise.Lunge, Exercise.CableKickback, Exercise.HipThrust],
+    [Muscle.Thigs]: [Exercise.Thighs],
     [Muscle.MiddleChest]: [Exercise.BenchPress, Exercise.BenchFlyes],
     [Muscle.UpperChest]: [Exercise.InclineBenchFlyes, Exercise.InclineBenchPress],
     [Muscle.MiddleDelt]: [Exercise.SideLateralRaise, Exercise.UprightRow],

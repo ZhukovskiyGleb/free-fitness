@@ -1,25 +1,25 @@
 import {LocId} from "../../localization/localization";
 import {FoodConsumable} from "./food";
 
-export enum DietTarget {
+export const enum DietTarget {
     Loss= 'loss',
     Support = 'support',
     Gain = 'gain'
 }
 
-export enum Formation {
+export const enum Formation {
     Variety,
     Monotony
 }
 
-export enum DietMealsAmount {
+export const enum DietMealsAmount {
     Three= 'three',
     Four = 'four',
     Five = 'five',
     Six = 'six'
 }
 
-export enum MealName {
+export const enum MealName {
     Breakfast = 'breakfast',
     Brunch = 'brunch',
     Lunch = 'lunch',

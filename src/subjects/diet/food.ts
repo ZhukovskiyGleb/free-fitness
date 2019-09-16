@@ -1,6 +1,6 @@
 import {LocId} from "../../localization/localization";
 
-export enum Food {
+export const enum Food {
     Salmon,
     WhiteFish,
     Seafood,
@@ -38,7 +38,7 @@ export enum Food {
     Avocado
 }
 
-export enum FoodType {
+export const enum FoodType {
   Meat,
   Poultry,
   Fish,
@@ -55,7 +55,7 @@ export enum FoodType {
   Vegan,
 }
 
-export enum FoodConsumable {
+export const enum FoodConsumable {
     Piece,
     Unit,
     Portion,
